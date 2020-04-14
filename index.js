@@ -5,14 +5,16 @@ const { prefix, token, games } = require("./config.json");
 
 bot.commands = new Discord.Collection();
 const botCommands = require("./commands");
-const botChat = require("./chat");
+const botVoice    = require("./voice");
+const botChat     = require("./chat");
+// const {botChat} = require("./chat");
 
 bot.login(token);
 
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
 
-  bot.user.setActivity("In development");
+  bot.user.setActivity("🚧Under Construction");
   // chooseGame(bot);
 });
 
@@ -28,8 +30,12 @@ Object.keys(botCommands).map(key => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
 });
 
+Object.keys(botVoice).map(key => {
+  bot.commands.set(botVoice[key].name, botVoice[key]);
+});
+
 bot.on("message", msg => {
-  if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+  if (!msg.content.startsWith(prefix) || msg.author.bot) {console.info("message not chat or command");return};
 
   const args = msg.content.slice(prefix.length).split(/ +/);
   const command = args.shift().toLowerCase();

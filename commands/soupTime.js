@@ -1,13 +1,22 @@
 const { soups } = require("../config.json");
 
+const Discord = require("discord.js");
+
 module.exports = {
   name: "souptime",
   description: "Soup Time",
   execute(msg, args) {
-    // msg.reply('pong');
     var num = Math.floor(Math.random() * (+soups.length - +0) + +0);
     var image = soups[num];
-    msg.channel.send(image);
-    // console.info("pong");
+    
+    const imageEmbed = new Discord.MessageEmbed()
+      .setColor("#FFD700")
+      .setTitle("Here is sum soup, just for you " + msg.author.username)
+      // .setAuthor("@"+msg.author.username, msg.author.displayAvatarURL())
+      .setDescription("I hope you enjoy!")
+      .setImage(image)
+      .setTimestamp();
+
+    msg.channel.send(imageEmbed);
   }
 };
