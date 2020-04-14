@@ -3,4 +3,5 @@ module.exports = {
   Ping:   require("./ping"),
   Soup:   require("./soupTime"),
   Say:    require('./say'),
+  Pizza:  require('./pizzatime'),
 };
