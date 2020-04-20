@@ -3,8 +3,9 @@ const Discord = require("discord.js");
 
 module.exports = {
   name: "help",
+  hidden: true,
   description: "List all of my commands or info about a specific command.",
-  aliases: ["commands"],
+  aliases: ["commands","?"],
   usage: "[command name]",
   // cooldown: 5,
   execute(msg, args) {
@@ -12,27 +13,37 @@ module.exports = {
     const { commands } = msg.client;
 
     if (!args.length) {
-      const exampleEmbed = new Discord.MessageEmbed()
-      .setColor("#ff0000")
+      const coms = commands.filter(com => !com.hidden);
+      const helpEmbed = new Discord.MessageEmbed()
+      .setColor("#fdfdfd")
       .setTitle("Help")
       .setDescription("Here's a list of all my commands:")
-      .addField("`" + commands.map(command => command.name).join("`, `") + "`",`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,true)
+      .addField("`" + coms.map(command => !command.hidden ? command.name : '').join("`, `") + "`",`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,true)
+      .setFooter(msg.author.tag,msg.author.displayAvatarURL())
       .setTimestamp();
 
-      return msg.author
-        .send(exampleEmbed)//, { split: true })
+      // // .addField("`" + commands.map(command => command.name).join("`, `") + "`",`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,true)
+      // console.info(commands.length);
+      // // for(var i = 0;i<commands.length;i++) {
+      // commands.map(command => helpEmbed.addField(command.name,command.aliases ? command.aliases.join(", ") + " " + commands.usage : command.usage,true));
+      // // }
+      // helpEmbed.addField('Specific Commands',`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,true);
+
+      
+      return msg.channel
+        .send(helpEmbed)//, { split: true })
         .then(() => {
-          if (msg.channel.type === "dm") return;
-          msg.reply("I've sent you a DM with all my commands!");
+          // if (msg.channel.type === "dm") return;
+          // msg.reply("I've sent you a DM with all my commands!");
         })
         .catch(error => {
-          console.error(
-            `Could not send help DM to ${msg.author.tag}.\n`,
-            error
-          );
-          msg.reply(
-            "it seems like I can't DM you! Do you have DMs disabled?"
-          );
+          // console.error(
+          //   `Could not send help DM to ${msg.author.tag}.\n`,
+          //   error
+          // );
+          // msg.reply(
+          //   "it seems like I can't DM you! Do you have DMs disabled?"
+          // );
         });
     }
 

@@ -10,7 +10,8 @@
     "dotenv": "^8.2.0",
     "discord.js": "^12.1.1",
     "fs": "^0.0.2",
-    "@discordjs/opus": "^0.1.0"
+    "@discordjs/opus": "^0.1.0",
+    "ytdl-core": "^2.0.1"
   },
   "engines": {
     "node": "12.x"
@@ -19,6 +20,7 @@
   "keywords": [
     "node",
     "glitch",
-    "discord"
+    "discord",
+    "Friday"
   ]
 }

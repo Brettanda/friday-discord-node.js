@@ -1,17 +1,22 @@
 {
   "prefix": "!",
-  "token": "NDc2MzAzNDQ2NTQ3MzY1ODkx.XpU9cw.kyQpzPksbgl9H2-bvrNe1L06zv8",
+  "devId": "215227961048170496",
+  "devGuild": "243159711237537802",
+  "delMSGtimeout": 60000,
   "games": [
     "Developing myself",
     "Minecraft",
-    "Use !help",
+    "Use !help For commands",
     "Super Smash Bros. Ultimate",
     "Cyberpunk 2077 ALPHA",
     "GTA VI",
     "Forza Horizon 4",
     "Red Dead Redemption 2",
     "Ori and the Will of the Wisps",
-    "Animal Crossing New Horizons"
+    "Animal Crossing New Horizons",
+    "With the internet",
+    "DOOM Eternal",
+    "D&D (solo)"
   ],
   "soups": [
     "https://cdn.discordapp.com/attachments/503687266594586634/504016368618700801/homemade-chicken-noodle-soup.png",
@@ -55,5 +60,59 @@
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx3bhfnnLFVjULL_Fum2LR3j54u7zx7Q_tsCqGrg9zg-w_mmjvsQ",
     "https://www.bbcgoodfood.com/sites/default/files/styles/teaser_item/public/recipe/recipe-image/2018/10/cauliflower-soup-with-fancy-chorizo-topping.jpg?itok=eYP9xgNk",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbJOhpQo-oi8HWToVw6ZZQYfEbqwxiJGz2FnzUaXPR68yh-PKJ"
+  ],
+  "greetings": ["hey", "hello", "hola", "hi", "ahoy", "sup", "yo", "good day"],
+  "farewells": [
+    "bye",
+    "good bye",
+    "goodbye",
+    "see ya",
+    "see you",
+    "see you later"
+  ],
+  "thanks": [
+    "thank you",
+    "thank u",
+    "thanks",
+    "thank",
+    "merci",
+    "merçi",
+    "danke",
+    "gracias",
+    "arigato",
+    "gratzie",
+    "obrigado",
+    "thx",
+    "tx",
+    "thankx",
+    "thankss",
+    "thanksss",
+    "thankssss",
+    "that looks yummy",
+    "that looks good",
+    "that looks so good",
+    "ty",
+    "that's nice",
+    "great",
+    "sweet"
+  ],
+  "welcomes": [
+    "you're welcome",
+    "you are very welcome",
+    "you are welcome",
+    "no problem",
+    "np"
+  ],
+  "insults": [
+    "fuck off",
+    "fack off", 
+    "shut up",
+    "shut it",
+    "piss off",
+    "fuck you",
+    "screw you",
+    "I don't like you", 
+    "go fuck yourself",
+    "fuck yourself"
   ]
 }

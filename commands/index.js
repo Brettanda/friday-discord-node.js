@@ -4,4 +4,6 @@ module.exports = {
   Soup:   require("./soupTime"),
   Say:    require('./say'),
   Pizza:  require('./pizzatime'),
+  Issue:  require('./issue'),
+  // Dice:   require("./diceRoll"),
 };
