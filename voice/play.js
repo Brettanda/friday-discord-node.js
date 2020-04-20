@@ -1,26 +1,55 @@
-const Discord = require("discord.js");
-const bot = new Discord.Client();
-const fs = require('fs');
+const fs = require("fs");
+const ytdl = require("ytdl-core");
+const {delMSGtimeout} = require("../config.json");
 
 module.exports = {
   name: "play",
-  execute(msg,args) {
-    if (msg.member.voice.channel) {
-      const connection = msg.member.voice.channel.join();
-      
-      connection.play("https://cdn.glitch.com/2bc000cf-e82b-4d7d-815b-e1ba4350bf59%2FYoda%20goes%20to%20steal%20Luke's%20ketamine.mp3?v=1586857736240");
+  usage: "[Audio URL]",
+  description: "Plays the audio from a YouTube video",
+  async execute(msg, args = "",bot) {
+    // const songInfo = await ytdl.getInfo(args[0], (err,info) => {if(err) {throw err; msg.reply(err[0])}});
+    const songInfo = await ytdl.getInfo(args[0]);
+    
+  //   ytdl.getInfo(videoID, (err, info) => {
+  // if (err) throw err;
+  // let format = ytdl.chooseFormat(info.formats, { quality: '134' });
+  // if (format) {
+  //   console.log('Format found!');
+  // }
+    const song = {
+      title: songInfo.title,
+      url: songInfo.video_url
+    };
 
-      connection.on('start', () => {
-        console.log('audio.mp3 is now playing!');
+    if (msg.member.voice.channel) {
+      const connection = await msg.member.voice.channel.join();
+
+      const disp = connection.play(ytdl(song.url));
+
+      disp.on("start", () => {
+        msg.channel.send("Now Playing: `" + song.title + "`").then(status => {
+          setTimeout(() => {
+            status.delete();
+          }, delMSGtimeout);
+        });
+        console.info("Now Playing: `" + song.title + "`");
+        // bot.user.setActivity(song.title,{type:"WATCHING"});
       });
 
-      connection.on('finish', () => {
-        console.log('audio.mp3 has finished playing!');
+      disp.on("finish", () => {
+        msg.channel
+          .send("Finished Playing: `" + song.title + "`")
+          .then(status => {
+            setTimeout(() => {
+              status.delete();
+            }, delMSGtimeout);
+          });
+        console.info("Finished Playing: `" + song.title + "`");
+        // bot.user.setActivity("My thoughts",{type:"LISTENING"});
       });
 
       // Always remember to handle errors appropriately!
-      connection.on('error', console.error);
+      disp.on("error", console.error);
     }
-    
   }
-}
+};
