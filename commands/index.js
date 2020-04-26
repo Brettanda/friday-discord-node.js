@@ -5,5 +5,6 @@ module.exports = {
   Say:    require('./say'),
   Pizza:  require('./pizzatime'),
   Issue:  require('./issue'),
+  Server: require('./serverInfo'),
   // Dice:   require("./diceRoll"),
 };
