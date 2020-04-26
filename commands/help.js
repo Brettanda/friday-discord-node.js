@@ -5,7 +5,7 @@ module.exports = {
   name: "help",
   hidden: true,
   description: "List all of my commands or info about a specific command.",
-  aliases: ["commands","?"],
+  aliases: ["commands","?", ""],
   usage: "[command name]",
   // cooldown: 5,
   execute(msg, args) {
@@ -57,8 +57,9 @@ module.exports = {
     }
 
     const helpCom = new Discord.MessageEmbed()
-      .setColor("#ff0000")
+      .setColor("#fdfdfd")
       .setTitle(`**Name:** ${command.name}`)
+    	.setFooter(msg.author.tag,msg.author.displayAvatarURL())
       .setTimestamp();
 
     if (command.aliases)
