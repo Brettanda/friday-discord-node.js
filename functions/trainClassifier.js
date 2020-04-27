@@ -6,9 +6,9 @@
  * @param {Array.String} phrases
  */
 module.exports = (classifier, label, phrases) => {
-  console.info("Teaching set ", label, phrases);
+  // console.info("Teaching set ", label, phrases);
   phrases.forEach(phrase => {
-    console.log(`Teaching single ${label}: ${phrase}`);
+    // console.info(`Teaching single ${label}: ${phrase}`);
     classifier.addDocument(phrase.toLowerCase(), label);
   });
 };

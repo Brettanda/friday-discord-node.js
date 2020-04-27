@@ -1,39 +1,43 @@
 {
-  "greetings": ["hey", "hello", "hola", "hi", "ahoy", "sup", "yo", "good day"],
-  "farewells": [
-    "bye",
-    "good bye",
-    "goodbye",
-    "see ya",
-    "see you",
-    "see you later"
+  "greetings": [
+    "hey",
+    "hello",
+    "hola",
+    "hi",
+    "ahoy",
+    "sup",
+    "yo",
+    "greetings"
   ],
+  "farewells": {
+    "questions" : [
+      "bye",
+      "goodbye",
+      "see you"
+    ],
+    "answers": [
+      "bye",
+      "good day",
+      "goodbye",
+      "see ya",
+      "see you",
+      "see you later",
+      "see you in the future"
+    ]
+  },
   "thanks": {
     "questions": [
       "thank you",
-      "thank u",
       "thanks",
       "thank",
       "merci",
-      "merçi",
       "danke",
       "gracias",
       "arigato",
       "gratzie",
       "obrigado",
       "thx",
-      "tx",
-      "thankx",
-      "thankss",
-      "thanksss",
-      "thankssss",
-      "that looks yummy",
-      "that looks good",
-      "that looks so good",
-      "ty",
-      "that's nice",
-      "great",
-      "sweet"
+      "ty"
     ],
     "answers": [
       "you're welcome",
@@ -43,17 +47,124 @@
       "np"
     ]
   },
-  "insults": [
-    "fuck off",
-    "fack off",
-    "shut up",
-    "shut it",
-    "piss off",
-    "you suck",
-    "fuck you",
-    "screw you",
-    "i don't like you",
-    "go fuck yourself",
-    "fuck yourself"
-  ]
+  "compliments": {
+    "questions": [
+      "that's nice",
+      "great work",
+      "sweet",
+      "nice work",
+      "you are the best",
+      "cool",
+      "awesome",
+      "perfect",
+      "amazing",
+      "gj"
+    ],
+    "answers": [
+      "thanks",
+      "thank you"
+    ]
+  },
+  "soupCompliments": {
+    "questions": [
+      "yummy",
+      "eat",
+      "scrumptious"
+    ],
+    "answer": "I hope it fits your tastes"
+  },
+  "insults": {
+    "questions": [
+      "fuck off",
+      "fack off",
+      "shut up",
+      "piss off",
+      "you shit",
+      "you suck",
+      "screw you",
+      "dont like you",
+      "fuck yourself",
+      "trash",
+      "you die"
+    ]
+  },
+  "meaning": {
+    "questions": [
+      "meaning of life",
+      "answer to the universe and everything"
+    ],
+    "answer": "42"
+  },
+  "feeling": {
+    "questions": [
+      "how are you",
+      "how do you feel"
+    ],
+    "answers": [
+      "i am feeling great",
+      "i am doing good",
+      "im great how about you?"
+    ]
+  },
+  "failed": {
+    "questions": [
+      "thats not right",
+      "supposed to happen",
+      "not correct",
+      "didnt work",
+      "wrong",
+      "no"
+    ],
+    "answer": "If this was an error, please use `!issue` to submit this to the developer. Please include what happened and the steps to reproduce the error"
+  },
+  "votefriday": {
+    "questions": [
+      "i vote for you",
+      "i vote friday"
+    ],
+    "anwsers": [
+      "thank you for your support",
+      "i appreciate your vote"
+    ]
+  },
+  "creator": {
+    "questions": [
+      "created you",
+      "made you",
+      "your maker",
+      "your developer"
+    ],
+    "answer": "Brett is my creator :)"
+  },
+  "fun": {
+    "questions": [
+      "go have some fun",
+      "dont forget to have fun",
+      "have fun"
+    ],
+    "answers": [
+      "thank you, i will",
+      "I like having fun, will do",
+      "I will :)"
+    ]
+  },
+  "activities": {
+    "questions": [
+      "you up to",
+      "you playing",
+      "whats up"
+    ]
+  },
+  "aware": {
+    "questions": [
+      "self aware",
+      "sentient"
+    ]
+  },
+  "souptime": {
+    "questions": [
+      "what time is it",
+      "what should i have for dinner"
+    ]
+  }
 }

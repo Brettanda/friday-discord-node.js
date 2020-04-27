@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 
 var func = require("../functions");
 
-const { greetings, thanks, farewells, insults } = require("../chatModel.json");
 const { soups, prefix, delMSGtimeout, typingTime } = require("../config.json");
 
 // Load our training data
@@ -12,54 +11,87 @@ const NLP = require("natural");
 // Create a new classifier to train
 const classifier = new NLP.LogisticRegressionClassifier();
 
-function interpret(phrase) {
-  console.log("interpret", phrase);
-  console.log(classifier.getClassifications(phrase.toLowerCase()));
-  const guesses = classifier.getClassifications(phrase.toLowerCase());
-  console.log("guesses", guesses);
-  const guess = guesses.reduce((x, y) => (x && x.value > y.value ? x : y));
-  return {
-    probabilities: guesses,
-    guess: guess.value > 0.7 ? guess.label : null
-  };
-}
+var i = 0;
+Object.keys(trainingData).forEach(elementContext => {
+  const data = trainingData[elementContext].questions == undefined ? trainingData[elementContext] : trainingData[elementContext].questions;
+  func.trainClassifier(classifier, elementContext, data);
+  i++;
+  if (i === Object.keys(trainingData).length) {
+    i = 0;
+    classifier.train();
+    const filePath = "./classifier.json";
+    classifier.save(filePath, (err) => {
+      if (err) {
+        console.error(err);
+      }
+      // console.info("Created a Classifier file in ", filePath);
+    });
+  }
+});
 
 module.exports = function(msg, bot) {
   const content = msg.content.toLowerCase().replace(/[\']/, "");
+  
+  const noContext = ["greetings", "farewells", "meaning","aware"];
 
-  try {
-    //     const interpretation = interpret(content);
-    //     console.info(interpretation.guess);
+  msg.channel.messages.fetch({ limit: 2 }).then(item => {
+    
+    const interpretation = func.interpret(content.replace("friday", ""), classifier);
 
-    //     if (interpretation.guess && trainingData[interpretation.guess]) {
-    //       console.info("Found response");
-    //       // speech.reply(message, trainingData[interpretation.guess].answer);
-    //     } else {
-    //       console.info("Couldn't match phrase");
-    //       // speech.reply(message, 'Sorry, I\'m not sure what you mean');
-    //     }
+    if (interpretation.guess == null) return;
+    
+    if (!noContext.includes(interpretation.guess) && Array.from(item.filter(i => i.author.bot == true)).length < 1 && msg.mentions.has(bot.user) != true && content.includes("friday") != true && msg.channel.type != "dm") {
+      return;
+    } 
 
-    var i = 0;
-    Object.keys(trainingData).forEach((element, key) => {
-      const data = trainingData[element].questions == undefined ? trainingData[element] : trainingData[element].questions;
-      func.trainClassifier(classifier, element, data);
-      i++;
-      if (i === Object.keys(trainingData).length) {
-        classifier.train();
-        const filePath = "./classifier.json";
-        classifier.save(filePath, (err, classifier) => {
-          if (err) {
-            console.error(err);
-          }
-          console.info("Created a Classifier file in ", filePath);
-        });
-      }
-    });
-  } catch (err) {
-    console.error(err);
-  }
+    console.info("guess: ",interpretation.guess);
+    var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
 
-  if (msg.guild.id != process.env.devguild && msg.channel.type != "dm") {
+    if (interpretation.guess && data !== "dynamic") {
+      console.info("Found response");
+      msg.channel.send(func.capitalize(data));
+    } else if (data !== "dynamic") {
+      console.info("Couldn't match phrase");
+      // msg.reply('Sorry, I\'m not sure what you mean');
+    }
+
+    if(data != "dynamic") return;
+
+    // // comebacks
+    switch(interpretation.guess) {
+      case "insults":
+        const noU = new Discord.MessageEmbed()
+          .setColor("#FFD700")
+          .setTitle("No u!")
+          .setImage("https://i.imgur.com/yXEiYQ4.png");
+        msg.channel.send(noU);
+        break;
+      case "activities":
+        msg.reply(`I am playing ${bot.user.presence}`);
+        break;
+      case "aware":
+        msg.react("😅");
+        break;
+      case "souptime":
+        const num = Math.floor(Math.random() * (+soups.length - +0) + +0);
+        const image = soups[num];
+
+        msg.channel.send(
+          func.embed(
+            "It is time for soup, just for you " + msg.author.username,
+            "#FFD700",
+            "I hope you enjoy",
+            msg.author,
+            image
+          )
+        );
+        break;
+    }
+
+
+  });
+
+  if (msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD) {
     msg.channel.messages.fetch({ limit: 3 }).then(item => {
       const msgs = item.map(i => i);
       var conts = item.map(i => i.content);
@@ -86,53 +118,6 @@ module.exports = function(msg, bot) {
     });
   }
 
-  // greetings
-  if (greetings.includes(content)) {
-    const reply = greetings[func.random(0, greetings.length)];
-    msg.channel.startTyping();
-    setTimeout(() => {
-      msg.channel.stopTyping(true);
-      msg.reply(func.capitalize(reply));
-    }, typingTime);
-  }
-  // greetings.forEach(item => {
-  //   if (content.includes(item)) {
-  //     const reply = greetings[func.random(0, greetings.length)];
-  //     msg.reply(func.capitalize(reply));
-  //   }
-  // });
-
-  // thanks
-  var stop = false;
-  thanks.questions.forEach(item => {
-    if (content.includes(item) && content.includes("friday") && stop == false) {
-      const reply = thanks.answers[func.random(0, thanks.answers.length)];
-      msg.react("😘");
-      msg.reply(func.capitalize(reply));
-      stop = true;
-    }
-  });
-
-  // comebacks
-  insults.forEach(item => {
-    if (content.includes(item) && content.includes("friday")) {
-      //https://i.imgur.com/yXEiYQ4.png
-      const noU = new Discord.MessageEmbed()
-        .setColor("#FFD700")
-        .setTitle("No u!")
-        .setImage("https://i.imgur.com/yXEiYQ4.png");
-      msg.channel.send(noU);
-    }
-  });
-
-  // farewells
-  farewells.forEach(item => {
-    if (content.includes(item)) {
-      const reply = farewells[func.random(0, farewells.length)];
-      msg.reply(func.capitalize(reply));
-    }
-  });
-
   // the game
   if (content.includes("the game") || content.includes("thegame")) {
     const game = new Discord.MessageEmbed()
@@ -158,24 +143,6 @@ module.exports = function(msg, bot) {
 
   if (content.includes("I like you") && content.includes("friday")) {
     msg.reply("I like you too");
-  }
-
-  if (
-    content.includes("what time is it") ||
-    content.includes("whats the time")
-  ) {
-    const num = Math.floor(Math.random() * (+soups.length - +0) + +0);
-    const image = soups[num];
-
-    msg.channel.send(
-      func.embed(
-        "It is time for soup, just for you " + msg.author.username,
-        "#FFD700",
-        "I hope you enjoy",
-        msg.author,
-        image
-      )
-    );
   }
 
   if (content.includes("can i get") && content.includes("soup")) {
@@ -216,10 +183,6 @@ module.exports = function(msg, bot) {
       });
   }
 
-  if (content.includes("what is the meaning of life")) {
-    msg.reply("42");
-  }
-
   if (content == "f" || content.includes("can i get an f")) {
     msg.channel.send("F");
   }
@@ -249,15 +212,12 @@ module.exports = function(msg, bot) {
     msg.channel.send("Da fuck");
   }
 
-  if (content.includes("self aware") && !content.includes("friday")) {
-    msg.react("😅");
-  }
-
   if (content.includes("neko")) {
     msg.react("😻");
   }
 
-  /*if (content.match(/\@everyone/)) {
-    msg.reply('please use @here instead');
-  }*/
+/*if (content.match(/\@everyone/)) {
+  msg.reply('please use @here instead');
+}*/
+  
 };

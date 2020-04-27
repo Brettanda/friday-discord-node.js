@@ -9,9 +9,10 @@
  * @returns {Object}
  */
 module.exports = (phrase, classifier) => {
-  console.info("interpret", phrase);
-  const guesses = classifier.getClassifications(phrase);
-  console.info("guesses", guesses);
+  console.log("interpret", phrase);
+  // console.log(classifier.getClassifications(phrase.toLowerCase()));
+  const guesses = classifier.getClassifications(phrase.toLowerCase());
+  console.log("guesses", guesses);
   const guess = guesses.reduce((x, y) => (x && x.value > y.value ? x : y));
   return {
     probabilities: guesses,
