@@ -53,7 +53,7 @@
       "great work",
       "sweet",
       "nice work",
-      "you are the best",
+      "the best",
       "cool",
       "awesome",
       "perfect",
@@ -109,17 +109,16 @@
   "failed": {
     "questions": [
       "thats not right",
-      "supposed to happen",
-      "not correct",
+      "not supposed to happen",
+      "incorrect",
       "didnt work",
-      "wrong",
-      "no"
+      "thats wrong"
     ],
     "answer": "If this was an error, please use `!issue` to submit this to the developer. Please include what happened and the steps to reproduce the error"
   },
   "votefriday": {
     "questions": [
-      "i vote for you",
+      "you have my vote",
       "i vote friday"
     ],
     "anwsers": [
@@ -133,8 +132,7 @@
       "made you",
       "your maker",
       "your developer"
-    ],
-    "answer": "Brett is my creator :)"
+    ]
   },
   "fun": {
     "questions": [
@@ -150,7 +148,6 @@
   },
   "activities": {
     "questions": [
-      "you up to",
       "you playing",
       "whats up"
     ]
@@ -163,8 +160,14 @@
   },
   "souptime": {
     "questions": [
-      "what time is it",
-      "what should i have for dinner"
+      "time is it",
+      "i have for dinner"
     ]
+  },
+  "whoami": {
+    "questions": [
+      "what is your purpose"
+    ],
+    "answer": "I am a Discord bot from the future, with the goal to bring life to any Discord server"
   }
 }

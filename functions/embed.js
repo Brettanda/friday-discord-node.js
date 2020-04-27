@@ -21,7 +21,9 @@ module.exports = (
 
   if (image) embed.setImage(image);
 
-  if (msg && val) embed.addField(msg, val, true);
+  if (Array.isArray(msg) && Array.isArray(val)) msg.map((item,index) => embed.addField(item, val[index], true));
+
+  if (typeof msg == "string" && typeof val == "string") embed.addField(msg,val,true);
 
   embed.setFooter(author.tag, author.displayAvatarURL()).setTimestamp();
 

@@ -6,5 +6,6 @@ module.exports = {
   Pizza:  require('./pizzatime'),
   Issue:  require('./issue'),
   Server: require('./serverInfo'),
+  Info:   require('./info'),
   // Dice:   require("./diceRoll"),
 };

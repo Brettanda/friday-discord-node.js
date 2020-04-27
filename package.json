@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start":  "node index.js"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -17,7 +17,7 @@
     "natural": "^1.0.0"
   },
   "engines": {
-    "node": "13.x"
+    "node": ">=12.x"
   },
   "keywords": [
     "node",

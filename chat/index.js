@@ -60,17 +60,18 @@ module.exports = function(msg, bot) {
     // // comebacks
     switch(interpretation.guess) {
       case "insults":
-        const noU = new Discord.MessageEmbed()
-          .setColor("#FFD700")
-          .setTitle("No u!")
-          .setImage("https://i.imgur.com/yXEiYQ4.png");
-        msg.channel.send(noU);
+        msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, "https://i.imgur.com/yXEiYQ4.png"));
         break;
       case "activities":
-        msg.reply(`I am playing ${bot.user.presence}`);
+        msg.reply(`I am playing ${bot.user.presence.activities[0].name}`);
         break;
       case "aware":
         msg.react("😅");
+        break;
+      case "creator":
+        bot.users.fetch(process.env.DEVID).then(member => {
+          msg.channel.send(`${member.tag} is my creator :)`);
+        });
         break;
       case "souptime":
         const num = Math.floor(Math.random() * (+soups.length - +0) + +0);
@@ -91,32 +92,32 @@ module.exports = function(msg, bot) {
 
   });
 
-  if (msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD) {
-    msg.channel.messages.fetch({ limit: 3 }).then(item => {
-      const msgs = item.map(i => i);
-      var conts = item.map(i => i.content);
-      const reply =
-        "Don't spam please. If this is not spam please use `" +
-        prefix +
-        "issue`";
-      conts = conts.filter(i => i != reply);
-      if (func.hasDups(conts) == true) {
-        if (
-          msgs.filter(i => i.author.id == bot.user.id && i.content == reply)
-            .length > 0
-        ) {
-          msg.delete();
-          return;
-        }
-        msg.delete();
-        msg.channel.send(reply).then(status => {
-          setTimeout(() => {
-            status.delete();
-          }, delMSGtimeout);
-        });
-      }
-    });
-  }
+  // if (msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD) {
+  //   msg.channel.messages.fetch({ limit: 3 }).then(item => {
+  //     const msgs = item.map(i => i);
+  //     var conts = item.map(i => i.content);
+  //     const reply =
+  //       "Don't spam please. If this is not spam please use `" +
+  //       prefix +
+  //       "issue`";
+  //     conts = conts.filter(i => i != reply);
+  //     if (func.hasDups(conts) == true) {
+  //       if (
+  //         msgs.filter(i => i.author.id == bot.user.id && i.content == reply)
+  //           .length > 0
+  //       ) {
+  //         msg.delete();
+  //         return;
+  //       }
+  //       msg.delete();
+  //       msg.channel.send(reply).then(status => {
+  //         setTimeout(() => {
+  //           status.delete();
+  //         }, delMSGtimeout);
+  //       });
+  //     }
+  //   });
+  // }
 
   // the game
   if (content.includes("the game") || content.includes("thegame")) {
