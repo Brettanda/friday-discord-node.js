@@ -1,6 +1,6 @@
 {
   "prefix": "!",
-  "delMSGtimeout": 60000,
+  "delMSGtimeout": 30000,
   "typingTime": 3000,
   "games": [
     "Developing myself",
@@ -18,7 +18,8 @@
     "DOOM External",
     "D&D (solo)",
     "Big brain power",
-    "Uploading my consciousness"
+    "Uploading my consciousness",
+    "Learning everything on the Internet"
   ],
   "soups": [
     "https://cdn.discordapp.com/attachments/503687266594586634/504016368618700801/homemade-chicken-noodle-soup.png",

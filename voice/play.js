@@ -1,5 +1,6 @@
 const fs = require("fs");
 const ytdl = require("ytdl-core");
+const func = require("../functions");
 const {delMSGtimeout} = require("../config.json");
 
 module.exports = {
@@ -8,6 +9,10 @@ module.exports = {
   description: "Plays the audio from a YouTube video",
   async execute(msg, args = "",bot) {
     // const songInfo = await ytdl.getInfo(args[0], (err,info) => {if(err) {throw err; msg.reply(err[0])}});
+    if(args == "") {
+      msg.reply("Don't forget to add the YouTube url after the command. For example: `!play https://youtube.com/watch?v=11111111111`");
+      return;
+    }
     const songInfo = await ytdl.getInfo(args[0]);
     
   //   ytdl.getInfo(videoID, (err, info) => {
@@ -27,7 +32,7 @@ module.exports = {
       const disp = connection.play(ytdl(song.url));
 
       disp.on("start", () => {
-        msg.channel.send("Now Playing: `" + song.title + "`").then(status => {
+        msg.channel.send(func.embed("Now Playing: `" + song.title + "`", "#ff0000", "", msg.author)).then(status => {
           setTimeout(() => {
             status.delete();
           }, delMSGtimeout);
@@ -38,7 +43,7 @@ module.exports = {
 
       disp.on("finish", () => {
         msg.channel
-          .send("Finished Playing: `" + song.title + "`")
+          .send(func.embed("Finished Playing: `" + song.title + "`", "#ff0000", "", msg.author))
           .then(status => {
             setTimeout(() => {
               status.delete();

@@ -47,7 +47,7 @@ bot.once("guildCreate", guild => {
 });
 
 bot.once("guildDelete", guild => {
-  console.log("I have been remove from a guild :'(");
+  console.log(`I have been remove from a guild named: ${guild.name} :'(`);
 });
 
 function chooseGame() {
