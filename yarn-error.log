@@ -1,5 +1,5 @@
 Arguments: 
-  /home/brett/.nvm/versions/node/v13.0.1/bin/node /home/brett/.nvm/versions/node/v13.0.1/bin/yarn add gridsome-plugin-scheduled-posts
+  /home/brett/.nvm/versions/node/v13.0.1/bin/node /home/brett/.nvm/versions/node/v13.0.1/bin/yarn add @tensorflow-models/universal-sentance-encoder
 
 PATH: 
   /home/brett/.nvm/versions/node/v13.0.1/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/usr/local/nvm/versions/node/v/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/gridsome-plugin-scheduled-posts: Not found
+  Error: https://registry.yarnpkg.com/@tensorflow-models%2funiversal-sentance-encoder: Not found
       at Request.params.callback [as _callback] (/home/brett/.nvm/versions/node/v13.0.1/lib/node_modules/yarn/lib/cli.js:66926:18)
       at Request.self.callback (/home/brett/.nvm/versions/node/v13.0.1/lib/node_modules/yarn/lib/cli.js:140564:22)
       at Request.emit (events.js:210:5)
@@ -34,16 +34,18 @@ npm manifest:
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-      "start":  "node index.js"
+      "start": "node index.js",
+      "dev": "node index.js --dev"
     },
     "dependencies": {
-      "express": "^4.17.1",
-      "dotenv": "^8.2.0",
-      "discord.js": "^12.2.0",
-      "fs": "^0.0.2",
       "@discordjs/opus": "^0.2.1",
-      "ytdl-core": "^2.1.1",
-      "natural": "^1.0.0"
+      "@tensorflow/tfjs": "^1.7.3",
+      "discord.js": "^12.2.0",
+      "dotenv": "^8.2.0",
+      "express": "^4.17.1",
+      "fs": "^0.0.2",
+      "natural": "^1.0.0",
+      "ytdl-core": "^2.1.1"
     },
     "engines": {
       "node": ">=12.x"
@@ -87,6 +89,79 @@ Lockfile:
       node-pre-gyp "^0.14.0"
       patch-package "^6.2.2"
       postinstall-postinstall "^2.1.0"
+  
+  "@tensorflow/tfjs-converter@1.7.3":
+    version "1.7.3"
+    resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-converter/-/tfjs-converter-1.7.3.tgz#c343060215a079d816f4435170869e8f8f1c095d"
+    integrity sha512-C6ksvLzhgqDPwVBXc28+k4m01kB0WC3iXemqfe38Ld3Dc9AIU7I0xvYW7z1rfa/txRDDOG7kDf6zWLUHq2yiXQ==
+  
+  "@tensorflow/tfjs-core@1.7.3":
+    version "1.7.3"
+    resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-core/-/tfjs-core-1.7.3.tgz#7bdf8e1bd4df38069fb8a1a0f9925fb98c1b8a50"
+    integrity sha512-+l0BxgNLQuKSlKAWjd9X4zOQaZo+RzQT1artOw/q88LpseH33OYV6705KpMMTy6FEk09NLQX4mgWwelkWDrnRg==
+    dependencies:
+      "@types/offscreencanvas" "~2019.3.0"
+      "@types/seedrandom" "2.4.27"
+      "@types/webgl-ext" "0.0.30"
+      "@types/webgl2" "0.0.4"
+      node-fetch "~2.1.2"
+      seedrandom "2.4.3"
+  
+  "@tensorflow/tfjs-data@1.7.3":
+    version "1.7.3"
+    resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-data/-/tfjs-data-1.7.3.tgz#761dee6dfee07b54addbf7f1d1b5cd1de2d66cdf"
+    integrity sha512-uA/ga83Qji67Kp8fiRfE94m1U1nvejYTs1JDj7ps4m6sA+K4uaVhh/B6/OyvBUutvn7HBpbjJ1KoChdbJIfa8w==
+    dependencies:
+      "@types/node-fetch" "^2.1.2"
+      node-fetch "~2.1.2"
+  
+  "@tensorflow/tfjs-layers@1.7.3":
+    version "1.7.3"
+    resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-layers/-/tfjs-layers-1.7.3.tgz#dd72e5e5ef7d8d90401866513874c6dfbceb17a2"
+    integrity sha512-Iy8LRgWrU1mAH5ZLjigWUMEm4BnjhxCsjfNYNAFxjBGCthYDkdzyVyZOW9BtXHMCHP+RRRQfdyNTzIOBoW8Q/Q==
+  
+  "@tensorflow/tfjs@^1.7.3":
+    version "1.7.3"
+    resolved "https://registry.yarnpkg.com/@tensorflow/tfjs/-/tfjs-1.7.3.tgz#35968aee674e1267374f22726c136759ee2d2e1b"
+    integrity sha512-g1Y+2U+tQXG9XWVLH7xfNPTyB/OSdMqAwgrLjSCWsnqM/YZSQ5SZdYcAnd0pTRIeioi35KmGC+DkUMcp9f20Sg==
+    dependencies:
+      "@tensorflow/tfjs-converter" "1.7.3"
+      "@tensorflow/tfjs-core" "1.7.3"
+      "@tensorflow/tfjs-data" "1.7.3"
+      "@tensorflow/tfjs-layers" "1.7.3"
+  
+  "@types/node-fetch@^2.1.2":
+    version "2.5.7"
+    resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.7.tgz#20a2afffa882ab04d44ca786449a276f9f6bbf3c"
+    integrity sha512-o2WVNf5UhWRkxlf6eq+jMZDu7kjgpgJfl4xVNlvryc95O/6F2ld8ztKX+qu+Rjyet93WAWm5LjeX9H5FGkODvw==
+    dependencies:
+      "@types/node" "*"
+      form-data "^3.0.0"
+  
+  "@types/node@*":
+    version "13.13.4"
+    resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.4.tgz#1581d6c16e3d4803eb079c87d4ac893ee7501c2c"
+    integrity sha512-x26ur3dSXgv5AwKS0lNfbjpCakGIduWU1DU91Zz58ONRWrIKGunmZBNv4P7N+e27sJkiGDsw/3fT4AtsqQBrBA==
+  
+  "@types/offscreencanvas@~2019.3.0":
+    version "2019.3.0"
+    resolved "https://registry.yarnpkg.com/@types/offscreencanvas/-/offscreencanvas-2019.3.0.tgz#3336428ec7e9180cf4566dfea5da04eb586a6553"
+    integrity sha512-esIJx9bQg+QYF0ra8GnvfianIY8qWB0GBx54PK5Eps6m+xTj86KLavHv6qDhzKcu5UUOgNfJ2pWaIIV7TRUd9Q==
+  
+  "@types/seedrandom@2.4.27":
+    version "2.4.27"
+    resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-2.4.27.tgz#9db563937dd86915f69092bc43259d2f48578e41"
+    integrity sha1-nbVjk33YaRX2kJK8QyWdL0hXjkE=
+  
+  "@types/webgl-ext@0.0.30":
+    version "0.0.30"
+    resolved "https://registry.yarnpkg.com/@types/webgl-ext/-/webgl-ext-0.0.30.tgz#0ce498c16a41a23d15289e0b844d945b25f0fb9d"
+    integrity sha512-LKVgNmBxN0BbljJrVUwkxwRYqzsAEPcZOe6S2T6ZaBDIrFp0qu4FNlpc5sM1tGbXUYFgdVQIoeLk1Y1UoblyEg==
+  
+  "@types/webgl2@0.0.4":
+    version "0.0.4"
+    resolved "https://registry.yarnpkg.com/@types/webgl2/-/webgl2-0.0.4.tgz#c3b0f9d6b465c66138e84e64cb3bdf8373c2c279"
+    integrity sha512-PACt1xdErJbMUOUweSrbVM7gSIYm1vTncW2hF6Os/EeWi6TXYAYMPp+8v6rzHmypE5gHrxaxZNXgMkJVIdZpHw==
   
   "@webassemblyjs/ast@1.9.0":
     version "1.9.0"
@@ -1256,6 +1331,15 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
     integrity sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=
   
+  form-data@^3.0.0:
+    version "3.0.0"
+    resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.0.tgz#31b7e39c85f1355b7139ee0c647cf0de7f83c682"
+    integrity sha512-CKMFDglpbMi6PyN+brwB9Q/GOw0eAnsrEZDgcsH5Krhz5Od/haKHAX0NmQfha2zPPz0JpWzA7GJHGSnvCRLWsg==
+    dependencies:
+      asynckit "^0.4.0"
+      combined-stream "^1.0.8"
+      mime-types "^2.1.12"
+  
   forwarded@~0.1.2:
     version "0.1.2"
     resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
@@ -2074,6 +2158,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
     integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
   
+  node-fetch@~2.1.2:
+    version "2.1.2"
+    resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
+    integrity sha1-q4hOjn5X44qUR1POxwb3iNF2i7U=
+  
   node-libs-browser@^2.2.1:
     version "2.2.1"
     resolved "https://registry.yarnpkg.com/node-libs-browser/-/node-libs-browser-2.2.1.tgz#b64f513d18338625f90346d27b0d235e631f6425"
@@ -2103,7 +2192,7 @@ Lockfile:
       util "^0.11.0"
       vm-browserify "^1.0.1"
   
-  node-pre-gyp@*, node-pre-gyp@^0.14.0:
+  node-pre-gyp@^0.14.0:
     version "0.14.0"
     resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.14.0.tgz#9a0596533b877289bcad4e143982ca3d904ddc83"
     integrity sha512-+CvDC7ZttU/sSt9rFjix/P05iS43qHCOOGzcr3Ry99bXG7VX953+vFyEuph/tfqoYu8dttBkE86JSKBO2OzcxA==
@@ -2628,6 +2717,11 @@ Lockfile:
       ajv "^6.1.0"
       ajv-errors "^1.0.0"
       ajv-keywords "^3.1.0"
+  
+  seedrandom@2.4.3:
+    version "2.4.3"
+    resolved "https://registry.yarnpkg.com/seedrandom/-/seedrandom-2.4.3.tgz#2438504dad33917314bff18ac4d794f16d6aaecc"
+    integrity sha1-JDhQTa0zkXMUv/GKxNeU8W1qrsw=
   
   semver@^5.3.0, semver@^5.5.0, semver@^5.6.0:
     version "5.7.1"

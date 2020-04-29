@@ -9,11 +9,13 @@
  * @returns {Object}
  */
 module.exports = (phrase, classifier) => {
-  console.log("interpret", phrase);
+  console.info("interpret", phrase);
   // console.log(classifier.getClassifications(phrase.toLowerCase()));
   const guesses = classifier.getClassifications(phrase.toLowerCase());
-  console.log("guesses", guesses);
+  console.info("guesses", guesses/*.filter((item,i) => i < 5)*/);
   const guess = guesses.reduce((x, y) => (x && x.value > y.value ? x : y));
+  // console.info("pre-guess",guess)
+  // console.info(guess.value > 0.7);
   return {
     probabilities: guesses,
     guess: guess.value > 0.7 ? guess.label : null

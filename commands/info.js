@@ -8,13 +8,14 @@ module.exports = {
 		msg.channel.send(
 			func.embed(
 				`${bot.user.username} - Info`,
-				"#f2f2f2",
+				"#fdfdfd",
 				"Some information about me, Friday ;)",
 				msg.author,
 				"",
 				"",
 				"",
 				["Username","Uptime","Guilds joined","Status","Loving Life"],
-				[bot.user.username, bot.uptime, bot.guilds.cache.map(item => item.name).length, bot.user.presence.activities[0].name,"true"]))
+				[bot.user.username, bot.uptime, bot.guilds.cache.map(item => item.name).length, bot.user.presence.activities[0].name,"true"],
+				bot.user.displayAvatarURL()))
 	}
 }

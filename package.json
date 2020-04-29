@@ -5,16 +5,19 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start":  "node index.js"
+    "start": "node index.js",
+    "dev": "node index.js --dev"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "dotenv": "^8.2.0",
-    "discord.js": "^12.2.0",
-    "fs": "^0.0.2",
     "@discordjs/opus": "^0.2.1",
-    "ytdl-core": "^2.1.1",
-    "natural": "^1.0.0"
+    "@tensorflow-models/universal-sentence-encoder": "^1.2.2",
+    "@tensorflow/tfjs": "^1.7.3",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.2",
+    "natural": "^1.0.0",
+    "ytdl-core": "^2.1.1"
   },
   "engines": {
     "node": ">=12.x"

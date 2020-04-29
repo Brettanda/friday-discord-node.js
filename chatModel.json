@@ -71,7 +71,19 @@
       "eat",
       "scrumptious"
     ],
-    "answer": "I hope it fits your tastes"
+    "answer": "i hope it fits your tastes"
+  },
+  "like": {
+    "questions": [
+      "i like you"
+    ],
+    "answer": "i like you too"
+  },
+  "love": {
+    "questions": [
+      "i love you"
+    ],
+    "answer": "i dont think this relationship is going to work out"
   },
   "insults": {
     "questions": [
@@ -82,7 +94,7 @@
       "you shit",
       "you suck",
       "screw you",
-      "dont like you",
+      "i dont like you",
       "fuck yourself",
       "trash",
       "you die"
@@ -136,8 +148,6 @@
   },
   "fun": {
     "questions": [
-      "go have some fun",
-      "dont forget to have fun",
       "have fun"
     ],
     "answers": [
@@ -149,13 +159,26 @@
   "activities": {
     "questions": [
       "you playing",
-      "whats up"
+      "whats up",
+      "what are you doing"
     ]
   },
   "aware": {
     "questions": [
       "self aware",
-      "sentient"
+      "sentient",
+      "artificial intelligence"
+    ]
+  },
+  "alive": {
+    "questions": [
+      "are you alive",
+      "are you a bot"
+    ],
+    "answers": [
+      "maybe",
+      "that is up to you",
+      "i don't think i should answer that"
     ]
   },
   "souptime": {
@@ -166,8 +189,28 @@
   },
   "whoami": {
     "questions": [
-      "what is your purpose"
+      "what is your purpose",
+      "what are you",
+      "who are you"
     ],
     "answer": "I am a Discord bot from the future, with the goal to bring life to any Discord server"
+  },
+  "stop": {
+    "questions": [
+      "stop",
+      "halt"
+    ]
+  },
+  "nou": {
+    "questions": [
+      "no u",
+      "no you"
+    ]
+  },
+  "discord": {
+    "questions": [
+      "what do you think about discord"
+    ],
+    "answer": "it's great, with out it i wouldn't be able to talk to you"
   }
 }

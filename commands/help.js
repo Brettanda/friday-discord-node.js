@@ -8,7 +8,7 @@ module.exports = {
   aliases: ["commands","?", ""],
   usage: "[command name]",
   // cooldown: 5,
-  execute(msg, args) {
+  execute(msg, args,bot) {
     const data = [];
     const { commands } = msg.client;
 
@@ -16,7 +16,8 @@ module.exports = {
       const coms = commands.filter(com => !com.hidden);
       const helpEmbed = new Discord.MessageEmbed()
       .setColor("#fdfdfd")
-      .setTitle("Help")
+      .setTitle("Friday - Help")
+      .setThumbnail(bot.user.displayAvatarURL())
       .setDescription("Here's a list of all my commands:")
       .addField("`" + coms.map(command => !command.hidden ? command.name : '').join("`, `") + "`",`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,true)
       .setFooter(msg.author.tag,msg.author.displayAvatarURL())

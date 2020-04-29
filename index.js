@@ -5,8 +5,9 @@ const { prefix, games, typingTime } = require("./config.json");
 
 bot.commands = new Discord.Collection();
 const botCommands = require("./commands");
-const botVoice = require("./voice");
 const botChat = require("./chat");
+
+// const NLP = require("natural");
 
 bot.login(process.env.TOKEN);
 
@@ -16,6 +17,8 @@ bot.once("ready", () => {
       bot.guilds.cache.map(item => item.name).length
     } guilds`
   );
+
+  if (process.argv.includes("--dev")) console.log("Development Setup");
 
   // console.info(Object.keys(bot.guilds).length);
   // console.info(bot.guilds.cache.map(item => item.name).join(" -- "));
@@ -47,7 +50,7 @@ bot.once("guildCreate", guild => {
 });
 
 bot.once("guildDelete", guild => {
-  console.log(`I have been remove from a guild named: ${guild.name} :'(`);
+  console.log(`I have been remove from the guild named: ${guild.name} :'(`);
 });
 
 function chooseGame() {
@@ -56,7 +59,7 @@ function chooseGame() {
   bot.user.setActivity(game, { type: "PLAYING" });
   // console.info("Currently playing: " + game);
 
-  const choose = setInterval(chooseGame, 1800000);
+  setInterval(chooseGame, 1800000);
 }
 
 bot.once("guildMemberAdd", member => {
@@ -68,12 +71,13 @@ Object.keys(botCommands).map(key => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
 });
 
-Object.keys(botVoice).map(key => {
-  bot.commands.set(botVoice[key].name, botVoice[key]);
-});
+// console.log()//.map(com => botCommands[com].aliases).filter(item => item != undefined).map(item => item.join(", ")));
+// var coms = Object.keys(botCommands).map(com => botCommands[com].name);
 
-bot.on("message", msg => {
-  if (msg.author.bot) return;
+// var spellcheck = new NLP.Spellcheck(coms);
+
+bot.once("message", msg => {
+  if (msg.author.bot || (process.argv.includes("--dev") && msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD) || (!process.argv.includes("--dev") && msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD)) return;
 
   if (!msg.content.startsWith(prefix)) {
     botChat(msg, bot);
@@ -81,27 +85,33 @@ bot.on("message", msg => {
   }
 
   const args = msg.content.slice(prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
+  var command = args.shift().toLowerCase();
   console.info(`Called command: ${command}`);
 
   if (
     !bot.commands.get(command) &&
     !bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))
   ) {
-    msg.channel.send("That command could not be found");
-    return;
+    // if (!spellcheck.isCorrect(command) && bot.commands.get(spellcheck.getCorrections(command, 2)[0])) {
+      // msg.reply("I think you mean't `" + prefix + spellcheck.getCorrections(command, 2)[0]+"`");
+      // command = spellcheck.getCorrections(command, 2)[0];
+      // return;
+    // } else {
+      msg.channel.send("That command could not be found");
+      return;
+    // }
   }
 
   try {
     bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))
       ? bot.commands
           .find(cmd => cmd.aliases && cmd.aliases.includes(command))
-          .execute(msg, args)
+          .execute(msg, args,bot)
       : bot.commands.get(command).execute(msg, args, bot);
   } catch (error) {
     console.error(error);
     msg.reply("there was an error trying to execute that command!");
   }
 
-  if(msg.channel.type != "dm") msg.delete();
+  if(msg.channel.type != "dm") msg.delete({timeout:0,reason:"Command"});
 });

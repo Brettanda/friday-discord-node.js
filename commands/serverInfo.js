@@ -7,14 +7,14 @@ module.exports = {
   execute(msg, args = "") {
     const reply = embed(
       msg.guild.name + " - info",
-      "",
+      "#fdfdfd",
       "",
       msg.author,
       "",
       "",
       "",
-      "Info",
-      `**Server Name**: ${msg.guild.name}\n**Members**: ${msg.guild.memberCount}\n**Owner**: ${msg.guild.owner.user.tag}\n**Server ID**: ${msg.guild.id}`
+      ["Server Name","Members","Owner","Server ID","Region"],
+      [msg.guild.name, msg.guild.memberCount, msg.guild.owner.user.tag, msg.guild.id,msg.guild.region]
     );
     msg.channel.send(reply);
   }

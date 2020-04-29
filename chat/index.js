@@ -11,16 +11,13 @@ const NLP = require("natural");
 // Create a new classifier to train
 const classifier = new NLP.LogisticRegressionClassifier();
 
-var i = 0;
-Object.keys(trainingData).forEach(elementContext => {
-  const data = trainingData[elementContext].questions == undefined ? trainingData[elementContext] : trainingData[elementContext].questions;
-  func.trainClassifier(classifier, elementContext, data);
-  i++;
-  if (i === Object.keys(trainingData).length) {
-    i = 0;
+const keys = Object.keys(trainingData);
+
+keys.map((elementContext,i) => {
+  func.trainClassifier(classifier, elementContext, trainingData[elementContext].questions == undefined ? trainingData[elementContext] : trainingData[elementContext].questions);
+  if (i+1 === keys.length) {
     classifier.train();
-    const filePath = "./classifier.json";
-    classifier.save(filePath, (err) => {
+    classifier.save("./classifier.json", (err) => {
       if (err) {
         console.error(err);
       }
@@ -32,15 +29,36 @@ Object.keys(trainingData).forEach(elementContext => {
 module.exports = function(msg, bot) {
   const content = msg.content.toLowerCase().replace(/[\']/, "");
   
-  const noContext = ["greetings", "farewells", "meaning","aware"];
+  const noContext = ["greetings", "farewells", "meaning", "aware"];
 
   msg.channel.messages.fetch({ limit: 2 }).then(item => {
+    const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+
+    if (pattern.test(content)) return;
     
     const interpretation = func.interpret(content.replace("friday", ""), classifier);
 
+    console.info("guess guess:",interpretation.guess)
+
     if (interpretation.guess == null) return;
     
-    if (!noContext.includes(interpretation.guess) && Array.from(item.filter(i => i.author.bot == true)).length < 1 && msg.mentions.has(bot.user) != true && content.includes("friday") != true && msg.channel.type != "dm") {
+    console.log(!noContext.includes(interpretation.guess),
+      Array.from(item.filter(i => i.author.bot == true)).length < 1,
+      msg.mentions.has(bot.user) != true,
+      content.includes("friday") != true,
+      msg.channel.type != "dm");
+    if (
+      !noContext.includes(interpretation.guess) &&
+      Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
+      msg.mentions.has(bot.user) != true &&
+      content.includes("friday") != true &&
+      msg.channel.type != "dm"
+    ) {
       return;
     } 
 
@@ -74,8 +92,8 @@ module.exports = function(msg, bot) {
         });
         break;
       case "souptime":
-        const num = Math.floor(Math.random() * (+soups.length - +0) + +0);
-        const image = soups[num];
+        const image = soups[func.random(0,soups.length)];
+        console.info(`Soup: ${image}`);
 
         msg.channel.send(
           func.embed(
@@ -87,37 +105,44 @@ module.exports = function(msg, bot) {
           )
         );
         break;
+      case "stop":
+        msg.react("😅");
+        break;
+      case "nou":
+        msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, "https://i.imgur.com/yXEiYQ4.png"));
+        break;
+        
     }
 
 
   });
 
-  // if (msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD) {
-  //   msg.channel.messages.fetch({ limit: 3 }).then(item => {
-  //     const msgs = item.map(i => i);
-  //     var conts = item.map(i => i.content);
-  //     const reply =
-  //       "Don't spam please. If this is not spam please use `" +
-  //       prefix +
-  //       "issue`";
-  //     conts = conts.filter(i => i != reply);
-  //     if (func.hasDups(conts) == true) {
-  //       if (
-  //         msgs.filter(i => i.author.id == bot.user.id && i.content == reply)
-  //           .length > 0
-  //       ) {
-  //         msg.delete();
-  //         return;
-  //       }
-  //       msg.delete();
-  //       msg.channel.send(reply).then(status => {
-  //         setTimeout(() => {
-  //           status.delete();
-  //         }, delMSGtimeout);
-  //       });
-  //     }
-  //   });
-  // }
+  if (msg.channel.type != "dm" && msg.guild.id == process.env.DEVGUILD) {
+    msg.channel.messages.fetch({ limit: 3 }).then(item => {
+      const msgs = item.map(i => i);
+      var conts = item.map(i => i.content);
+      const reply =
+        "Don't spam please. If this is not spam please use `" +
+        prefix +
+        "issue`";
+      conts = conts.filter(i => i != reply);
+      if (func.hasDups(conts) == true) {
+        if (
+          msgs.filter(i => i.author.id == bot.user.id && i.content == reply)
+            .length > 0
+        ) {
+          msg.delete(0,"Message: `"+msg.content+"` Spam, hopfully");
+          return;
+        }
+        msg.delete();
+        msg.channel.send(reply).then(status => {
+          setTimeout(() => {
+            status.delete();
+          }, delMSGtimeout);
+        });
+      }
+    });
+  }
 
   // the game
   if (content.includes("the game") || content.includes("thegame")) {
@@ -130,21 +155,17 @@ module.exports = function(msg, bot) {
   }
 
   // no u
-  if (
-    content.includes("no u") ||
-    content.includes("no you") ||
-    content.includes("nou")
-  ) {
-    const noU = new Discord.MessageEmbed()
-      .setColor("#FFD700")
-      .setTitle("No u!")
-      .setImage("https://i.imgur.com/yXEiYQ4.png");
-    msg.channel.send(noU);
-  }
+  // if (
+  //   content.includes("no u") ||
+  //   content.includes("no you") ||
+  //   content.includes("nou")
+  // ) {
+  //   msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author,"https://i.imgur.com/yXEiYQ4.png"));
+  // }
 
-  if (content.includes("I like you") && content.includes("friday")) {
-    msg.reply("I like you too");
-  }
+  // if (content.includes("I like you") && content.includes("friday")) {
+  //   msg.reply("I like you too");
+  // }
 
   if (content.includes("can i get") && content.includes("soup")) {
     const num = func.random(0, soups.length);
@@ -161,9 +182,9 @@ module.exports = function(msg, bot) {
     );
   }
 
-  if (content.includes("stop") && content.includes("friday")) {
-    msg.react("😅");
-  }
+  // if (content.includes("stop") && content.includes("friday")) {
+  //   msg.react("😅");
+  // }
 
   if (content.includes("bazinga")) {
     msg.channel

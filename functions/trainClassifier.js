@@ -7,7 +7,7 @@
  */
 module.exports = (classifier, label, phrases) => {
   // console.info("Teaching set ", label, phrases);
-  phrases.forEach(phrase => {
+  phrases.map(phrase => {
     // console.info(`Teaching single ${label}: ${phrase}`);
     classifier.addDocument(phrase.toLowerCase(), label);
   });

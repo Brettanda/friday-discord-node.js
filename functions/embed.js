@@ -9,7 +9,8 @@ module.exports = (
   usage,
   aliases,
   msg,
-  val
+  val,
+  thumbNail
 ) => {
   const embed = new Discord.MessageEmbed();
 
@@ -24,6 +25,8 @@ module.exports = (
   if (Array.isArray(msg) && Array.isArray(val)) msg.map((item,index) => embed.addField(item, val[index], true));
 
   if (typeof msg == "string" && typeof val == "string") embed.addField(msg,val,true);
+
+  if(thumbNail) embed.setThumbnail(thumbNail)
 
   embed.setFooter(author.tag, author.displayAvatarURL()).setTimestamp();
 

@@ -1,4 +1,4 @@
-const fs = require("fs");
+// const fs = require("fs");
 const ytdl = require("ytdl-core");
 const func = require("../functions");
 const {delMSGtimeout} = require("../config.json");
@@ -26,17 +26,15 @@ module.exports = {
       url: songInfo.video_url
     };
 
-    if (msg.member.voice.channel) {
+    if (msg.member.voice.channel && msg.member.voice.channel.joinable()) {
       const connection = await msg.member.voice.channel.join();
 
-      const disp = connection.play(ytdl(song.url));
+      const disp = connection.play(ytdl(song.url, { filter: 'audioonly' }));
 
       disp.on("start", () => {
-        msg.channel.send(func.embed("Now Playing: `" + song.title + "`", "#ff0000", "", msg.author)).then(status => {
-          setTimeout(() => {
-            status.delete();
-          }, delMSGtimeout);
-        });
+        msg.channel.send(func.embed("Now Playing: `" + song.title + "`", "#ff0000", "", msg.author)).then(status => 
+          status.delete({ timeout: delMSGtimeout})
+        );
         console.info("Now Playing: `" + song.title + "`");
         // bot.user.setActivity(song.title,{type:"WATCHING"});
       });
@@ -44,17 +42,19 @@ module.exports = {
       disp.on("finish", () => {
         msg.channel
           .send(func.embed("Finished Playing: `" + song.title + "`", "#ff0000", "", msg.author))
-          .then(status => {
-            setTimeout(() => {
-              status.delete();
-            }, delMSGtimeout);
-          });
+          .then(status => 
+              status.delete({ timeout: delMSGtimeout})
+          );
         console.info("Finished Playing: `" + song.title + "`");
         // bot.user.setActivity("My thoughts",{type:"LISTENING"});
       });
 
       // Always remember to handle errors appropriately!
-      disp.on("error", console.error);
+      disp.on("error", msg.reply("Something went wrong").then(status => status.delete({ timeout: delMSGtimeout})));
+    } else if(!msg.member.voice.joinable) {
+      await msg.reply("I looks like I am unable to join that voice channel. It might be full")
+    } else {
+      await msg.reply("You have to join a voice channel for me to join");
     }
   }
 };

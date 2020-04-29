@@ -7,5 +7,8 @@ module.exports = {
   Issue:  require('./issue'),
   Server: require('./serverInfo'),
   Info:   require('./info'),
+  Play:   require('./play'),
+  Stop:   require('./stop'),
+  Pause:  require('./pause'),
   // Dice:   require("./diceRoll"),
 };
