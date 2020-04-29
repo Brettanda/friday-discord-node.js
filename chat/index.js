@@ -27,9 +27,9 @@ keys.map((elementContext,i) => {
 });
 
 module.exports = function(msg, bot) {
-  const content = msg.content.toLowerCase().replace(/[\']/, "");
+  const content = msg.content.toLowerCase().split(/[\'\"\`\,\.]/).join("");
   
-  const noContext = ["greetings", "farewells", "meaning", "aware"];
+  const noContext = ["greetings", "farewells", "meaning", "aware","souptime","nou"];
 
   msg.channel.messages.fetch({ limit: 2 }).then(item => {
     const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -41,7 +41,7 @@ module.exports = function(msg, bot) {
 
     if (pattern.test(content)) return;
     
-    const interpretation = func.interpret(content.replace("friday", ""), classifier);
+    const interpretation = func.interpret(content.split("friday").join(""), classifier);
 
     console.info("guess guess:",interpretation.guess)
 

@@ -88,16 +88,13 @@
   "insults": {
     "questions": [
       "fuck off",
-      "fack off",
       "shut up",
       "piss off",
-      "you shit",
+      "your shit",
       "you suck",
       "screw you",
-      "i dont like you",
-      "fuck yourself",
       "trash",
-      "you die"
+      "i hope you die"
     ]
   },
   "meaning": {
@@ -184,7 +181,8 @@
   "souptime": {
     "questions": [
       "time is it",
-      "i have for dinner"
+      "i have for dinner",
+      "im hungry"
     ]
   },
   "whoami": {

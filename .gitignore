@@ -3,4 +3,3 @@ node_modules
 *-lock.json
 *.lock
 classifier.json
-chatModel.json

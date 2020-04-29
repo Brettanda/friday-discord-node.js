@@ -27,15 +27,15 @@ bot.once("ready", () => {
   chooseGame(bot);
 });
 
-bot.once("reconnecting", () => {
+bot.on("reconnecting", () => {
   console.info("Reconnecting!");
 });
 
-bot.once("disconnect", () => {
+bot.on("disconnect", () => {
   console.info("Disconnect!");
 });
 
-bot.once("guildCreate", guild => {
+bot.on("guildCreate", guild => {
   console.log("I have been added to a new guild :)");
   if (!guild.systemChannel) return;
   guild.systemChannel.startTyping();
@@ -49,7 +49,7 @@ bot.once("guildCreate", guild => {
   }, typingTime);
 });
 
-bot.once("guildDelete", guild => {
+bot.on("guildDelete", guild => {
   console.log(`I have been remove from the guild named: ${guild.name} :'(`);
 });
 
@@ -62,7 +62,7 @@ function chooseGame() {
   setInterval(chooseGame, 1800000);
 }
 
-bot.once("guildMemberAdd", member => {
+bot.on("guildMemberAdd", member => {
   member.send(`Welcome to the server, ${member.username}. It's great to have you :) I am a bit that helps manage this server. If you would like to chat with me in the future with one of my commands, just type '${prefix}help'
 `);
 });
@@ -76,7 +76,7 @@ Object.keys(botCommands).map(key => {
 
 // var spellcheck = new NLP.Spellcheck(coms);
 
-bot.once("message", msg => {
+bot.on("message", msg => {
   if (msg.author.bot || (process.argv.includes("--dev") && msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD) || (!process.argv.includes("--dev") && msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD)) return;
 
   if (!msg.content.startsWith(prefix)) {
