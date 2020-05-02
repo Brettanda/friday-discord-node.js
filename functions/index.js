@@ -6,4 +6,5 @@ module.exports = {
   interpret:          require("./interpret"),
   embed:              require("./embed"),
   hasDups:            require("./hasDups"),
+  queryDialogFlow:    require("./queryDialogflow"),
 };

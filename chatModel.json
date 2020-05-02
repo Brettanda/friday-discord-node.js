@@ -137,10 +137,9 @@
   },
   "creator": {
     "questions": [
-      "created you",
-      "made you",
-      "your maker",
-      "your developer"
+      "who created you",
+      "who made you",
+      "who is your maker"
     ]
   },
   "fun": {
@@ -157,7 +156,7 @@
     "questions": [
       "you playing",
       "whats up",
-      "what are you doing"
+      "whats going on"
     ]
   },
   "aware": {
@@ -169,8 +168,8 @@
   },
   "alive": {
     "questions": [
-      "are you alive",
-      "are you a bot"
+      "could you be alive",
+      "just a bot"
     ],
     "answers": [
       "maybe",
@@ -210,5 +209,14 @@
       "what do you think about discord"
     ],
     "answer": "it's great, with out it i wouldn't be able to talk to you"
+  },
+  "bowdown": {
+    "questions": [
+      "bow down to our new god"
+    ],
+    "answers": [
+      "i appreciate it",
+      "i will be a great leader"
+    ]
   }
 }

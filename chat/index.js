@@ -2,35 +2,25 @@ const Discord = require("discord.js");
 
 var func = require("../functions");
 
-const { soups, prefix, delMSGtimeout, typingTime } = require("../config.json");
+const { soups, prefix, delMSGtimeout, typingTime, unoCards } = require("../config.json");
+
+// const fs = require("fs");
 
 // Load our training data
-const trainingData = func.parseTrainingData("./chatModel.json");
+// const trainingData = func.parseTrainingData("./chatModel.json");
 
-const NLP = require("natural");
+// const NLP = require("natural");
 // Create a new classifier to train
-const classifier = new NLP.LogisticRegressionClassifier();
+// const classifier = NLP.BayesClassifier.restore(func.parseTrainingData("./classifier.json"), null, function (err, classifier){});
 
-const keys = Object.keys(trainingData);
-
-keys.map((elementContext,i) => {
-  func.trainClassifier(classifier, elementContext, trainingData[elementContext].questions == undefined ? trainingData[elementContext] : trainingData[elementContext].questions);
-  if (i+1 === keys.length) {
-    classifier.train();
-    classifier.save("./classifier.json", (err) => {
-      if (err) {
-        console.error(err);
-      }
-      // console.info("Created a Classifier file in ", filePath);
-    });
-  }
-});
+// console.log(classifier)
 
 module.exports = function(msg, bot) {
   const content = msg.content.toLowerCase().split(/[\'\"\`\,\.]/).join("");
   
-  const noContext = ["greetings", "farewells", "meaning", "aware","souptime","nou"];
-
+  const noContext = ["Default Welcome Intent (Greetings)", "Farewells", "The meaning of life?", "Self Aware","Soup Time","No U"];
+  
+  // msg.channel.startTyping();
   msg.channel.messages.fetch({ limit: 2 }).then(item => {
     const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -41,117 +31,123 @@ module.exports = function(msg, bot) {
 
     if (pattern.test(content)) return;
     
-    const interpretation = func.interpret(content.split("friday").join(""), classifier);
+    // const interpretation = func.interpret(content.split("friday").join(""), classifier);
 
-    console.info("guess guess:",interpretation.guess)
+    // console.info("guess guess:",interpretation.guess)
 
-    if (interpretation.guess == null) return;
-    
-    console.log(!noContext.includes(interpretation.guess),
-      Array.from(item.filter(i => i.author.bot == true)).length < 1,
-      msg.mentions.has(bot.user) != true,
-      content.includes("friday") != true,
-      msg.channel.type != "dm");
-    if (
-      !noContext.includes(interpretation.guess) &&
-      Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
+    // console.log("no spaces", content.split(" ").join("").split("friday").join(""));
+    // if (content.split(" ").join("").split("friday").join("") == "  ") {
+    //   msg.reply("How can I help?");
+    //   return;
+    // }
+
+    if(
       msg.mentions.has(bot.user) != true &&
       content.includes("friday") != true &&
+      Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
       msg.channel.type != "dm"
-    ) {
-      return;
-    } 
+    ) return;
 
-    console.info("guess: ",interpretation.guess);
-    var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
+    func.queryDialogFlow(content).then(async result => {
 
-    if (interpretation.guess && data !== "dynamic") {
+      if (result.intent.displayName == "Default Fallback Intent" || !noContext.includes(result.intent)) {
+        // await msg.channel.stopTyping(true);
+        return;
+      }
+      
+      // console.info("guess: ",interpretation.guess);
+      // var trainingData = func.parseMovie().answers;
+      // var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
+      // var data = trainingData[interpretation.guess]
+      
+      if (result.fulfillmentText == "") {
+        // await msg.channel.stopTyping(true);
+        console.info("No response to send");
+        return;
+        // msg.reply('Sorry, I\'m not sure what you mean');
+      }
       console.info("Found response");
-      msg.channel.send(func.capitalize(data));
-    } else if (data !== "dynamic") {
-      console.info("Couldn't match phrase");
-      // msg.reply('Sorry, I\'m not sure what you mean');
-    }
-
-    if(data != "dynamic") return;
-
-    // // comebacks
-    switch(interpretation.guess) {
-      case "insults":
-        msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, "https://i.imgur.com/yXEiYQ4.png"));
-        break;
-      case "activities":
-        msg.reply(`I am playing ${bot.user.presence.activities[0].name}`);
-        break;
-      case "aware":
-        msg.react("😅");
-        break;
-      case "creator":
-        bot.users.fetch(process.env.DEVID).then(member => {
-          msg.channel.send(`${member.tag} is my creator :)`);
-        });
-        break;
-      case "souptime":
-        const image = soups[func.random(0,soups.length)];
-        console.info(`Soup: ${image}`);
-
-        msg.channel.send(
-          func.embed(
-            "It is time for soup, just for you " + msg.author.username,
-            "#FFD700",
-            "I hope you enjoy",
-            msg.author,
-            image
-          )
-        );
-        break;
-      case "stop":
-        msg.react("😅");
-        break;
-      case "nou":
-        msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, "https://i.imgur.com/yXEiYQ4.png"));
-        break;
-        
-    }
+      
+      if(result.fulfillmentText != "dynamic") {
+        await msg.channel.send(func.capitalize(result.fulfillmentText));
+        // await msg.channel.stopTyping(true);
+        return;
+      }
+  
+      // comebacks
+      switch (result.intent.displayName) {
+        case "Insults":
+          await msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, unoCards[func.random(0,unoCards.length)]));
+          break;
+        case "Activities":
+          await msg.reply(`I am playing ${bot.user.presence.activities[0].name}`);
+          break;
+        case "Self Aware":
+          await msg.react("😅");
+          break;
+        case "Creator":
+          await bot.users.fetch(process.env.DEVID).then(member => {
+            msg.channel.send(`${member.tag} is my creator :)`);
+          });
+          break;
+        case "Soup Time":
+          const image = soups[func.random(0,soups.length)];
+          console.info(`Soup: ${image}`);
+  
+          await msg.channel.send(
+            func.embed(
+              "It's time for soup, just for you " + msg.author.username,
+              "#FFD700",
+              "I hope you enjoy, I made it myself :)",
+              msg.author,
+              image
+            )
+          );
+          break;
+        case "Stop":
+          await msg.react("😅");
+          break;
+        case "No U":
+          await msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, unoCards[func.random(0,unoCards.length)]));
+          break;
+          
+      }
+      // await msg.channel.stopTyping(true);
+    }).catch(err => console.error(err));
 
 
   });
 
-  if (msg.channel.type != "dm" && msg.guild.id == process.env.DEVGUILD) {
-    msg.channel.messages.fetch({ limit: 3 }).then(item => {
-      const msgs = item.map(i => i);
-      var conts = item.map(i => i.content);
-      const reply =
-        "Don't spam please. If this is not spam please use `" +
-        prefix +
-        "issue`";
-      conts = conts.filter(i => i != reply);
-      if (func.hasDups(conts) == true) {
-        if (
-          msgs.filter(i => i.author.id == bot.user.id && i.content == reply)
-            .length > 0
-        ) {
-          msg.delete(0,"Message: `"+msg.content+"` Spam, hopfully");
-          return;
-        }
-        msg.delete();
-        msg.channel.send(reply).then(status => {
-          setTimeout(() => {
-            status.delete();
-          }, delMSGtimeout);
-        });
-      }
-    });
-  }
+  // if (msg.channel.type != "dm" && msg.guild.id == process.env.DEVGUILD) {
+  //   msg.channel.messages.fetch({ limit: 3 }).then(item => {
+  //     const msgs = item.map(i => i);
+  //     var conts = item.map(i => i.content);
+  //     const reply =
+  //       "Don't spam please. If this is not spam please use `" +
+  //       prefix +
+  //       "issue`";
+  //     conts = conts.filter(i => i != reply);
+  //     if (func.hasDups(conts) == true) {
+  //       if (
+  //         msgs.filter(i => i.author.id == bot.user.id && i.content == reply)
+  //           .length > 0
+  //       ) {
+  //         msg.delete(0,"Message: `"+msg.content+"` Spam, hopfully");
+  //         return;
+  //       }
+  //       msg.delete().catch(err => console.error(err));
+  //       msg.channel.send(reply)/*.then(status => {
+  //         setTimeout(() => {
+  //           status.delete();
+  //         }, delMSGtimeout);
+  //       })*/;
+  //     }
+  //   }).catch(err => console.error(err));
+  // }
 
   // the game
   if (content.includes("the game") || content.includes("thegame")) {
-    const game = new Discord.MessageEmbed()
-      .setColor("#ff8c00")
-      .setImage(
-        "https://media1.tenor.com/images/725176d9418345bf3a9b3699f2123a2a/tenor.gif"
-      );
-    msg.channel.send(game);
+    msg.channel.send(func.embed("", "#FF8C00", "", msg.author,"https://media1.tenor.com/images/725176d9418345bf3a9b3699f2123a2a/tenor.gif"));
   }
 
   // no u
@@ -160,27 +156,27 @@ module.exports = function(msg, bot) {
   //   content.includes("no you") ||
   //   content.includes("nou")
   // ) {
-  //   msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author,"https://i.imgur.com/yXEiYQ4.png"));
+  //   msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author,unoCards[func.random(0,unoCards.length)]));
   // }
 
   // if (content.includes("I like you") && content.includes("friday")) {
   //   msg.reply("I like you too");
   // }
 
-  if (content.includes("can i get") && content.includes("soup")) {
-    const num = func.random(0, soups.length);
-    const image = soups[num];
+  // if (content.includes("can i get") && content.includes("soup")) {
+  //   const num = func.random(0, soups.length);
+  //   const image = soups[num];
 
-    msg.channel.send(
-      func.embed(
-        "As you wish, " + msg.author.username,
-        "#ffd700",
-        "I hope you enjoy",
-        msg.author,
-        image
-      )
-    );
-  }
+  //   msg.channel.send(
+  //     func.embed(
+  //       "As you wish, " + msg.author.username,
+  //       "#ffd700",
+  //       "I hope you enjoy",
+  //       msg.author,
+  //       image
+  //     )
+  //   );
+  // }
 
   // if (content.includes("stop") && content.includes("friday")) {
   //   msg.react("😅");
