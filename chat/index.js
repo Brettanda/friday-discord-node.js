@@ -41,16 +41,10 @@ module.exports = function(msg, bot) {
     //   return;
     // }
 
-    if(
-      msg.mentions.has(bot.user) != true &&
-      content.includes("friday") != true &&
-      Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
-      msg.channel.type != "dm"
-    ) return;
-
+    
     func.queryDialogFlow(content).then(async result => {
-
-      if (result.intent.displayName == "Default Fallback Intent" || !noContext.includes(result.intent)) {
+      
+      if (result.intent.displayName == "Default Fallback Intent") {
         // await msg.channel.stopTyping(true);
         return;
       }
@@ -59,6 +53,13 @@ module.exports = function(msg, bot) {
       // var trainingData = func.parseMovie().answers;
       // var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
       // var data = trainingData[interpretation.guess]
+      if(
+        !noContext.includes(result.intent.displayName) &&
+        msg.mentions.has(bot.user) != true &&
+        content.includes("friday") != true &&
+        Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
+        msg.channel.type != "dm"
+      ) return;
       
       if (result.fulfillmentText == "") {
         // await msg.channel.stopTyping(true);
