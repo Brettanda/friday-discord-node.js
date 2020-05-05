@@ -41,11 +41,11 @@ module.exports = function(msg, bot) {
     //   return;
     // }
 
-    msg.channel.startTyping();
+    // msg.channel.startTyping();
     func.queryDialogFlow(content,msg).then(async result => {
       
       if (result.intent.displayName == "Default Fallback Intent") {
-        await msg.channel.stopTyping(true);
+        // await msg.channel.stopTyping(true);
         return;
       }
       
@@ -62,7 +62,7 @@ module.exports = function(msg, bot) {
       ) return;
       
       if (result.fulfillmentText == "") {
-        await msg.channel.stopTyping(true);
+        // await msg.channel.stopTyping(true);
         console.info("No response to send");
         return;
         // msg.reply('Sorry, I\'m not sure what you mean');
@@ -71,7 +71,7 @@ module.exports = function(msg, bot) {
       
       if(result.fulfillmentText != "dynamic") {
         await msg.channel.send(func.capitalize(result.fulfillmentText));
-        await msg.channel.stopTyping(true);
+        // await msg.channel.stopTyping(true);
         return;
       }
   
@@ -119,7 +119,7 @@ module.exports = function(msg, bot) {
           break;
           
       }
-      await msg.channel.stopTyping(true);
+      // await msg.channel.stopTyping(true);
     }).catch(err => console.error(err));
 
 
