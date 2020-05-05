@@ -115,7 +115,7 @@ module.exports = function(msg, bot) {
           await require('../commands/meme').execute(msg)
           break;
         case "Title of your sex tape":
-          msg.channel.send(`"*${msg.content}*", Title of your sex-tape`);
+          msg.channel.send(`"*${msg.content}*", title of your sex-tape`);
           break;
           
       }
