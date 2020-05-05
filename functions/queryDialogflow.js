@@ -1,7 +1,7 @@
 const dialogflow = require('dialogflow');
 
 module.exports = async (content,msg) => {	
-	const sessionID = msg.author.id.toString();//Math.random().toString();
+	const sessionID = msg.channel.id.toString();//Math.random().toString();
 
 	let config = { 
 		credentials: { 
