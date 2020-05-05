@@ -18,7 +18,7 @@ const { soups, prefix, delMSGtimeout, typingTime, unoCards } = require("../confi
 module.exports = function(msg, bot) {
   const content = msg.content.toLowerCase().split(/[\'\"\`\,\.]/).join("");
   
-  const noContext = ["Default Welcome Intent (Greetings)", "I dont want to talk to a chat bot", "Farewells", "The meaning of life?", "Birthday", "Memes", "Self Aware","Soup Time","No U"];
+  const noContext = ["Default Welcome Intent (Greetings)", "Title of your sex tape", "I dont want to talk to a chat bot", "Farewells", "The meaning of life?", "Birthday", "Memes", "Self Aware","Soup Time","No U"];
   
   // msg.channel.startTyping();
   msg.channel.messages.fetch({ limit: 2 }).then(item => {
@@ -113,6 +113,9 @@ module.exports = function(msg, bot) {
           break;
         case "Memes" || "Memes - Another":
           await require('../commands/meme').execute(msg)
+          break;
+        case "Title of your sex tape":
+          msg.channel.send(`"*${msg.content}*", Title of your sex-tape`);
           break;
           
       }
