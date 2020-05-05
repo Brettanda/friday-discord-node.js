@@ -18,7 +18,7 @@ const { soups, prefix, delMSGtimeout, typingTime, unoCards } = require("../confi
 module.exports = function(msg, bot) {
   const content = msg.content.toLowerCase().split(/[\'\"\`\,\.]/).join("");
   
-  const noContext = ["Default Welcome Intent (Greetings)", "Farewells", "The meaning of life?", "Self Aware","Soup Time","No U"];
+  const noContext = ["Default Welcome Intent (Greetings)", "I dont want to talk to a chat bot", "Farewells", "The meaning of life?", "Birthday", "Memes", "Self Aware","Soup Time","No U"];
   
   // msg.channel.startTyping();
   msg.channel.messages.fetch({ limit: 2 }).then(item => {
@@ -42,7 +42,7 @@ module.exports = function(msg, bot) {
     // }
 
     
-    func.queryDialogFlow(content).then(async result => {
+    func.queryDialogFlow(content,msg).then(async result => {
       
       if (result.intent.displayName == "Default Fallback Intent") {
         // await msg.channel.stopTyping(true);
@@ -110,6 +110,9 @@ module.exports = function(msg, bot) {
           break;
         case "No U":
           await msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, unoCards[func.random(0,unoCards.length)]));
+          break;
+        case "Memes" || "Memes - Another":
+          await require('../commands/meme').execute(msg)
           break;
           
       }
@@ -182,6 +185,11 @@ module.exports = function(msg, bot) {
   // if (content.includes("stop") && content.includes("friday")) {
   //   msg.react("😅");
   // }
+
+  if(content.match(/^r(e+)$/)) {
+    msg.react("🇷");
+    msg.react("🇪");
+  }
 
   if (content.includes("bazinga")) {
     msg.channel

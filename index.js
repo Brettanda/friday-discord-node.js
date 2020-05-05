@@ -77,7 +77,23 @@ Object.keys(botCommands).map(key => {
 // var spellcheck = new NLP.Spellcheck(coms);
 
 bot.on("message", msg => {
-  if (msg.author.bot || (process.argv.includes("--dev") && msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD) || (!process.argv.includes("--dev") && msg.channel.type != "dm" && msg.guild.id != process.env.DEVGUILD)) return;
+  if(
+    msg.author.bot || 
+    (process.argv.includes('--dev') &&
+     msg.guild.id != process.env.DEVGUILD) || 
+     (process.argv.includes('--dev') &&
+      msg.channel.type == "dm") || 
+      (!process.argv.includes('--dev') && 
+      msg.guild.id == process.env.DEVGUILD)) return;
+  // if (
+  //   msg.author.bot || 
+  //   (process.argv.includes("--dev") &&
+  //     msg.channel.type != "dm" &&
+  //     msg.guild.id != process.env.DEVGUILD) ||
+  //   (!process.argv.includes("--dev") &&
+  //     msg.channel.type != "dm" &&
+  //     msg.guild.id != process.env.DEVGUILD)
+  // ) return;
 
   if (!msg.content.startsWith(prefix)) {
     botChat(msg, bot);

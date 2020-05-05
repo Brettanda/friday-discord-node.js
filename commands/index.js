@@ -10,5 +10,6 @@ module.exports = {
   Play:   require('./play'),
   Stop:   require('./stop'),
   Pause:  require('./pause'),
+  Meme:   require('./meme'),
   // Dice:   require("./diceRoll"),
 };
