@@ -19,3 +19,9 @@ Another way to see the full list of commands is by typing `!help` in a Discord s
 ### Thanks
 
 ### Insults
+
+## Privacy
+
+Friday uses Googles Dialogflow which records all messages sent visible by Friday. As far as i can tell there is no easy way to remove message records from Dialogflow, but any and all messages will only be used for the purpose of training the Friday Dialogflow Agent. If there is a conversation that you would like removed just message me with one of the messages from the conversation and I will remove it from Dialogflow.
+
+Dialogflow does not take any information about the Discord guild except for any persons metioned in a message and contents of a message. The channel id is used for the Dialogflow session id for context and so Friday can respond to questions appropriately.
