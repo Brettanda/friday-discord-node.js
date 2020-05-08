@@ -1,7 +1,7 @@
-const dialogflow = require('dialogflow');
-
+const dialogflow = require('dialogflow').v2;
+// /home/brett/personal/friday-discord-node.js/node_modules/dialogflow/src/index
 module.exports = async (content,msg) => {	
-	const sessionID = msg.channel.id.toString();//Math.random().toString();
+	const sessionID = msg.channel.id ? msg.channel.id.toString() : msg.author.id.toString();//Math.random().toString();
 
 	let config = { 
 		credentials: { 
@@ -25,7 +25,7 @@ module.exports = async (content,msg) => {
 
 	const responses = await sessionClient.detectIntent(request).catch(err => console.error(err));
 	console.log("Detected intent");
-	console.log(`  Session ID: ${sessionID}`)
+	// console.log(`  Session ID: ${sessionID}`)
 	const result = responses[0].queryResult;
 	console.log(`  Query: ${result.queryText}`);
 	console.log(`  Response: ${result.fulfillmentText}`);

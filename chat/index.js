@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 var func = require("../functions");
 
-const { soups, prefix, delMSGtimeout, typingTime, unoCards } = require("../config.json");
+const { prefix, delMSGtimeout, typingTime } = require("../config.json");
 
 // const fs = require("fs");
 
@@ -15,12 +15,15 @@ const { soups, prefix, delMSGtimeout, typingTime, unoCards } = require("../confi
 
 // console.log(classifier)
 
-module.exports = function(msg, bot) {
-  const content = msg.content.toLowerCase().split(/[\'\"\`\,\.]/).join("");
+module.exports = (msg, bot) => {
+  const content = msg.cleanContent.toLowerCase().split(/[\'\"\`\,\.]/).join("");
   
   const noContext = ["Default Welcome Intent (Greetings)", "Title of your sex tape", "I dont want to talk to a chat bot", "Farewells", "The meaning of life?", "Birthday", "Memes", "Self Aware","Soup Time","No U"];
   
   // msg.channel.startTyping();
+
+  let query = func.queryDialogFlow(content, msg);
+
   msg.channel.messages.fetch({ limit: 2 }).then(item => {
     const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -42,7 +45,7 @@ module.exports = function(msg, bot) {
     // }
 
     // msg.channel.startTyping();
-    func.queryDialogFlow(content,msg).then(async result => {
+    query.then(async result => {
       
       if (result.intent.displayName == "Default Fallback Intent") {
         // await msg.channel.stopTyping(true);
@@ -75,55 +78,17 @@ module.exports = function(msg, bot) {
         return;
       }
   
-      // comebacks
-      switch (result.intent.displayName) {
-        case "Insults":
-          await msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, unoCards[func.random(0,unoCards.length)]));
-          break;
-        case "Activities":
-          await msg.reply(`I am playing ${bot.user.presence.activities[0].name}`);
-          break;
-        case "Self Aware":
-          await msg.react("😅");
-          break;
-        case "Creator":
-          await bot.users.fetch(process.env.DEVID).then(member => {
-            msg.channel.send(`${member.tag} is my creator :)`);
-          });
-          break;
-        case "Soup Time":
-          const image = soups[func.random(0,soups.length)];
-          console.info(`Soup: ${image}`);
-  
-          await msg.channel.send(
-            func.embed(
-              "It's time for soup, just for you " + msg.author.username,
-              "#FFD700",
-              "I hope you enjoy, I made it myself :)",
-              msg.author,
-              image
-            )
-          );
-          break;
-        case "Stop":
-          await msg.react("😅");
-          break;
-        case "No U":
-          await msg.channel.send(func.embed("No u!", "#FFD700", "", msg.author, unoCards[func.random(0,unoCards.length)]));
-          break;
-        case "Memes" || "Memes - Another":
-          await require('../commands/meme').execute(msg)
-          break;
-        case "Title of your sex tape":
-          msg.channel.send(`*"${msg.content}"*, title of your sex-tape`);
-          break;
-          
-      }
+      await require("./dynamicChat")(result.intent.displayName,msg,bot);
+
       // await msg.channel.stopTyping(true);
     }).catch(err => console.error(err));
 
 
   });
+
+  if(msg.author.lastMessage.cleanContent == msg.cleanContent) {
+    console.info(`Spam detected on \`${msg.guild.name} - ${msg.channel.name}\``)
+  }
 
   // if (msg.channel.type != "dm" && msg.guild.id == process.env.DEVGUILD) {
   //   msg.channel.messages.fetch({ limit: 3 }).then(item => {
@@ -217,7 +182,7 @@ module.exports = function(msg, bot) {
     msg.channel.send("F");
   }
 
-  if (content == "oof") {
+  if (content.match(/^o+f$/)) {
     msg.react("😲");
   }
 

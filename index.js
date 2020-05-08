@@ -1,17 +1,16 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 const bot = new Discord.Client();
+// const team = new Discord.Team(bot,{});
 const { prefix, games, typingTime } = require("./config.json");
 
 bot.commands = new Discord.Collection();
 const botCommands = require("./commands");
 const botChat = require("./chat");
 
-// const NLP = require("natural");
-
 bot.login(process.env.TOKEN);
 
-bot.once("ready", () => {
+bot.on("ready", () => {
   console.info(
     `Logged in as ${bot.user.tag}! Apart of ${
       bot.guilds.cache.map(item => item.name).length
@@ -36,21 +35,13 @@ bot.on("disconnect", () => {
 });
 
 bot.on("guildCreate", guild => {
-  console.log("I have been added to a new guild :)");
+  console.info("I have been added to a new guild :)");
   if (!guild.systemChannel) return;
-  guild.systemChannel.startTyping();
-  setTimeout(() => {
-    guild.systemChannel.send(
-      "Thank you for inviting me to your server.\nMy name is Friday, and I like to party.\nI will respond to some chats directed towards me and commands. To get started with commands type `" +
-        prefix +
-        "help`.\nAn example of something I will respond to is `Hey` or `Hello Friday`"
-    );
-    guild.systemChannel.stopTyping(true);
-  }, typingTime);
+  guild.systemChannel.send(`Thank you for inviting me to your server. My name is Friday, and I like to party. I will respond to some chats directed towards me and commands. To get started with commands type \`${prefix}help\`.\nAn example of something I will respond to is \`Hey\` or \`Hello Friday\``);
 });
 
 bot.on("guildDelete", guild => {
-  console.log(`I have been remove from the guild named: ${guild.name} :'(`);
+  console.info(`I have been remove from a guild :'(`);
 });
 
 function chooseGame() {
@@ -63,8 +54,7 @@ function chooseGame() {
 }
 
 bot.on("guildMemberAdd", member => {
-  member.send(`Welcome to the server, ${member.username}. It's great to have you :) I am a bit that helps manage this server. If you would like to chat with me in the future with one of my commands, just type '${prefix}help'
-`);
+  member.send(`Welcome **${member.displayName}** to **${member.guild.name}**.\nIt's great to have you :) I am a bot that help around the server. If you would like to chat with me in the future with one of my commands, just type \`${prefix}help\`.\nYou can also talk to me just by saying something like \`Hello Friday\`.`);
 });
 
 Object.keys(botCommands).map(key => {
@@ -74,26 +64,29 @@ Object.keys(botCommands).map(key => {
 // console.log()//.map(com => botCommands[com].aliases).filter(item => item != undefined).map(item => item.join(", ")));
 // var coms = Object.keys(botCommands).map(com => botCommands[com].name);
 
-// var spellcheck = new NLP.Spellcheck(coms);
-
 bot.on("message", msg => {
-  if(
-    msg.author.bot || 
-    (process.argv.includes('--dev') &&
-     msg.guild.id != process.env.DEVGUILD) || 
-     (process.argv.includes('--dev') &&
-      msg.channel.type == "dm") || 
-      (!process.argv.includes('--dev') && 
-      msg.guild.id == process.env.DEVGUILD)) return;
-  // if (
-  //   msg.author.bot || 
-  //   (process.argv.includes("--dev") &&
-  //     msg.channel.type != "dm" &&
-  //     msg.guild.id != process.env.DEVGUILD) ||
-  //   (!process.argv.includes("--dev") &&
-  //     msg.channel.type != "dm" &&
-  //     msg.guild.id != process.env.DEVGUILD)
-  // ) return;
+  // If this happened then something horrible has gone down
+  if (msg.guild == null && msg.channel.type != "dm") {
+    bot.users.fetch(process.env.DEVID).then(member => {
+      member.send("Check Glitch, a message didn't have a guild and wasn't a DM.");
+    }).catch(err => console.error(err));
+    return;
+  }
+
+  // Im not going to bother important channels
+  if(msg.channel.type == "store" || msg.channel.type == "voice" || msg.channel.type == "category" || msg.channel.type == "news") return;
+
+  // Im going to talk to another bot or me lol
+  if(msg.author.bot) return;
+
+  // If in development don't respond to messages outside of the dev guild
+  if (process.argv.includes('--dev')) {
+    if(msg.channel.type == "dm") return;
+
+    if (msg.guild.id != process.env.DEVGUILD) return;
+  } else {
+    if (msg.guild.id == process.env.DEVGUILD) return;
+  }
 
   if (!msg.content.startsWith(prefix)) {
     botChat(msg, bot);
@@ -101,7 +94,7 @@ bot.on("message", msg => {
   }
 
   const args = msg.content.slice(prefix.length).split(/ +/);
-  var command = args.shift().toLowerCase();
+  const command = args.shift().toLowerCase();
   console.info(`Called command: ${command}`);
 
   if (
@@ -126,7 +119,7 @@ bot.on("message", msg => {
       : bot.commands.get(command).execute(msg, args, bot);
   } catch (error) {
     console.error(error);
-    msg.reply("there was an error trying to execute that command!");
+    msg.reply("There was an error trying to execute that command!");
   }
 
   if(msg.channel.type != "dm") msg.delete({timeout:0,reason:"Command"});

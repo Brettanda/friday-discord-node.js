@@ -4,4 +4,5 @@ module.exports = {
   embed:              require("./embed"),
   hasDups:            require("./hasDups"),
   queryDialogFlow:    require("./queryDialogflow"),
+  msgDev:             require("./msgdev"),
 };
