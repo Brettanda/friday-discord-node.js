@@ -1,14 +1,18 @@
-const { embed } = require("../functions");
+const { embed,msgDev } = require("../functions");
 
 module.exports = {
   name: "issue",
+  aliases: ["problem"],
   description:
     "If you have an issue or noticed a bug with Friday, this will send a message to the developer.",
   usage: "[Description of issue and steps to recreate the issue]",
   execute(msg, args = "", bot) {
-    bot.users.fetch(process.env.DEVID).then(member => {
-      member.send("`" + msg.author.tag + ":` " + args.join(" "));
-    });
+    if(args == "") {
+      msg.channel.send("Don't forget to describe your issue. For example `!issue this is my issue`");
+      return;
+    }
+
+    msgDev(args.join(" "),msg,bot,"Issue");
 
     msg.channel.send(
       embed(

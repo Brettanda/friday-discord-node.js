@@ -9,7 +9,8 @@ module.exports = (
   usage,
   aliases,
   msg,
-  val
+  val,
+  thumbNail
 ) => {
   const embed = new Discord.MessageEmbed();
 
@@ -21,9 +22,13 @@ module.exports = (
 
   if (image) embed.setImage(image);
 
-  if (msg && val) embed.addField(msg, val, true);
+  if (Array.isArray(msg) && Array.isArray(val)) msg.map((item,index) => embed.addField(item, val[index], true));
 
-  embed.setFooter(author.tag, author.displayAvatarURL()).setTimestamp();
+  if (typeof msg == "string" && typeof val == "string") embed.addField(msg,val,true);
+
+  if(thumbNail) embed.setThumbnail(thumbNail)
+
+  embed.setFooter(`Called by: ${author.username}`, author.displayAvatarURL()).setTimestamp();
 
   return embed;
 };

@@ -6,5 +6,13 @@ module.exports = {
   Pizza:  require('./pizzatime'),
   Issue:  require('./issue'),
   Server: require('./serverInfo'),
+  Info:   require('./info'),
+  Play:   require('./music').play,
+  Stop:   require('./music').stop,
+  Toggle:  require('./music').toggle,
+  Skip:   require('./music').skip,
+  // Add:    require('./music').add,
+  Meme:   require('./meme'),
+  // Music:  require('./music'),
   // Dice:   require("./diceRoll"),
 };
