@@ -57,7 +57,13 @@ module.exports = async (content, msg, bot) => {
       await require("../commands/meme").execute(msg);
       break;
     case "Title of your sex tape":
-      msg.channel.send(`*"${msg.cleanContent}"*, title of your sex-tape`);
+      msg.channel.send(`*"${func.capitalize(msg.cleanContent)}"*, title of your sex-tape`);
+      break;
+    case "show me something cute":
+      await require("../commands/smile").execute(msg);
+      break;
+    case "Something cool":
+      await require("../commands/meme").execute(msg,"cool");
       break;
   }
 };

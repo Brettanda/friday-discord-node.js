@@ -4,6 +4,7 @@ var func = require("../functions");
 
 const { prefix, delMSGtimeout, typingTime } = require("../config.json");
 
+
 // const fs = require("fs");
 
 // Load our training data
@@ -51,16 +52,29 @@ module.exports = async (msg, bot) => {
 
   // msg.channel.startTyping();
 
-  const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
+//   const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
 
-  if (pattern.test(msg.cleanContent)) {
-    console.log("url");
-    return;
-  }
+//   if (pattern.test(msg.cleanContent)) {
+//     console.log("url");
+//     return;
+//   }
+  if(require('./reposts')(msg,bot)) return;
+  // const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
+  // if(pattern.test(msg.cleanContent)) return;
 
   const query = func.queryDialogFlow(content, msg);
+      // talkingAboutAnotherBot,
+    // talkingAboutMe;
+  //   pastFiveMSGS = msg.channel.messages.fetch({limit: 5}).then(item => {
+  //   talkingAboutAnotherBot = Array.from(item.filter(message => message.author.bot == true && message.author.id != bot.user.id)).length
+  //   talkingAboutMe = Array.from(item.filter(message => message.author.id == bot.user.id)).length
+    
+  //   console.log(talkingAboutAnotherBot)
+  //   console.log(talkingAboutMe)
+  // });
 
-  msg.channel.messages.fetch({ limit: 2 }).then(item => {
+
+  await msg.channel.messages.fetch({ limit: 3 }).then(async item => {
     // const interpretation = func.interpret(content.split("friday").join(""), classifier);
 
     // console.info("guess guess:",interpretation.guess)
@@ -72,7 +86,7 @@ module.exports = async (msg, bot) => {
     // }
 
     // msg.channel.startTyping();
-    query
+    await query
       .then(async result => {
         if (result.intent.displayName == "Default Fallback Intent") {
           // await msg.channel.stopTyping(true);
@@ -83,11 +97,15 @@ module.exports = async (msg, bot) => {
         // var trainingData = func.parseMovie().answers;
         // var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
         // var data = trainingData[interpretation.guess]
+
         if (
           !noContext.includes(result.intent.displayName) &&
           msg.mentions.has(bot.user) != true &&
           content.includes("friday") != true &&
-          Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
+          // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
+          content.includes("bot") != true &&
+          // TODO: add a check for another bot
+          Array.from(item.filter(i => i.author.id == bot.user.id)).length == 0 &&
           msg.channel.type != "dm"
         )
           return;
@@ -196,6 +214,16 @@ module.exports = async (msg, bot) => {
     msg.react("🇪");
   }
 
+  if(content.includes("@someone")) {
+    // console.log("Max: " + msg.guild.memberCount + " " + func.random(0,msg.guild.memberCount))
+    msg.channel.messages.fetch({ limit: 10 }).then(async item => {
+      if(Array.from(item).filter(i => i[1].content.includes("@someone") && i[1].author == msg.author).length > 0) return msg.reply("You have already used that recently. Try again later :)")
+      
+      let user = Array.from(msg.guild.members.cache)[func.random(0,msg.guild.memberCount)][1].user;
+      msg.channel.send("<@!"+user.id+">");
+    });
+  }
+  
   if (content.includes("bazinga")) {
     msg.channel
       .send("Banning " + msg.author.username + " in 10 seconds")
@@ -225,6 +253,7 @@ module.exports = async (msg, bot) => {
 
   if (
     content.includes("shit") ||
+    content.includes("shît") ||
     content.includes("crap") ||
     content.includes("poop") ||
     content.includes("poo")
@@ -232,7 +261,7 @@ module.exports = async (msg, bot) => {
     msg.react("💩");
   }
 
-  if (content.includes("pupper")) {
+  if (content.includes("pupper") || content.include("dog")) {
     msg.react("🐕");
   }
 

@@ -53,7 +53,10 @@ exports.play = {
 
     const serverQueue = queue.get(msg.guild.id);
     const songInfo = await ytdl.getInfo(args[0]).catch(err => {
-      if (err.toString().includes("Not a YouTube domain") || err.toString().includes("No video id found:")) {
+      if (
+        err.toString().includes("Not a YouTube domain") ||
+        err.toString().includes("No video id found:")
+      ) {
         console.error("Url not a YouTube domain");
         return msg.channel.send(
           func.embed(
@@ -65,8 +68,8 @@ exports.play = {
         );
       } else console.error(err);
     });
-    
-    if(typeof songInfo.video_url == "undefined") return;
+
+    if (typeof songInfo.video_url == "undefined") return;
 
     const song = {
       title: songInfo.title,
@@ -168,7 +171,7 @@ exports.stop = {
         "You can only use this command in server text channel"
       );
 
-    await leave(msg,bot);
+    await leave(msg, bot);
   }
 };
 
@@ -186,11 +189,11 @@ exports.toggle = {
     //   await msg.member.voice.channel.leave();
     // }
     // if(args != "") return await msg.channel.send()
-    
-    if(typeof serverQueue == "undefined") {
+
+    if (typeof serverQueue == "undefined") {
       return await msg.reply("There is no music to pause or resume playing");
     }
-    
+
     if (command == "resume" && serverQueue.connection.dispatcher.paused)
       return await serverQueue.connection.dispatcher.resume();
     else if (command == "resume" && !serverQueue.connection.dispatcher.paused)
@@ -207,7 +210,7 @@ exports.toggle = {
           status.delete({ timeout: delMSGtimeout });
         });
     if (command == "pause" && !serverQueue.connection.dispatcher.paused)
-      return await serverQueue.connection.dispatcher.pause(false);
+      return await serverQueue.connection.dispatcher.pause(true);
     else if (command == "pause" && serverQueue.connection.dispatcher.paused)
       return await msg.channel
         .send(
@@ -222,7 +225,7 @@ exports.toggle = {
           status.delete({ timeout: delMSGtimeout });
         });
     if (command == "toggle" && !serverQueue.connection.dispatcher.paused)
-      return await serverQueue.connection.dispatcher.pause(false);
+      return await serverQueue.connection.dispatcher.pause(true);
     else return await serverQueue.connection.dispatcher.resume();
   }
 };
@@ -266,8 +269,8 @@ exports.skip = {
         "You can only use this command in server text channel"
       );
     const serverQueue = queue.get(msg.guild.id);
-    
-    if(typeof serverQueue == "undefined") {
+
+    if (typeof serverQueue == "undefined") {
       return await msg.reply("There is no music to skip");
     }
 
@@ -319,7 +322,12 @@ async function play(msg, song) {
   }
 
   const dispatcher = serverQueue.connection
-    .play(await ytdl(song.url), { type: "opus" ,liveBuffer:20000,highWaterMark:1000})
+    .play(await ytdl(song.url), {
+      type: "opus",
+      liveBuffer: 20000,
+      highWaterMark: 50,
+      volume: false
+    })
     .on("finish", () => {
       serverQueue.songs.shift();
       if (serverQueue.songs.length == 0) {
@@ -328,7 +336,7 @@ async function play(msg, song) {
           .then(status => {
             status.delete({ timeout: delMSGtimeout });
           });
-        leave(msg,msg.client);
+        leave(msg, msg.client);
       }
       play(msg, serverQueue.songs[0]);
     })
@@ -344,53 +352,57 @@ async function play(msg, song) {
       status.delete({ timeout: delMSGtimeout });
     });
 
-  // await serverQueue.textChannel.stopTyping(true);
 }
 
-async function leave(msg,bot) {
+async function leave(msg, bot) {
   if (msg.channel.type == "dm")
-      return await msg.channel.send(
-        "You can only use this command in server text channel"
-      );
+    return await msg.channel.send(
+      "You can only use this command in server text channel"
+    );
 
-    const serverQueue = queue.get(msg.guild.id);
-    
-    if(typeof serverQueue == "undefined" || serverQueue.connection == null || serverQueue.connection.dispatcher == null || serverQueue.connection.dispatcher.end == null) {
-      // console.log(Array.from(bot.voice.connections).length);
-      // console.log(bot.voice);
-      
-      if (Array.from(bot.voice.connections).length > 0) {
-        return await bot.voice.connections.map(item => item.channel.leave());
-        // await msg.reply("I will leave. For now").then(status => {
-        //   status.delete({ timeout: delMSGtimeout });
-        // });
-      } else if(Array.from(bot.voice.connections).length == 0) {
-        return await msg
-          .reply("I am either not connected to any voice channel or something has gone wrong to prevent me from leave. If I am in a voice channel just wait a minute or two for me to leave automatically")
-          .then(status => {
-            status.delete({ timeout: delMSGtimeout });
-          });
-      }
-      return await msg.reply("There is no music to stop");
+  const serverQueue = queue.get(msg.guild.id);
+
+  if (
+    typeof serverQueue == "undefined" ||
+    serverQueue.connection == null ||
+    serverQueue.connection.dispatcher == null
+  ) {
+    // console.log(Array.from(bot.voice.connections).length);
+    // console.log(bot.voice);
+
+    if (Array.from(bot.voice.connections).length > 0) {
+      return await bot.voice.connections.map(item => item.channel.leave());
+      // await msg.reply("I will leave. For now").then(status => {
+      //   status.delete({ timeout: delMSGtimeout });
+      // });
+    } else if (Array.from(bot.voice.connections).length == 0) {
+      return await msg
+        .reply(
+          "I am either not connected to any voice channel or something has gone wrong to prevent me from leave. If I am in a voice channel just wait a minute or two for me to leave automatically"
+        )
+        .then(status => {
+          status.delete({ timeout: delMSGtimeout });
+        });
     }
+    return await msg.reply("There is no music to stop");
+  }
 
-  
-    // if (serverQueue.connection.dispatcher.end == null) {
-    //   if (Array.from(bot.voice.connections).length > 0) {
-    //     await bot.voice.connections.map(item => item.channel.leave());
-    //     await msg.reply("I will leave. For now").then(status => {
-    //       status.delete({ timeout: delMSGtimeout });
-    //     });
-    //   } else {
-    //     await msg
-    //       .reply("I am not connected to any voice channel")
-    //       .then(status => {
-    //         status.delete({ timeout: delMSGtimeout });
-    //       });
-    //   }
-    //   return;
-    // }
+  // if (serverQueue.connection.dispatcher.end == null) {
+  //   if (Array.from(bot.voice.connections).length > 0) {
+  //     await bot.voice.connections.map(item => item.channel.leave());
+  //     await msg.reply("I will leave. For now").then(status => {
+  //       status.delete({ timeout: delMSGtimeout });
+  //     });
+  //   } else {
+  //     await msg
+  //       .reply("I am not connected to any voice channel")
+  //       .then(status => {
+  //         status.delete({ timeout: delMSGtimeout });
+  //       });
+  //   }
+  //   return;
+  // }
 
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
+  serverQueue.songs = [];
+  serverQueue.connection.disconnect();
 }

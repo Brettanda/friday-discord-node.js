@@ -1,5 +1,9 @@
 # Friday Discord Bot
 
+## Disclaimer
+
+Because this bot is using Dialogflow, Friday records all messages visible to itself and sends them to Dialogflow. Messages that Friday does not send include links and image embeds/links to images. The purpose of sending messages to Dialogflow is to train what Friday will respond to and what the reply would be. Sending messages to Dialogflow will be removed in the future once Fridays responses are more stable and accurate.
+
 [Add Friday](https://discord.com/api/oauth2/authorize?client_id=476303446547365891&permissions=36792384&scope=bot) to your Discord server.
 
 Hello, my name is Friday, I am a chatbot for the platform Discord. I like trying to be human and of course memes.
