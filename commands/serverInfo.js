@@ -13,8 +13,24 @@ module.exports = {
       "",
       "",
       "",
-      ["Server Name","Members","Owner","Server ID","Region","Verified","Partnered"],
-      [msg.guild.name, msg.guild.memberCount, msg.guild.owner.user.tag, msg.guild.id,msg.guild.region,msg.guild.verified,msg.guild.partnered],
+      [
+        "Server Name",
+        "Members",
+        "Owner",
+        "Server ID",
+        "Region",
+        "Verified",
+        "Partnered"
+      ],
+      [
+        msg.guild.name,
+        msg.guild.memberCount,
+        msg.guild.owner.user.tag,
+        msg.guild.id,
+        msg.guild.region,
+        msg.guild.verified,
+        msg.guild.partnered
+      ],
       msg.guild.iconURL()
     );
     msg.channel.send(reply);

@@ -4,6 +4,7 @@ var func = require("../functions");
 
 const { prefix, delMSGtimeout, typingTime } = require("../config.json");
 
+
 // const fs = require("fs");
 
 // Load our training data
@@ -15,25 +16,65 @@ const { prefix, delMSGtimeout, typingTime } = require("../config.json");
 
 // console.log(classifier)
 
-module.exports = (msg, bot) => {
-  const content = msg.cleanContent.toLowerCase().split(/[\'\"\`\,\.]/).join("");
-  
-  const noContext = ["Default Welcome Intent (Greetings)", "Title of your sex tape", "I dont want to talk to a chat bot", "Farewells", "The meaning of life?", "Birthday", "Memes", "Self Aware","Soup Time","No U"];
-  
+module.exports = async (msg, bot) => {
+  const content = msg.cleanContent
+    .toLowerCase()
+    .split(/[\'\"\`\,\.]/)
+    .join("");
+
+  if (
+    Array.from(msg.attachments).length >= 1 &&
+    (msg.content == null ||
+      typeof msg.content == "undefined" ||
+      msg.content == "")
+  ) {
+    console.log("Image");
+    return;
+  }
+
+  // if ((await require("./spamstream")) == true) {
+  //   console.log("spamstream");
+  //   return;
+  // } else console.log("spamstream failed");
+
+  const noContext = [
+    "Default Welcome Intent (Greetings)",
+    "Title of your sex tape",
+    "I dont want to talk to a chat bot",
+    "Farewells",
+    "The meaning of life?",
+    "Birthday",
+    "Memes",
+    "Self Aware",
+    "Soup Time",
+    "No U"
+  ];
+
   // msg.channel.startTyping();
 
-  let query = func.queryDialogFlow(content, msg);
+//   const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
 
-  msg.channel.messages.fetch({ limit: 2 }).then(item => {
-    const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+//   if (pattern.test(msg.cleanContent)) {
+//     console.log("url");
+//     return;
+//   }
+  if(require('./reposts')(msg,bot)) return;
+  // const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
+  // if(pattern.test(msg.cleanContent)) return;
 
-    if (pattern.test(content)) return;
+  const query = func.queryDialogFlow(content, msg);
+      // talkingAboutAnotherBot,
+    // talkingAboutMe;
+  //   pastFiveMSGS = msg.channel.messages.fetch({limit: 5}).then(item => {
+  //   talkingAboutAnotherBot = Array.from(item.filter(message => message.author.bot == true && message.author.id != bot.user.id)).length
+  //   talkingAboutMe = Array.from(item.filter(message => message.author.id == bot.user.id)).length
     
+  //   console.log(talkingAboutAnotherBot)
+  //   console.log(talkingAboutMe)
+  // });
+
+
+  await msg.channel.messages.fetch({ limit: 3 }).then(async item => {
     // const interpretation = func.interpret(content.split("friday").join(""), classifier);
 
     // console.info("guess guess:",interpretation.guess)
@@ -45,50 +86,56 @@ module.exports = (msg, bot) => {
     // }
 
     // msg.channel.startTyping();
-    query.then(async result => {
-      
-      if (result.intent.displayName == "Default Fallback Intent") {
-        // await msg.channel.stopTyping(true);
-        return;
-      }
-      
-      // console.info("guess: ",interpretation.guess);
-      // var trainingData = func.parseMovie().answers;
-      // var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
-      // var data = trainingData[interpretation.guess]
-      if(
-        !noContext.includes(result.intent.displayName) &&
-        msg.mentions.has(bot.user) != true &&
-        content.includes("friday") != true &&
-        Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
-        msg.channel.type != "dm"
-      ) return;
-      
-      if (result.fulfillmentText == "") {
-        // await msg.channel.stopTyping(true);
-        console.info("No response to send");
-        return;
-        // msg.reply('Sorry, I\'m not sure what you mean');
-      }
-      console.info("Found response");
-      
-      if(result.fulfillmentText != "dynamic") {
-        await msg.channel.send(func.capitalize(result.fulfillmentText));
-        // await msg.channel.stopTyping(true);
-        return;
-      }
-  
-      await require("./dynamicChat")(result.intent.displayName,msg,bot);
+    await query
+      .then(async result => {
+        if (result.intent.displayName == "Default Fallback Intent") {
+          // await msg.channel.stopTyping(true);
+          return;
+        }
 
-      // await msg.channel.stopTyping(true);
-    }).catch(err => console.error(err));
+        // console.info("guess: ",interpretation.guess);
+        // var trainingData = func.parseMovie().answers;
+        // var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
+        // var data = trainingData[interpretation.guess]
 
+        if (
+          !noContext.includes(result.intent.displayName) &&
+          msg.mentions.has(bot.user) != true &&
+          content.includes("friday") != true &&
+          // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
+          content.includes("bot") != true &&
+          // TODO: add a check for another bot
+          Array.from(item.filter(i => i.author.id == bot.user.id)).length == 0 &&
+          msg.channel.type != "dm"
+        )
+          return;
 
+        if (result.fulfillmentText == "") {
+          // await msg.channel.stopTyping(true);
+          console.info("No response to send");
+          return;
+          // msg.reply('Sorry, I\'m not sure what you mean');
+        }
+        console.info("Found response");
+
+        if (result.fulfillmentText != "dynamic") {
+          await msg.channel.send(func.capitalize(result.fulfillmentText));
+          // await msg.channel.stopTyping(true);
+          return;
+        }
+
+        await require("./dynamicChat")(result.intent.displayName, msg, bot);
+
+        // await msg.channel.stopTyping(true);
+      })
+      .catch(err => console.error(err));
   });
 
-  if(msg.author.lastMessage.cleanContent == msg.cleanContent) {
-    console.info(`Spam detected on \`${msg.guild.name} - ${msg.channel.name}\``)
-  }
+  // if (msg.author.lastMessage.cleanContent == msg.cleanContent && msg.guild) {
+  //   console.info(
+  //     `Spam detected on \`${msg.guild.name} - ${msg.channel.name}\``
+  //   );
+  // }
 
   // if (msg.channel.type != "dm" && msg.guild.id == process.env.DEVGUILD) {
   //   msg.channel.messages.fetch({ limit: 3 }).then(item => {
@@ -119,7 +166,15 @@ module.exports = (msg, bot) => {
 
   // the game
   if (content.includes("the game") || content.includes("thegame")) {
-    msg.channel.send(func.embed("", "#FF8C00", "", msg.author,"https://media1.tenor.com/images/725176d9418345bf3a9b3699f2123a2a/tenor.gif"));
+    msg.channel.send(
+      func.embed(
+        "",
+        "#FF8C00",
+        "",
+        msg.author,
+        "https://media1.tenor.com/images/725176d9418345bf3a9b3699f2123a2a/tenor.gif"
+      )
+    );
   }
 
   // no u
@@ -154,11 +209,21 @@ module.exports = (msg, bot) => {
   //   msg.react("😅");
   // }
 
-  if(content.match(/^r(e+)$/)) {
+  if (content.match(/^r(e+)$/)) {
     msg.react("🇷");
     msg.react("🇪");
   }
 
+  if(content.includes("@someone")) {
+    // console.log("Max: " + msg.guild.memberCount + " " + func.random(0,msg.guild.memberCount))
+    msg.channel.messages.fetch({ limit: 10 }).then(async item => {
+      if(Array.from(item).filter(i => i[1].content.includes("@someone") && i[1].author == msg.author).length > 0) return msg.reply("You have already used that recently. Try again later :)")
+      
+      let user = Array.from(msg.guild.members.cache)[func.random(0,msg.guild.memberCount)][1].user;
+      msg.channel.send("<@!"+user.id+">");
+    });
+  }
+  
   if (content.includes("bazinga")) {
     msg.channel
       .send("Banning " + msg.author.username + " in 10 seconds")
@@ -188,6 +253,7 @@ module.exports = (msg, bot) => {
 
   if (
     content.includes("shit") ||
+    content.includes("shît") ||
     content.includes("crap") ||
     content.includes("poop") ||
     content.includes("poo")
@@ -195,7 +261,7 @@ module.exports = (msg, bot) => {
     msg.react("💩");
   }
 
-  if (content.includes("pupper")) {
+  if (content.includes("pupper") || content.include("dog")) {
     msg.react("🐕");
   }
 
@@ -211,8 +277,7 @@ module.exports = (msg, bot) => {
     msg.react("😻");
   }
 
-/*if (content.match(/\@everyone/)) {
+  /*if (content.match(/\@everyone/)) {
   msg.reply('please use @here instead');
 }*/
-  
 };

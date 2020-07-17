@@ -24,6 +24,7 @@ module.exports = async (content,msg) => {
 	};
 
 	const responses = await sessionClient.detectIntent(request).catch(err => console.error(err));
+<<<<<<< HEAD
 	console.log("Detected intent");
 	// console.log(`  Session ID: ${sessionID}`)
 	const result = responses[0].queryResult;
@@ -34,5 +35,15 @@ module.exports = async (content,msg) => {
 		return result;
 	}
 	console.log(`  No intent matched.`);
+=======
+	// console.log(`  Session ID: ${sessionID}`)
+	const result = responses[0].queryResult;
+	console.log(`Detected intent\n\t${result.intentDetectionConfidence}\n\tQuery: ${result.queryText}\n\tResponse: ${result.fulfillmentText}\n\t${result.intent ? 'Intent: '+result.intent.displayName : 'No intent matched'}`);
+	if (result.intent) {
+		// console.log(`  Intent: ${result.intent.displayName}`);
+		return result;
+	}
+	// console.log(`  No intent matched.`);
+>>>>>>> glitch
 	return false;
 }

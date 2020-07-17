@@ -1,4 +1,4 @@
-const { embed,msgDev } = require("../functions");
+const { embed, msgDev } = require("../functions");
 
 module.exports = {
   name: "issue",
@@ -12,6 +12,8 @@ module.exports = {
       return;
     }
 
+//     If this was an error, please use `!issue` to submit this to the developer. Please include what happened and the steps to reproduce the error
+    
     msgDev(args.join(" "),msg,bot,"Issue");
 
     msg.channel.send(
