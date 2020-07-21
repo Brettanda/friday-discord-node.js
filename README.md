@@ -37,3 +37,4 @@ Dialogflow does not take any information about the Discord guild except for any 
 [] Auto add intents or self teaching ML
 [] Add queue system for playing YouTube audio
 [] Add D&D dice rolling command and dialogflow intent
+[] Make a modern looking icon
