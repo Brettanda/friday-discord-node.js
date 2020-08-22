@@ -3,3 +3,4 @@ node_modules
 *-lock.json
 *.lock
 .glitch-assets
+yarn-error.log

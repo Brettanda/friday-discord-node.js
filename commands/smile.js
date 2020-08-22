@@ -7,7 +7,7 @@ var postedMemes = [];
 
 module.exports = {
   name: "smile",
-  description: "Gets a meme from Reddit and sends the an image",
+  description: "Gets a r/mademesmile meme from Reddit and sends the image",
   async execute(msg, args, bot) {
     var sub = ["mademesmile"];
     const chName = msg.channel.name;

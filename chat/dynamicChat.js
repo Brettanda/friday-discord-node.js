@@ -4,15 +4,16 @@ const func = require("../functions");
 module.exports = async (content, msg, bot) => {
   switch (content) {
     case "Insults":
-      await msg.channel.send(
-        func.embed(
-          "No u!",
-          "#FFD700",
-          "",
-          msg.author,
-          unoCards[func.random(0, unoCards.length)]
-        )
-      );
+      await msg.react("😭");
+      // await msg.channel.send(
+      //   func.embed(
+      //     "No u!",
+      //     "#FFD700",
+      //     "",
+      //     msg.author,
+      //     unoCards[func.random(0, unoCards.length)]
+      //   )
+      // );
       break;
     case "Activities":
       await msg.reply(`I am playing ${bot.user.presence.activities[0].name}`);
@@ -53,7 +54,8 @@ module.exports = async (content, msg, bot) => {
         )
       );
       break;
-    case "Memes" || "Memes - Another":
+    case "Memes":
+    case "Memes - Another":
       await require("../commands/meme").execute(msg);
       break;
     case "Title of your sex tape":
@@ -64,6 +66,12 @@ module.exports = async (content, msg, bot) => {
       break;
     case "Something cool":
       await require("../commands/meme").execute(msg,"cool");
+      break;
+    case "Compliments":
+    case "Thanks":
+    case "are you a bot?":
+      const emojis = ["❤️","💯","💕"];
+      await msg.react(emojis[func.random(0,emojis.length)]);
       break;
   }
 };

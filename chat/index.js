@@ -104,7 +104,7 @@ module.exports = async (msg, bot) => {
           content.includes("friday") != true &&
           // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
           content.includes("bot") != true &&
-          // TODO: add a check for another bot
+          // TODO: add a check for another bot 
           Array.from(item.filter(i => i.author.id == bot.user.id)).length == 0 &&
           msg.channel.type != "dm"
         )
@@ -226,7 +226,7 @@ module.exports = async (msg, bot) => {
   
   if (content.includes("bazinga")) {
     msg.channel
-      .send("Banning " + msg.author.username + " in 10 seconds")
+      .send(`Banning ${msg.author.username} from \`${msg.guild.name}\` in 10 seconds`)
       .then(ban => {
         var timeLeft = 10;
         var count = setInterval(() => {
@@ -237,7 +237,7 @@ module.exports = async (msg, bot) => {
             return;
           }
           ban.edit(
-            "Banning " + msg.author.username + " in " + timeLeft + " seconds"
+            `Banning ${msg.author.username} from \`${msg.guild.name}\` in ${timeLeft} seconds`
           );
         }, 1000);
       });
@@ -261,7 +261,7 @@ module.exports = async (msg, bot) => {
     msg.react("💩");
   }
 
-  if (content.includes("pupper") || content.include("dog")) {
+  if (content.includes("pupper") || content.includes("dog")) {
     msg.react("🐕");
   }
 
