@@ -6,7 +6,7 @@
 [![Discord Chat](https://img.shields.io/discord/308323056592486420.svg)](https://discord.gg/NTRuFjU) 
 [![Vote](https://img.shields.io/badge/Vote-Friday-blue)](https://top.gg/bot/476303446547365891/vote)
 [![Add Friday to your server](https://img.shields.io/badge/Add%20Friday-to%20your%20server-orange)](https://discord.com/api/oauth2/authorize?client_id=476303446547365891&permissions=36792384&scope=bot)
-<a href="https://www.patreon.com/bePatron?u=34255235" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+[![Become a Patron!](https://img.shields.io/badge/-Become%20a%20Patron!-rgb(232%2C%2091%2C%2070))](https://www.patreon.com/bePatron?u=34255235)
 
 ## Privacy Disclaimer
 
