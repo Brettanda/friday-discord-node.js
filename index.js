@@ -76,7 +76,7 @@ bot.on("guildMemberAdd", member => {
   if (!process.argv.includes("--dev")) {
     member.send(
       `Welcome **${member.displayName}** to **${member.guild.name}**.\nIt's great to have you :) I am a bot that help around the server. If you would like to chat with me in the future with one of my commands, just type \`${prefix}help\`.\nYou can also talk to me just by saying something like \`Hello Friday\`.`
-    );
+    ).catch(console.error("could not send a welcome message to a user"))
   }
 });
 
