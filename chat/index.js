@@ -214,15 +214,15 @@ module.exports = async (msg, bot) => {
     msg.react("🇪");
   }
 
-  if(content.includes("@someone")) {
-    // console.log("Max: " + msg.guild.memberCount + " " + func.random(0,msg.guild.memberCount))
-    msg.channel.messages.fetch({ limit: 10 }).then(async item => {
-      if(Array.from(item).filter(i => i[1].content.includes("@someone") && i[1].author == msg.author).length > 0) return msg.reply("You have already used that recently. Try again later :)")
+  // if(content.includes("@someone")) {
+  //   // console.log("Max: " + msg.guild.memberCount + " " + func.random(0,msg.guild.memberCount))
+  //   msg.channel.messages.fetch({ limit: 10 }).then(async item => {
+  //     if(Array.from(item).filter(i => i[1].content.includes("@someone") && i[1].author == msg.author).length > 0) return msg.reply("You have already used that recently. Try again later :)")
       
-      let user = Array.from(msg.guild.members.cache)[func.random(0,msg.guild.memberCount)][1].user;
-      msg.channel.send("<@!"+user.id+">");
-    });
-  }
+  //     let user = Array.from(msg.guild.members.cache)[func.random(0,msg.guild.memberCount)][1].user;
+  //     msg.channel.send("<@!"+user.id+">");
+  //   });
+  // }
   
   if (content.includes("bazinga")) {
     msg.channel
