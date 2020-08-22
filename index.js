@@ -114,6 +114,11 @@ bot.on("message", async msg => {
       if (msg.guild && msg.guild.id == process.env.DEVGUILD) return;
     }
 
+    if(require("./chat/ignoreText")(msg).length > 0) {
+      console.log(`Ignored message: "${msg.cleanContent}"`);
+      return
+    }
+    
     if (!msg.content.startsWith(prefix)) return await botChat(msg, bot);
 
     const args = msg.content.slice(prefix.length).split(/ +/);
