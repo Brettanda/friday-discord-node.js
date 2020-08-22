@@ -1,6 +1,14 @@
 # Friday Discord Bot
 
-## Disclaimer
+[![NPM Version](https://img.shields.io/npm/v/npm.svg?style=flat)]()
+[![GitHub license](https://img.shields.io/github/license/Brettanda/friday-discord-node.js)](https://github.com/Brettanda/friday-discord-node.js/blob/master/LICENSE.md)
+[![GitHub issues](https://img.shields.io/github/issues/Brettanda/friday-discord-node.js)](https://github.com/Brettanda/friday-discord-node.js/issues)
+[![Discord Chat](https://img.shields.io/discord/308323056592486420.svg)](https://discord.gg/NTRuFjU) 
+[![Vote](https://img.shields.io/badge/Vote-Friday-blue)](https://top.gg/bot/476303446547365891/vote)
+[![Add Friday to your server](https://img.shields.io/badge/Add%20Friday-to%20your%20server-orange)](https://discord.com/api/oauth2/authorize?client_id=476303446547365891&permissions=36792384&scope=bot)
+<a href="https://www.patreon.com/bePatron?u=34255235" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+
+## Privacy Disclaimer
 
 Because this bot is using Dialogflow, Friday records all messages visible to itself and sends them to Dialogflow. Messages that Friday does not send include links and image embeds/links to images. The purpose of sending messages to Dialogflow is to train what Friday will respond to and what the reply would be. Sending messages to Dialogflow will be removed in the future once Fridays responses are more stable and accurate.
 
@@ -38,3 +46,4 @@ Dialogflow does not take any information about the Discord guild except for any 
 - [X] Add queue system for playing YouTube audio
 - [ ] Add D&D dice rolling command and dialogflow intent
 - [ ] Make a modern looking icon
+- [ ] Add spam protection for the commands like `!issue`
