@@ -18,7 +18,7 @@ module.exports = {
         .setColor("#fdfdfd")
         .setTitle("Friday - Help")
         .setThumbnail(bot.user.displayAvatarURL())
-        .setDescription("Here's a list of all my commands:")
+        .setDescription("If you would like to make a suggestion for a command please join the Friday Discord and explain your suggestion. Here's a list of all my commands:")
         .addField(
           `\`${coms
             .map(command => (!command.hidden ? command.name : ""))
