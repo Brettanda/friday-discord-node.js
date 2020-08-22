@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 var func = require("../functions");
 
-const { prefix, delMSGtimeout, typingTime } = require("../config.json");
+const { prefix, delMSGtimeout, typingTime, theGame } = require("../config.json");
 
 
 // const fs = require("fs");
@@ -172,7 +172,7 @@ module.exports = async (msg, bot) => {
         "#FF8C00",
         "",
         msg.author,
-        "https://media1.tenor.com/images/725176d9418345bf3a9b3699f2123a2a/tenor.gif"
+        theGame[func.random(0,theGame.length)]
       )
     );
   }
