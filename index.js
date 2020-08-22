@@ -20,7 +20,7 @@ bot.on("ready", () => {
   if (process.argv.includes("--dev")) console.log("Development Setup");
 
   //bot.user.setActivity("🚧Under Construction");
-  func.chooseGame(bot);
+  if (!process.argv.includes("--dev")) func.chooseGame(bot); 
 });
 
 bot.on("reconnecting", () => {
@@ -28,15 +28,17 @@ bot.on("reconnecting", () => {
 });
 
 bot.on("disconnect", () => {
-  console.info("Disconnect!");
+  console.info("Disconnected!");
 });
 
 // bot.on('debug', console.log);
 bot.on("error", error => {
-  Array.from(bot.guilds.cache)
-    .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
-    .channels.cache.find(channel => channel.name == "errors")
-    .send(`**Error:** ${error}`);
+  if (!process.argv.includes("--dev")) {
+    Array.from(bot.guilds.cache)
+      .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
+      .channels.cache.find(channel => channel.name == "log-errors")
+      .send(`**Error:** ${error}`);
+  }
 });
 
 bot.on("shardError", error => {
@@ -44,32 +46,38 @@ bot.on("shardError", error => {
 });
 
 bot.on("guildCreate", async guild => {
-  console.info("I have been added to a new guild :)");
-  if (!guild.systemChannel) return;
-  await guild.systemChannel.send(
-    `Thank you for inviting me to your server. My name is Friday, and I like to party. I will respond to some chats directed towards me and commands. To get started with commands type \`${prefix}help\`.\nAn example of something I will respond to is \`Hey\` or \`Hello Friday\``
-  );
-  await Array.from(bot.guilds.cache)
-    .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
-    .channels.cache.find(channel => channel.name == "guild-join")
-    .send(
-      `I have joined another guild, making the total ${bot.guilds.cache.size}`
+  if (!process.argv.includes("--dev")) {
+    console.info("I have been added to a new guild :)");
+    if (!guild.systemChannel) return;
+    await guild.systemChannel.send(
+      `Thank you for inviting me to your server. My name is Friday, and I like to party. I will respond to some chats directed towards me and commands. To get started with commands type \`${prefix}help\`.\nAn example of something I will respond to is \`Hey\` or \`Hello Friday\`. At my current stage of development I am very chaotic, so if I do something I shouldn't have please use \`!issue\`. If something goes terribly wrong and you want it to stop, talk to my creator https://discord.gg/F8KUDwu`
     );
+    await Array.from(bot.guilds.cache)
+      .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
+      .channels.cache.find(channel => channel.name == "guild-join")
+      .send(
+        `I have joined another guild, making the total ${bot.guilds.cache.size}`
+      );
+  }
 });
 
 bot.on("guildDelete", guild => {
-  Array.from(bot.guilds.cache)
-    .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
-    .channels.cache.find(channel => channel.name == "guild-join")
-    .send(
-      `I have been removed from a guild, making the total ${bot.guilds.cache.size}`
-    );
+  if (!process.argv.includes("--dev")) {
+    Array.from(bot.guilds.cache)
+      .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
+      .channels.cache.find(channel => channel.name == "guild-join")
+      .send(
+        `I have been removed from a guild, making the total ${bot.guilds.cache.size}`
+      );
+  }
 });
 
 bot.on("guildMemberAdd", member => {
-  member.send(
-    `Welcome **${member.displayName}** to **${member.guild.name}**.\nIt's great to have you :) I am a bot that help around the server. If you would like to chat with me in the future with one of my commands, just type \`${prefix}help\`.\nYou can also talk to me just by saying something like \`Hello Friday\`.`
-  );
+  if (!process.argv.includes("--dev")) {
+    member.send(
+      `Welcome **${member.displayName}** to **${member.guild.name}**.\nIt's great to have you :) I am a bot that help around the server. If you would like to chat with me in the future with one of my commands, just type \`${prefix}help\`.\nYou can also talk to me just by saying something like \`Hello Friday\`.`
+    );
+  }
 });
 
 Object.keys(botCommands).map(key => {
@@ -113,7 +121,7 @@ bot.on("message", async msg => {
     } else {
       if (msg.guild && msg.guild.id == process.env.DEVGUILD) return;
     }
-
+    
     if(require("./chat/ignoreText")(msg).length > 0) {
       console.log(`Ignored message: "${msg.cleanContent}"`);
       return
@@ -130,7 +138,7 @@ bot.on("message", async msg => {
       !bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))
     ) {
       if (msg.channel.type != "dm")
-        await msg.delete({ timeout: 0, reason: "Command" });
+        await msg.delete({ timeout: 100, reason: "Command" });
       return await msg.channel.send(
         `\`${prefix + command}\` is not a valid command`
       );
@@ -146,7 +154,7 @@ bot.on("message", async msg => {
     ) {
       if (process.env.DEVID != msg.author.id) {
         if (msg.channel.type != "dm")
-          await msg.delete({ timeout: 0, reason: "Command" });
+          await msg.delete({ timeout: 100, reason: "Command" });
         await msg.reply("Only the owner of the bot can run this command");
         return;
       }
@@ -164,7 +172,7 @@ bot.on("message", async msg => {
     }
 
     if (msg.channel.type != "dm")
-      await msg.delete({ timeout: 0, reason: "Command" });
+      await msg.delete({ timeout: 100, reason: "Command" }).catch(err => console.error(err));
   } catch (err) {
     console.error(err);
   }
