@@ -63,12 +63,13 @@ bot.on("guildCreate", async guild => {
 
 bot.on("guildDelete", guild => {
   if (!process.argv.includes("--dev")) {
-    Array.from(bot.guilds.cache)
-      .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
-      .channels.cache.find(channel => channel.name == "guild-join")
-      .send(
-        `I have been removed from a guild, making the total ${bot.guilds.cache.size}`
-      );
+    func.msgDev(`I have been removed from a guild, making the total ${bot.guilds.cache.size}`,chat = "guild-join")
+    // Array.from(bot.guilds.cache)
+    //   .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
+    //   .channels.cache.find(channel => channel.name == "guild-join")
+    //   .send(
+    //     `I have been removed from a guild, making the total ${bot.guilds.cache.size}`
+    //   );
   }
 });
 
@@ -76,7 +77,7 @@ bot.on("guildMemberAdd", member => {
   if (!process.argv.includes("--dev")) {
     member.send(
       `Welcome **${member.displayName}** to **${member.guild.name}**.\nIt's great to have you :) I am a bot that help around the server. If you would like to chat with me in the future with one of my commands, just type \`${prefix}help\`.\nYou can also talk to me just by saying something like \`Hello Friday\`.`
-    ).catch(console.error("could not send a welcome message to a user"))
+    ).catch(err => {/*console.error("Could not send a welcome message to a user")*/})
   }
 });
 
@@ -89,16 +90,15 @@ Object.keys(botCommands).map(key => {
 
 bot.on("message", async msg => {
   try {
+    // Im going to talk to another bot or me lol
+    if (msg.author.bot) return;
+
+    // If the message exceeds the character limit for a message to a bot
+    if(msg.cleanContent.length > 256) return console.error("message exceeds 256 characters");
+
     // If this happened then something horrible has gone down
     if (msg.guild == null && msg.channel.type != "dm") {
-      return await bot.users
-        .fetch(process.env.DEVID)
-        .then(member => {
-          member.send(
-            "Check Glitch, a message didn't have a guild and wasn't a DM."
-          );
-        })
-        .catch(err => console.error(err));
+      return await func.msgDev("Check Glitch, a message didn't have a guild and wasn't a DM.",bot,"log-errors");
     }
 
     // Im not going to bother important channels
@@ -109,9 +109,6 @@ bot.on("message", async msg => {
       msg.channel.type == "news"
     )
       return;
-
-    // Im going to talk to another bot or me lol
-    if (msg.author.bot) return;
 
     // If in development don't respond to messages outside of the dev guild
     if (process.argv.includes("--dev")) {
@@ -138,7 +135,7 @@ bot.on("message", async msg => {
       !bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))
     ) {
       if (msg.channel.type != "dm")
-        await msg.delete({ timeout: 100, reason: "Command" });
+        await msg.delete({ timeout: 100, reason: "Command" }).catch(err => console.error("Failed to delete the command from a user"));
       return await msg.channel.send(
         `\`${prefix + command}\` is not a valid command`
       );
@@ -154,7 +151,7 @@ bot.on("message", async msg => {
     ) {
       if (process.env.DEVID != msg.author.id) {
         if (msg.channel.type != "dm")
-          await msg.delete({ timeout: 100, reason: "Command" });
+          await msg.delete({ timeout: 100, reason: "Command" }).catch(err => console.error("Failed to remove a users message"));
         await msg.reply("Only the owner of the bot can run this command");
         return;
       }
@@ -168,11 +165,12 @@ bot.on("message", async msg => {
         : bot.commands.get(command).execute(msg, args, bot, command);
     } catch (error) {
       console.error(error);
+      await func.msgDev(error,chat = "log-errors");
       await msg.reply("There was an error trying to execute that command!");
     }
 
     if (msg.channel.type != "dm")
-      await msg.delete({ timeout: 100, reason: "Command" }).catch(err => console.error(err));
+      await msg.delete({ timeout: 100, reason: "Command" }).catch(err => console.error("Failed to delete a users command"));
   } catch (err) {
     console.error(err);
   }

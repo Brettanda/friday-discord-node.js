@@ -47,3 +47,4 @@ Dialogflow does not take any information about the Discord guild except for any 
 - [ ] Add D&D dice rolling command and dialogflow intent
 - [ ] Make a modern looking icon
 - [ ] Add spam protection for the commands like `!issue`
+- [ ] If a role is tagged that Friday is not apart of, ignore the message.

@@ -1,4 +1,5 @@
 const { delMSGtimeout } = require("../config.json");
+const { execute } = require("./help");
 
 exports.say = {
   name: "say",
@@ -65,5 +66,23 @@ exports.react = {
       args.filter((i,index) => index >= 1).map(i => Array.from(message)[0][1].react(i));
       // Array.from(message)[0][1].react(args[1]);
     });
+  }
+}
+
+exports.servers = {
+  name: "servers",
+  owner: true,
+  hidden: true,
+  async execute(msg,arg,bot) {
+    var string = `**Servers:** ${Array.from(bot.guilds.cache).length}\n`;
+    var totalMembers = 0;
+    Array.from(bot.guilds.cache).map(guild => {
+      totalMembers = totalMembers + guild[1].memberCount;
+      string += `\n**Title:** ${guild[1].name}\n**Member Count:** ${guild[1].memberCount}\n**Large:** ${guild[1].large}\n**Region:** ${guild[1].region}\n`
+    });
+
+    string += `\n\n**Total Members in all servers:**${totalMembers}`;
+
+    await msg.channel.send(string)
   }
 }

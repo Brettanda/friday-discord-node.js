@@ -1,6 +1,16 @@
 pls
+psl
 j4j
 @!
 j1j
 p!
 p!play
+p1stop
+p!stop
+p1
+>booru
+@anti spam
+/
+?
+|
+\

@@ -16,6 +16,7 @@ module.exports = {
   Smile:  require('./smile'),
   Icon:   require('./admin').icon,
   React:  require('./admin').react,
+  Servers:require('./admin').servers,
   // Music:  require('./music'),
   // Dice:   require("./diceRoll"),
 };

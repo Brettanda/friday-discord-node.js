@@ -58,6 +58,7 @@ exports.play = {
         err.toString().includes("No video id found:")
       ) {
         console.error("Url not a YouTube domain");
+        func.msgDev(`Someone wants this url to work for music: \`${args.join(" ")}\``,bot,"log-issues",msg,"Music")
         return msg.channel.send(
           func.embed(
             `\`${args[0]}\` is not a valid YouTube URL`,

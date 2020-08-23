@@ -70,7 +70,12 @@ module.exports = async (content, msg, bot) => {
     case "Compliments":
     case "Thanks":
     case "are you a bot?":
+    case "I love you":
       const emojis = ["❤️","💯","💕"];
+      await msg.react(emojis[func.random(0,emojis.length)]);
+      break;
+    case "give me 5 minutes":
+      const emojis = ["⏰","⌚","🕰","⏱"];
       await msg.react(emojis[func.random(0,emojis.length)]);
       break;
   }
