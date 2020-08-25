@@ -3,15 +3,15 @@ const dialogflow = require('dialogflow').v2;
 module.exports = async (content,msg) => {	
 	const sessionID = msg.channel.id ? msg.channel.id.toString() : msg.author.id.toString();//Math.random().toString();
 
-	let config = { 
+	const config = { 
 		credentials: { 
 			private_key: process.env.PRIVATEKEY.split(/\\n/).join('\n'), 
 			client_email: process.env.CLIENTEMAIL 
 		} 
 	} 
 
-	const sessionClient = new dialogflow.SessionsClient(config);
-	const sessionPath = sessionClient.sessionPath(process.env.DIALOGFLOWID,sessionID);
+	const sessionClient = await new dialogflow.SessionsClient(config);
+	const sessionPath = await sessionClient.sessionPath(process.env.DIALOGFLOWID,sessionID);
 
 	const request = {
 		session: sessionPath,

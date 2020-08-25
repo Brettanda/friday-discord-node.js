@@ -71,12 +71,12 @@ module.exports = async (content, msg, bot) => {
     case "Thanks":
     case "are you a bot?":
     case "I love you":
-      const emojis = ["❤️","💯","💕"];
-      await msg.react(emojis[func.random(0,emojis.length)]);
+      const hearts = ["❤️","💯","💕"];
+      await msg.react(hearts[func.random(0,hearts.length)]);
       break;
     case "give me 5 minutes":
-      const emojis = ["⏰","⌚","🕰","⏱"];
-      await msg.react(emojis[func.random(0,emojis.length)]);
+      const clocks = ["⏰","⌚","🕰","⏱"];
+      await msg.react(clocks[func.random(0,clocks.length)]);
       break;
   }
 };

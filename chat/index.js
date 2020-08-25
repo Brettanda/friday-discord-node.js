@@ -1,4 +1,4 @@
-var func = require("../functions");
+const func = require("../functions");
 
 // const { prefix, delMSGtimeout, typingTime, theGame } = require("../config.json");
 
@@ -15,7 +15,7 @@ var func = require("../functions");
 // console.log(classifier)
 
 module.exports = async (msg, bot) => {
-  const content = msg.cleanContent
+  const content = await msg.cleanContent
     .toLowerCase()
     .split(/[\'\"\`\,\.]/)
     .join("");
@@ -56,13 +56,13 @@ module.exports = async (msg, bot) => {
 //     console.log("url");
 //     return;
 //   }
-  if(require('./reposts')(msg,bot)) return;
+  if(await require('./reposts')(msg,bot)) return;
   // const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
   // if(pattern.test(msg.cleanContent)) return;
 
-  require('./reactions')(content,msg)
+  await require('./reactions')(content,msg)
 
-  const query = func.queryDialogFlow(content, msg);
+  // const query = await func.queryDialogFlow(content, msg);
       // talkingAboutAnotherBot,
     // talkingAboutMe;
   //   pastFiveMSGS = msg.channel.messages.fetch({limit: 5}).then(item => {
@@ -86,7 +86,7 @@ module.exports = async (msg, bot) => {
     // }
 
     // msg.channel.startTyping();
-    await query
+    await func.queryDialogFlow(content, msg)
       .then(async result => {
         if (result.intent.displayName == "Default Fallback Intent") {
           // await msg.channel.stopTyping(true);
@@ -119,7 +119,7 @@ module.exports = async (msg, bot) => {
         console.info("Found response");
 
         if (result.fulfillmentText != "dynamic") {
-          await msg.channel.send(func.capitalize(result.fulfillmentText));
+          await msg.channel.send(await func.capitalize(result.fulfillmentText));
           // await msg.channel.stopTyping(true);
           return;
         }

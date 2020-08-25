@@ -159,10 +159,10 @@ bot.on("message", async msg => {
 
     try {
       bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))
-        ? bot.commands
+        ? await bot.commands
             .find(cmd => cmd.aliases && cmd.aliases.includes(command))
             .execute(msg, args, bot, command)
-        : bot.commands.get(command).execute(msg, args, bot, command);
+        : await bot.commands.get(command).execute(msg, args, bot, command);
     } catch (error) {
       console.error(error);
       await func.msgDev(error,chat = "log-errors");
