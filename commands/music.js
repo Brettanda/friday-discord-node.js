@@ -2,6 +2,8 @@
 const ytdl = require("ytdl-core-discord");
 const func = require("../functions");
 const { delMSGtimeout } = require("../config.json");
+const search = require('yt-search');
+//const { stat } = require("fs");
 
 const queue = new Map();
 
@@ -51,6 +53,100 @@ exports.play = {
         )
       );
 
+
+    if(func.isURL(args.join(" ")) == false)  return await search(args.join(" "), async (err, res) => {
+      if(err) {
+        console.error(err);
+        return msg.channel.send("something went wrong");
+      }
+
+      const videos = res.videos.slice(0,9);
+
+      let resp = "";
+      // let m = [],v = [];
+      await videos.map((ite, i) => {
+        // m.push(parseInt(i)+1);
+        // v.push(videos[i].title);
+
+        resp += `**[${parseInt(i)+1}]:** ${videos[i].title}\n`;
+      })
+      // for(var i in videos) {
+      //   resp += `**[${parseInt(i)+1}]:** \`${videos[i].title}\`\n`;
+      // }
+
+      resp += `\n**Choose a reaction number between 1 and ${videos.length}**`;
+
+      const musicChoice = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"];
+
+      await msg.channel.send(func.embed(`**Search for:** ${args.join(" ")}`,"#7BDCFC","",msg.author,"","","","Results",resp,"","",false)).then(async (item) => {
+        // This seemed to be the only way to have the musicChoice show everytime. Sometimes they would only show the first one and stop
+        item.react(musicChoice[0]).then(() => item.react(musicChoice[1]).then(() => item.react(musicChoice[2]).then(() => item.react(musicChoice[3]).then(() => item.react(musicChoice[4]).then(() => item.react(musicChoice[5]).then(() => item.react(musicChoice[6]).then(() => item.react(musicChoice[7]).then(() => item.react(musicChoice[8]).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return});
+
+        const filter = (reaction,user) => musicChoice.filter(item => item === reaction.emoji.name) && user.bot == false;
+
+        const collector = item.createReactionCollector(filter);
+
+        collector.videos = videos;
+
+        await collector.once('collect', async function(r) {
+          const num = musicChoice.indexOf(musicChoice.filter((item,i) => item === r.emoji.name)[0])+1;
+          const serverQueue = queue.get(msg.guild.id);
+          
+          const song = {
+            title: this.videos[parseInt(num)-1].title,
+            url: this.videos[parseInt(num)-1].url
+          };
+
+          if (!serverQueue) {
+            const queueContruct = {
+              textChannel: msg.channel,
+              voiceChannel: msg.member.voice.channel,
+              connection: null,
+              songs: [],
+              volume: 5,
+              playing: true
+            };
+      
+            queue.set(msg.guild.id, queueContruct);
+      
+            queueContruct.songs.push(song);
+      
+            try {
+              var connection = await msg.member.voice.channel.join();
+              queueContruct.connection = connection;
+              await item.delete();
+              play(msg, queueContruct.songs[0]);
+            } catch (err) {
+              console.log(err);
+              queue.delete(msg.guild.id);
+              await item.delete();
+              return msg.channel.send(err).then(status => {
+                status.delete({ timeout: delMSGtimeout });
+              });
+            }
+          } else {
+            serverQueue.songs.push(song);
+            await item.delete();
+            return msg.channel
+              .send(
+                func.embed(
+                  `${song.title} has been added to the queue!`,
+                  "#7BDCFC",
+                  "",
+                  msg.author
+                )
+              )
+              .then(status => {
+                status.delete({ timeout: delMSGtimeout });
+              });
+          }
+        })
+
+        await item.delete({ timeout: delMSGtimeout }).catch(err => {});
+      });
+    })
+
+
     const serverQueue = queue.get(msg.guild.id);
     const songInfo = await ytdl.getInfo(args[0]).catch(err => {
       if (
@@ -61,13 +157,16 @@ exports.play = {
         func.msgDev(`Someone wants this url to work for music: \`${args.join(" ")}\``,bot,"log-issues",msg,"Music")
         return msg.channel.send(
           func.embed(
-            `\`${args[0]}\` is not a valid YouTube URL`,
+            `\`${args.join(" ")}\` is not a valid YouTube URL`,
             "#7BDCFC",
             "",
             msg.author
           )
         );
-      } else console.error(err);
+      } else {
+        console.error(err);
+        return msg.reply("Something has gone wrong. Please try again later.");
+      }
     });
 
     if (typeof songInfo.video_url == "undefined") return;
@@ -164,13 +263,17 @@ exports.play = {
 
 exports.stop = {
   name: "stop",
-  aliases: ["leave", "end"],
+  aliases: ["leave", "end", "clear"],
   description: "Leaves the voice channel that i am apart of",
   async execute(msg, args = "", bot) {
     if (msg.channel.type == "dm")
-      return await msg.channel.send(
-        "You can only use this command in server text channel"
+    return await msg.channel.send(
+      "You can only use this command in server text channel"
       );
+      
+    if(queue.get(msg.guild.id)) queue.delete(msg.guild.id);
+    
+    msg.channel.send(func.embed("The queue has been cleared","#7BDCFC","",msg.author)).then(status => status.delete({ timeout:delMSGtimeout }))
 
     await leave(msg, bot);
   }
@@ -231,34 +334,34 @@ exports.toggle = {
   }
 };
 
-exports.volume = {
-  name: "volume",
-  aliases: ["vol"],
-  usage: "[Volume to set or leave blank for the current volume]",
-  description:
-    "Shows you the current volume or sets the volume with an argument",
-  hidden: true,
-  async execute(msg, args = "", bot) {
-    if (msg.channel.type == "dm")
-      return await msg.channel.send(
-        "You can only use this command in server text channel"
-      );
-    const serverQueue = queue.get(msg.guild.id);
-    if (args == "")
-      return msg.channel
-        .send(
-          func.embed(
-            `Current Volume: ${serverQueue.connection.dispatcher.volume}`,
-            "#7BDCFC",
-            "",
-            msg.author
-          )
-        )
-        .then(status => {
-          status.delete({ timeout: delMSGtimeout });
-        });
-  }
-};
+// exports.volume = {
+//   name: "volume",
+//   aliases: ["vol"],
+//   usage: "[Volume to set or leave blank for the current volume]",
+//   description:
+//     "Shows you the current volume or sets the volume with an argument",
+//   hidden: true,
+//   async execute(msg, args = "", bot) {
+//     if (msg.channel.type == "dm")
+//       return await msg.channel.send(
+//         "You can only use this command in server text channel"
+//       );
+//     const serverQueue = queue.get(msg.guild.id);
+//     if (args == "")
+//       return msg.channel
+//         .send(
+//           func.embed(
+//             `Current Volume: ${serverQueue.connection.dispatcher.volume}`,
+//             "#7BDCFC",
+//             "",
+//             msg.author
+//           )
+//         )
+//         .then(status => {
+//           status.delete({ timeout: delMSGtimeout });
+//         });
+//   }
+// };
 
 exports.skip = {
   name: "skip",

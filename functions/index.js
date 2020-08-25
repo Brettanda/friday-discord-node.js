@@ -5,5 +5,6 @@ module.exports = {
   hasDups:            require("./hasDups"),
   queryDialogFlow:    require("./queryDialogflow"),
   msgDev:             require("./msgdev"),
-  chooseGame:         require("./chooseGame")
+  chooseGame:         require("./chooseGame"),
+  isURL:              require("./isURL"),
 };

@@ -48,3 +48,6 @@ Dialogflow does not take any information about the Discord guild except for any 
 - [ ] Make a modern looking icon
 - [ ] Add spam protection for the commands like `!issue`
 - [ ] If a role is tagged that Friday is not apart of, ignore the message.
+- [ ] When music is playing and someone sends a message there is a little bit of a lag spike that occurs in the audio. This needs to be fixed.
+- [ ] Add some kind of server specific settings
+- [x] Add a search function to the `!play` command
