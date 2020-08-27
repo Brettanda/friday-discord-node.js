@@ -1,16 +1,29 @@
+process.stdout.write("Booting Up");
 require("dotenv").config();
+process.stdout.write(".");
 const Discord = require("discord.js");
+process.stdout.write(".");
 const bot = new Discord.Client();
+process.stdout.write(".");
 // const team = new Discord.Team(bot,{});
 
 const func = require("./functions");
+process.stdout.write(".");
 const { prefix, games, typingTime } = require("./config.json");
+process.stdout.write(".");
 
 bot.commands = new Discord.Collection();
+process.stdout.write(".");
 const botCommands = require("./commands");
+process.stdout.write(".");
 const botChat = require("./chat");
+process.stdout.clearLine();
+process.stdout.cursorTo(0);
+
 
 bot.login(process.env.TOKEN);
+
+require('./dbl')(bot);
 
 bot.on("ready", () => {
   console.info(
@@ -92,7 +105,7 @@ Object.keys(botCommands).map(key => {
 bot.on("message", async msg => {
   try {
     // Im going to talk to another bot or me lol
-    if (msg.author.bot) return;
+    if (msg.author.bot || msg.system) return;
 
     // If the message exceeds the character limit for a message to a bot
     if(msg.cleanContent.length > 256) return console.error("message exceeds 256 characters");
@@ -120,10 +133,13 @@ bot.on("message", async msg => {
       if (msg.guild && msg.guild.id == process.env.DEVGUILD) return;
     }
     
-    if(require("./chat/ignoreText")(msg).length > 0) {
-      console.log(`Ignored message: "${msg.cleanContent}"`);
+    if(require("./chat/ignoreText")(msg) == true) {
+      console.log(`Ignored message: "${msg.content}"`);
       return
     }
+    
+    const chatPerms = await msg.channel.permissionsFor(msg.client.user);
+    if(!chatPerms.has("SEND_MESSAGES")) return;
     
     if (!msg.content.startsWith(prefix)) return await botChat(msg, bot);
 

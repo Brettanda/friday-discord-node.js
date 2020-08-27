@@ -17,7 +17,7 @@ exports.play = {
     if (args == "")
       return msg.channel.send(
         func.embed(
-          `Command: \`${msg.cleanContent}\`\nDon't forget to add the YouTube url after the command. For example: \`!play https://youtu.be/dQw4w9WgXcQ\``,
+          `Command: \`${msg.cleanContent}\`\nDon't forget to add the YouTube url after the command. For example: \`!play https://youtu.be/dQw4w9WgXcQ\`. You can also input the title of a video and I will search for that video. \`!play uptown funk\``,
           "#7BDCFC",
           "",
           msg.author
@@ -78,7 +78,7 @@ exports.play = {
 
       const musicChoice = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"];
 
-      await msg.channel.send(func.embed(`**Search for:** ${args.join(" ")}`,"#7BDCFC","",msg.author,"","","","Results",resp,"","",false)).then(async (item) => {
+      await msg.channel.send(func.embed(`**Search for:** ${args.join(" ")}`,"#7BDCFC","",msg.author,"","","","Results",resp,"","",false)).then(item => {
         // This seemed to be the only way to have the musicChoice show everytime. Sometimes they would only show the first one and stop
         item.react(musicChoice[0]).then(() => item.react(musicChoice[1]).then(() => item.react(musicChoice[2]).then(() => item.react(musicChoice[3]).then(() => item.react(musicChoice[4]).then(() => item.react(musicChoice[5]).then(() => item.react(musicChoice[6]).then(() => item.react(musicChoice[7]).then(() => item.react(musicChoice[8]).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return})).catch(err => {return});
 
@@ -88,7 +88,7 @@ exports.play = {
 
         collector.videos = videos;
 
-        await collector.once('collect', async function(r) {
+        collector.once('collect', function(r) {
           const num = musicChoice.indexOf(musicChoice.filter((item,i) => item === r.emoji.name)[0])+1;
           const serverQueue = queue.get(msg.guild.id);
           
@@ -112,21 +112,25 @@ exports.play = {
             queueContruct.songs.push(song);
       
             try {
-              var connection = await msg.member.voice.channel.join();
-              queueContruct.connection = connection;
-              await item.delete();
-              play(msg, queueContruct.songs[0]);
+              // if(bot.voice.connections.map(item => item).length == 0) 
+              // const connection = await 
+              msg.member.voice.channel.join().then(con => {
+                queueContruct.connection = con;
+                item.delete();
+                play(msg, queueContruct.songs[0]);
+              });
             } catch (err) {
               console.log(err);
               queue.delete(msg.guild.id);
-              await item.delete();
+              item.delete();
               return msg.channel.send(err).then(status => {
                 status.delete({ timeout: delMSGtimeout });
               });
             }
           } else {
+            // console.log(bot.voice.connections.map(item => item).length)
             serverQueue.songs.push(song);
-            await item.delete();
+            item.delete();
             return msg.channel
               .send(
                 func.embed(
@@ -137,18 +141,71 @@ exports.play = {
                 )
               )
               .then(status => {
-                status.delete({ timeout: delMSGtimeout });
+                status.delete({ timeout: delMSGtimeout * 5 });
               });
           }
         })
 
-        await item.delete({ timeout: delMSGtimeout }).catch(err => {});
+        item.delete({ timeout: delMSGtimeout }).catch(err => {});
       });
     })
 
 
     const serverQueue = queue.get(msg.guild.id);
-    const songInfo = await ytdl.getInfo(args[0]).catch(err => {
+    // const songInfo = 
+    ytdl.getInfo(args[0]).then(item => {
+      if (typeof songInfo.video_url == "undefined") return;
+
+      const song = {
+        title: songInfo.title,
+        url: songInfo.video_url
+      };
+
+      if (!serverQueue) {
+        const queueContruct = {
+          textChannel: msg.channel,
+          voiceChannel: msg.member.voice.channel,
+          connection: null,
+          songs: [],
+          volume: 5,
+          playing: true
+        };
+
+        queue.set(msg.guild.id, queueContruct);
+
+        queueContruct.songs.push(song);
+
+        try {
+          // if(bot.voice.connections.map(item => item).length == 0) 
+          // const connection = await 
+          msg.member.voice.channel.join().then(con => {
+            queueContruct.connection = con;
+            item.delete();
+            play(msg, queueContruct.songs[0]);
+          });
+        } catch (err) {
+          console.log(err);
+          queue.delete(msg.guild.id);
+          return msg.channel.send(err).then(status => {
+            status.delete({ timeout: delMSGtimeout });
+          });
+        }
+      } else {
+        serverQueue.songs.push(song);
+        return msg.channel
+          .send(
+            func.embed(
+              `${song.title} has been added to the queue!`,
+              "#7BDCFC",
+              "",
+              msg.author
+            )
+          )
+          .then(status => {
+            status.delete({ timeout: delMSGtimeout });
+          });
+      }
+    }).catch(err => {
       if (
         err.toString().includes("Not a YouTube domain") ||
         err.toString().includes("No video id found:")
@@ -169,53 +226,7 @@ exports.play = {
       }
     });
 
-    if (typeof songInfo.video_url == "undefined") return;
-
-    const song = {
-      title: songInfo.title,
-      url: songInfo.video_url
-    };
-
-    if (!serverQueue) {
-      const queueContruct = {
-        textChannel: msg.channel,
-        voiceChannel: msg.member.voice.channel,
-        connection: null,
-        songs: [],
-        volume: 5,
-        playing: true
-      };
-
-      queue.set(msg.guild.id, queueContruct);
-
-      queueContruct.songs.push(song);
-
-      try {
-        var connection = await msg.member.voice.channel.join();
-        queueContruct.connection = connection;
-        play(msg, queueContruct.songs[0]);
-      } catch (err) {
-        console.log(err);
-        queue.delete(msg.guild.id);
-        return msg.channel.send(err).then(status => {
-          status.delete({ timeout: delMSGtimeout });
-        });
-      }
-    } else {
-      serverQueue.songs.push(song);
-      return msg.channel
-        .send(
-          func.embed(
-            `${song.title} has been added to the queue!`,
-            "#7BDCFC",
-            "",
-            msg.author
-          )
-        )
-        .then(status => {
-          status.delete({ timeout: delMSGtimeout });
-        });
-    }
+    
 
     //     const connection = await msg.member.voice.channel.join();
 

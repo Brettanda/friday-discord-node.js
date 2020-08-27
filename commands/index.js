@@ -17,6 +17,6 @@ module.exports = {
   Icon:   require('./admin').icon,
   React:  require('./admin').react,
   Servers:require('./admin').servers,
+  Dice:   require("./diceRoll"),
   // Music:  require('./music'),
-  // Dice:   require("./diceRoll"),
 };

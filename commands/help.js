@@ -41,7 +41,8 @@ module.exports = {
 
       return msg.channel
         .send(helpEmbed) //, { split: true })
-        .then(() => {
+        .then((t) => {
+          return require('../functions/settingsMngr').save(t)
           // if (msg.channel.type === "dm") return;
           // msg.reply("I've sent you a DM with all my commands!");
         })

@@ -9,7 +9,7 @@ function game(bot) {
   const gm = games[num];
 
   bot.user.setActivity(gm, { type: "PLAYING" });
-  console.info("Currently playing: " + gm);
+  // console.info("Currently playing: " + gm);
 
   setInterval(() => {
     // game(bot);

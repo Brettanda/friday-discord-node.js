@@ -108,7 +108,7 @@ module.exports = async (msg, bot) => {
           Array.from(item.filter(i => i.author.id == bot.user.id)).length == 0 &&
           msg.channel.type != "dm"
         )
-          return;
+          return console.log("Not replying to this message");
 
         if (result.fulfillmentText == "") {
           // await msg.channel.stopTyping(true);
