@@ -1,7 +1,7 @@
 const { soups, unoCards } = require("../config.json");
 const func = require("../functions");
 
-module.exports = async (content, msg, bot) => {
+module.exports = async (content, msg, bot, extra) => {
   switch (content) {
     case "Insults":
       await msg.react("😭");
@@ -56,6 +56,7 @@ module.exports = async (content, msg, bot) => {
       msg.channel.send(`*"${func.capitalize(msg.cleanContent)}"*, title of your sex-tape`);
       break;
     case "show me something cute":
+      if(extra) await msg.reply(extra)
       await require("../commands/smile").execute(msg);
       break;
     case "Something cool":

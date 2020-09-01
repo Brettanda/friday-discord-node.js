@@ -14,7 +14,7 @@ const func = require("../functions");
 // console.log(classifier)
 
 module.exports = async (msg, bot) => {
-  const content = await msg.cleanContent
+  const content = msg.cleanContent
     .toLowerCase()
     .split(/[\'\"\`\,\.]/)
     .join("");
@@ -47,31 +47,30 @@ module.exports = async (msg, bot) => {
 
   // msg.channel.startTyping();
 
-//   const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
+  //   const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
 
-//   if (pattern.test(msg.cleanContent)) {
-//     console.log("url");
-//     return;
-//   }
+  //   if (pattern.test(msg.cleanContent)) {
+  //     console.log("url");
+  //     return;
+  //   }
   if (await require("./reposts")(msg, bot)) return;
   // const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
   // if(pattern.test(msg.cleanContent)) return;
 
-  await require('./reactions')(content,msg)
+  require("./reactions")(content, msg);
 
   // const query = await func.queryDialogFlow(content, msg);
-      // talkingAboutAnotherBot,
-    // talkingAboutMe;
+  // talkingAboutAnotherBot,
+  // talkingAboutMe;
   //   pastFiveMSGS = msg.channel.messages.fetch({limit: 5}).then(item => {
   //   talkingAboutAnotherBot = Array.from(item.filter(message => message.author.bot == true && message.author.id != bot.user.id)).length
   //   talkingAboutMe = Array.from(item.filter(message => message.author.id == bot.user.id)).length
-    
+
   //   console.log(talkingAboutAnotherBot)
   //   console.log(talkingAboutMe)
   // });
 
-
-  await msg.channel.messages.fetch({ limit: 3 }).then(async item => {
+  msg.channel.messages.fetch({ limit: 3 }).then((item) => {
     // const interpretation = func.interpret(content.split("friday").join(""), classifier);
 
     // console.info("guess guess:",interpretation.guess)
@@ -83,8 +82,9 @@ module.exports = async (msg, bot) => {
     // }
 
     // msg.channel.startTyping();
-    await func.queryDialogFlow(content, msg)
-      .then(async result => {
+    func
+      .queryDialogFlow(content, msg)
+      .then((result) => {
         if (result.intent.displayName == "Default Fallback Intent") {
           // await msg.channel.stopTyping(true);
           return;
@@ -101,7 +101,7 @@ module.exports = async (msg, bot) => {
           content.includes("friday") != true &&
           // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
           content.includes("bot") != true &&
-          // TODO: add a check for another bot 
+          // TODO: add a check for another bot
           Array.from(item.filter((i) => i.author.id == bot.user.id)).length == 0 &&
           msg.channel.type != "dm"
         )
@@ -115,13 +115,13 @@ module.exports = async (msg, bot) => {
         }
         console.info("Found response");
 
-        if (result.fulfillmentText != "dynamic") {
-          await msg.channel.send(await func.capitalize(result.fulfillmentText));
+        if (result.fulfillmentText.startsWith("dynamic")) {
+          msg.channel.send(func.capitalize(result.fulfillmentText));
           // await msg.channel.stopTyping(true);
           return;
         }
 
-        await require("./dynamicChat")(result.intent.displayName, msg, bot);
+        require("./dynamicChat")(result.intent.displayName, msg, bot, result.fulfillmentText.replace("dynamic",""));
 
         // await msg.channel.stopTyping(true);
       })

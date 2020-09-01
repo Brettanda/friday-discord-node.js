@@ -4,3 +4,4 @@ node_modules
 *.lock
 .glitch-assets
 yarn-error.log
+shrinkwrap.yaml
