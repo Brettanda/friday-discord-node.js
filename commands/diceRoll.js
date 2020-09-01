@@ -1,12 +1,12 @@
 const { random, embed } = require("../functions/");
 const { delMSGtimeout } = require("../config.json");
 
-// TODO: this rolls the dice but not the **2**d20 number of time the dice should be rolled
+// TODO: k should display the highest roll example !r 2d20k1 + 5 should show the highest roll for 2d20 and + 5 to it for advantage rolls, l for disadvantage
 
 module.exports = {
   name: "roll",
   aliases: ["d", "dice", "r"],
-  description: "D&D dice rolling",
+  description: "D&D dice rolling, (Advantage and disadvantage will be added soon)",
   usage: "1d20+60/3 or !r 100d2+120d21*6+2",
   execute(msg, args, bot) {
     if (!args.length) {
@@ -14,8 +14,10 @@ module.exports = {
       return;
     }
 
+    if(args.join(" ").includes("k") || args.join(" ").includes("l") || args.join(" ").includes("x")) return msg.reply("K,L,X dice notation will be added in the future soon");
+
     if (args.length > 1)
-      return msg.reply(`\`${msg.args.join(" ")}\`This command only works without spaces`);
+      return msg.reply(`\`${args.join(" ")}\`This command only works without spaces`);
 
     const diceRolls = args
       .join(" ")

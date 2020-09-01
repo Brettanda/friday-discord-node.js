@@ -1,24 +1,14 @@
-process.stdout.write("Booting Up");
 require("dotenv").config();
-process.stdout.write(".");
 const Discord = require("discord.js");
-process.stdout.write(".");
 const bot = new Discord.Client();
-process.stdout.write(".");
 // const team = new Discord.Team(bot,{});
 
 const func = require("./functions");
-process.stdout.write(".");
 const { prefix, games, typingTime } = require("./config.json");
-process.stdout.write(".");
 
 bot.commands = new Discord.Collection();
-process.stdout.write(".");
 const botCommands = require("./commands");
-process.stdout.write(".");
 const botChat = require("./chat");
-process.stdout.clearLine();
-process.stdout.cursorTo(0);
 
 bot.login(process.env.TOKEN);
 
@@ -72,8 +62,7 @@ bot.on("guildDelete", (guild) => {
   if (!process.argv.includes("--dev")) {
     func.msgDev(
       `I have been removed from a guild, making the total ${bot.guilds.cache.size}`,
-      bot,
-      (chat = "guild-join")
+      bot,"guild-join"
     );
     // Array.from(bot.guilds.cache)
     //   .filter(item => item[0] == process.env.SUPPORTGUILD)[0][1]
