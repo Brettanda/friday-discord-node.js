@@ -2,7 +2,6 @@ const func = require("../functions");
 
 // const { prefix, delMSGtimeout, typingTime, theGame } = require("../config.json");
 
-
 // const fs = require("fs");
 
 // Load our training data
@@ -22,9 +21,7 @@ module.exports = async (msg, bot) => {
 
   if (
     Array.from(msg.attachments).length >= 1 &&
-    (msg.content == null ||
-      typeof msg.content == "undefined" ||
-      msg.content == "")
+    (msg.content == null || typeof msg.content == "undefined" || msg.content == "")
   ) {
     console.log("Image");
     return;
@@ -45,7 +42,7 @@ module.exports = async (msg, bot) => {
     "Memes",
     "Self Aware",
     "Soup Time",
-    "No U"
+    "No U",
   ];
 
   // msg.channel.startTyping();
@@ -56,7 +53,7 @@ module.exports = async (msg, bot) => {
 //     console.log("url");
 //     return;
 //   }
-  if(await require('./reposts')(msg,bot)) return;
+  if (await require("./reposts")(msg, bot)) return;
   // const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; // fragment locator
   // if(pattern.test(msg.cleanContent)) return;
 
@@ -105,7 +102,7 @@ module.exports = async (msg, bot) => {
           // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
           content.includes("bot") != true &&
           // TODO: add a check for another bot 
-          Array.from(item.filter(i => i.author.id == bot.user.id)).length == 0 &&
+          Array.from(item.filter((i) => i.author.id == bot.user.id)).length == 0 &&
           msg.channel.type != "dm"
         )
           return console.log("Not replying to this message");
@@ -128,6 +125,6 @@ module.exports = async (msg, bot) => {
 
         // await msg.channel.stopTyping(true);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   });
 };

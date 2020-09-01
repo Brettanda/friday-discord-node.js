@@ -1,6 +1,6 @@
 const { games } = require("../config.json");
 
-module.exports = bot => {
+module.exports = (bot) => {
   game(bot);
 };
 

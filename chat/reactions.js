@@ -2,8 +2,8 @@ const func = require("../functions");
 
 const { /*prefix, delMSGtimeout, typingTime, */ theGame } = require("../config.json");
 
-module.exports = async (content,msg) => {
-    // if (msg.author.lastMessage.cleanContent == msg.cleanContent && msg.guild) {
+module.exports = async (content, msg) => {
+  // if (msg.author.lastMessage.cleanContent == msg.cleanContent && msg.guild) {
   //   console.info(
   //     `Spam detected on \`${msg.guild.name} - ${msg.channel.name}\``
   //   );
@@ -39,13 +39,7 @@ module.exports = async (content,msg) => {
   // the game
   if (content.includes("the game") || content.includes("thegame")) {
     return await msg.channel.send(
-      func.embed(
-        "",
-        "#FF8C00",
-        "",
-        msg.author,
-        theGame[func.random(0,theGame.length)]
-      )
+      func.embed("", "#FF8C00", "", msg.author, theGame[func.random(0, theGame.length)])
     );
   }
 
@@ -90,16 +84,16 @@ module.exports = async (content,msg) => {
   //   // console.log("Max: " + msg.guild.memberCount + " " + func.random(0,msg.guild.memberCount))
   //   msg.channel.messages.fetch({ limit: 10 }).then(async item => {
   //     if(Array.from(item).filter(i => i[1].content.includes("@someone") && i[1].author == msg.author).length > 0) return msg.reply("You have already used that recently. Try again later :)")
-      
+
   //     let user = Array.from(msg.guild.members.cache)[func.random(0,msg.guild.memberCount)][1].user;
   //     msg.channel.send("<@!"+user.id+">");
   //   });
   // }
-  
+
   if (content.includes("bazinga")) {
     return await msg.channel
       .send(`Banning ${msg.author.username} from \`${msg.guild.name}\` in 10 seconds`)
-      .then(ban => {
+      .then((ban) => {
         var timeLeft = 10;
         var count = setInterval(() => {
           timeLeft = timeLeft - 1;
@@ -134,13 +128,14 @@ module.exports = async (content,msg) => {
     return await msg.react("💩");
   }
 
-  if(
+  if (
     content.includes("monkey") ||
     content.includes("munky") ||
     content.includes("manky") ||
     content.includes("menky")
   ) {
-    if(func.random(0,1) == 1) return await msg.react("🐒"); else return await msg.react("🐵");
+    if (func.random(0, 1) == 1) return await msg.react("🐒");
+    else return await msg.react("🐵");
   }
 
   if (content.includes("pupper") || content.includes("dog")) return await msg.react("🐕");
@@ -154,4 +149,4 @@ module.exports = async (content,msg) => {
   /*if (content.match(/\@everyone/)) {
   msg.reply('please use @here instead');
 }*/
-}
+};

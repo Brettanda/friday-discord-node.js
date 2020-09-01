@@ -18,13 +18,7 @@ module.exports = {
     //   .setTimestamp();
 
     msg.channel.send(
-      embed(
-        "Here is sum soup, just for you",
-        "#FFD700",
-        "I hope you enjoy!",
-        msg.author,
-        image
-      )
+      embed("Here is sum soup, just for you", "#FFD700", "I hope you enjoy!", msg.author, image)
     );
-  }
+  },
 };

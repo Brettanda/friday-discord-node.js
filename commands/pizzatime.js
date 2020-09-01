@@ -2,8 +2,8 @@
 
 module.exports = {
   name: "pizzatime",
-  execute(msg,args) {
+  execute(msg, args) {
     msg.delete();
     msg.channel.send("https://youtu.be/lpvT-Fciu-4");
-  }
-}
+  },
+};

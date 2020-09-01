@@ -6,7 +6,24 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js --dev"
+    "dev": "node index.js --dev",
+    "pretty-quick": "pretty-quick",
+    "postinstall": "pretty-quick"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "prettier": {
+    "jsxBracketSameLine": true,
+    "printWidth": 100,
+    "bracketSpacing": true
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.0"
   },
   "dependencies": {
     "@discordjs/opus": "^0.3.2",

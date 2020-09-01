@@ -22,7 +22,7 @@ module.exports = async (content, msg, bot) => {
       await msg.react("👀");
       break;
     case "Creator":
-      await bot.users.fetch(process.env.DEVID).then(member => {
+      await bot.users.fetch(process.env.DEVID).then((member) => {
         msg.channel.send(`${member.tag} is my creator :)`);
       });
       break;
@@ -45,13 +45,7 @@ module.exports = async (content, msg, bot) => {
       break;
     case "No U":
       await msg.channel.send(
-        func.embed(
-          "No u!",
-          "#FFD700",
-          "",
-          msg.author,
-          unoCards[func.random(0, unoCards.length)]
-        )
+        func.embed("No u!", "#FFD700", "", msg.author, unoCards[func.random(0, unoCards.length)])
       );
       break;
     case "Memes":
@@ -65,18 +59,18 @@ module.exports = async (content, msg, bot) => {
       await require("../commands/smile").execute(msg);
       break;
     case "Something cool":
-      await require("../commands/meme").execute(msg,"cool");
+      await require("../commands/meme").execute(msg, "cool");
       break;
     case "Compliments":
     case "Thanks":
     case "are you a bot?":
     case "I love you":
-      const hearts = ["❤️","💯","💕"];
-      await msg.react(hearts[func.random(0,hearts.length)]);
+      const hearts = ["❤️", "💯", "💕"];
+      await msg.react(hearts[func.random(0, hearts.length)]);
       break;
     case "give me 5 minutes":
-      const clocks = ["⏰","⌚","🕰","⏱"];
-      await msg.react(clocks[func.random(0,clocks.length)]);
+      const clocks = ["⏰", "⌚", "🕰", "⏱"];
+      await msg.react(clocks[func.random(0, clocks.length)]);
       break;
   }
 };

@@ -7,5 +7,5 @@ module.exports = {
     // msg.channel.send('pong');
     console.info("pong");
     console.info();
-  }
+  },
 };

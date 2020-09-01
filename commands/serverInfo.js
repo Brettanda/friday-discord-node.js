@@ -5,8 +5,8 @@ module.exports = {
   aliases: ["guild", "serverinfo", "guildinfo"],
   description: "Gives you info about the current server",
   execute(msg, args = "") {
-    if(msg.channel.type == "dm") {
-      return msg.channel.send("This command only works in a server")
+    if (msg.channel.type == "dm") {
+      return msg.channel.send("This command only works in a server");
     }
     const reply = embed(
       msg.guild.name + " - info",
@@ -16,15 +16,7 @@ module.exports = {
       "",
       "",
       "",
-      [
-        "Server Name",
-        "Members",
-        "Owner",
-        "Server ID",
-        "Region",
-        "Verified",
-        "Partnered"
-      ],
+      ["Server Name", "Members", "Owner", "Server ID", "Region", "Verified", "Partnered"],
       [
         msg.guild.name,
         msg.guild.memberCount,
@@ -32,10 +24,10 @@ module.exports = {
         msg.guild.id,
         msg.guild.region,
         msg.guild.verified,
-        msg.guild.partnered
+        msg.guild.partnered,
       ],
       msg.guild.iconURL()
     );
     msg.channel.send(reply);
-  }
+  },
 };

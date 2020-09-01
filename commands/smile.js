@@ -34,16 +34,12 @@ module.exports = {
 
       var allowed = msg.channel.nsfw
         ? body.data.children
-        : body.data.children.filter(post => !post.data.over_18);
+        : body.data.children.filter((post) => !post.data.over_18);
 
-      allowed = allowed.filter(post =>
-        post.data.url.includes("https://i.redd.it/")
-      );
+      allowed = allowed.filter((post) => post.data.url.includes("https://i.redd.it/"));
 
       if (!allowed.length)
-        return await msg.channel.send(
-          `It seems I am out of fresh \`${sub}\`!, Try again later.`
-        );
+        return await msg.channel.send(`It seems I am out of fresh \`${sub}\`!, Try again later.`);
 
       const randomnumber = func.random(0, allowed.length),
         data = allowed[randomnumber].data;
@@ -54,7 +50,7 @@ module.exports = {
 
       await msg.channel.send(
         func.embed(
-          /* data.title, `Here is a meme`*/"",
+          /* data.title, `Here is a meme`*/ "",
           0x00a2e8,
           `**${data.title}** Posts provided by **r/${sub}** posted by: **${data.author}**`,
           msg.author,
@@ -64,5 +60,5 @@ module.exports = {
     } catch (err) {
       return console.log(err);
     }
-  }
+  },
 };

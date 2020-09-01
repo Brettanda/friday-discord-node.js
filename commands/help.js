@@ -13,23 +13,20 @@ module.exports = {
     const { commands } = msg.client;
 
     if (!args.length) {
-      const coms = commands.filter(com => !com.hidden);
+      const coms = commands.filter((com) => !com.hidden);
       const helpEmbed = new Discord.MessageEmbed()
         .setColor("#fdfdfd")
         .setTitle("Friday - Help")
         .setThumbnail(bot.user.displayAvatarURL())
-        .setDescription("If you would like to make a suggestion for a command please join the Friday Discord and explain your suggestion. Here's a list of all my commands:")
+        .setDescription(
+          "If you would like to make a suggestion for a command please join the Friday Discord and explain your suggestion. Here's a list of all my commands:"
+        )
         .addField(
-          `\`${coms
-            .map(command => (!command.hidden ? command.name : ""))
-            .join("`, `")}\``,
+          `\`${coms.map((command) => (!command.hidden ? command.name : "")).join("`, `")}\``,
           `\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,
           true
         )
-        .setFooter(
-          `Called by: ${msg.author.username}`,
-          msg.author.displayAvatarURL()
-        )
+        .setFooter(`Called by: ${msg.author.username}`, msg.author.displayAvatarURL())
         .setTimestamp();
 
       // // .addField("`" + commands.map(command => command.name).join("`, `") + "`",`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,true)
@@ -42,11 +39,11 @@ module.exports = {
       return msg.channel
         .send(helpEmbed) //, { split: true })
         .then((t) => {
-          return require('../functions/settingsMngr').save(t)
+          return require("../functions/settingsMngr").save(t);
           // if (msg.channel.type === "dm") return;
           // msg.reply("I've sent you a DM with all my commands!");
         })
-        .catch(error => {
+        .catch((error) => {
           // console.error(
           //   `Could not send help DM to ${msg.author.tag}.\n`,
           //   error
@@ -59,8 +56,7 @@ module.exports = {
 
     const name = args[0].toLowerCase();
     const command =
-      commands.get(name) ||
-      commands.find(c => c.aliases && c.aliases.includes(name));
+      commands.get(name) || commands.find((c) => c.aliases && c.aliases.includes(name));
 
     if (!command) {
       return msg.reply("that's not a valid command!");
@@ -69,22 +65,13 @@ module.exports = {
     const helpCom = new Discord.MessageEmbed()
       .setColor("#fdfdfd")
       .setTitle(`**Name:** ${command.name}`)
-      .setFooter(
-        `Called by: ${msg.author.username}`,
-        msg.author.displayAvatarURL()
-      )
+      .setFooter(`Called by: ${msg.author.username}`, msg.author.displayAvatarURL())
       .setTimestamp();
 
-    if (command.aliases)
-      helpCom.addField(`**Aliases:**`, `${command.aliases.join(", ")}`);
-    if (command.description)
-      helpCom.addField(`**Description:**`, ` ${command.description}`);
-    if (command.usage)
-      helpCom.addField(
-        `**Usage:**`,
-        `${prefix}${command.name} ${command.usage}`
-      );
+    if (command.aliases) helpCom.addField(`**Aliases:**`, `${command.aliases.join(", ")}`);
+    if (command.description) helpCom.addField(`**Description:**`, ` ${command.description}`);
+    if (command.usage) helpCom.addField(`**Usage:**`, `${prefix}${command.name} ${command.usage}`);
 
     msg.channel.send(helpCom);
-  }
+  },
 };
