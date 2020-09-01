@@ -115,7 +115,7 @@ module.exports = async (msg, bot) => {
         }
         console.info("Found response");
 
-        if (result.fulfillmentText.startsWith("dynamic")) {
+        if (!result.fulfillmentText.includes("dynamic")) {
           msg.channel.send(func.capitalize(result.fulfillmentText));
           // await msg.channel.stopTyping(true);
           return;
