@@ -56,7 +56,7 @@ module.exports = async (content, msg, bot, extra) => {
       msg.channel.send(`*"${func.capitalize(msg.cleanContent)}"*, title of your sex-tape`);
       break;
     case "show me something cute":
-      if(extra) await msg.reply(extra)
+      if (extra) await msg.reply(extra);
       await require("../commands/smile").execute(msg);
       break;
     case "Something cool":
@@ -72,6 +72,9 @@ module.exports = async (content, msg, bot, extra) => {
     case "give me 5 minutes":
       const clocks = ["⏰", "⌚", "🕰", "⏱"];
       await msg.react(clocks[func.random(0, clocks.length)]);
+      break;
+    case "inspiration":
+      await require("../commands/inspiration").execute(msg);
       break;
   }
 };

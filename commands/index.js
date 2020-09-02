@@ -18,5 +18,6 @@ module.exports = {
   React: require("./admin").react,
   Servers: require("./admin").servers,
   Dice: require("./diceRoll"),
+  Inspiration: require("./inspiration"),
   // Music:  require('./music'),
 };

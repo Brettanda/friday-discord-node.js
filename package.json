@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
+    "canvas": "^2.6.1",
     "dblapi.js": "^2.4.1",
     "dialogflow": "^1.2.0",
     "discord.js": "^12.3.1",
