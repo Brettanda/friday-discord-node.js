@@ -21,7 +21,7 @@ module.exports = {
     await msg.channel.send(
       embed(
         "Your message has been sent to the developer",
-        "",
+        "#fdfdfd",
         "",
         msg.author,
         "",

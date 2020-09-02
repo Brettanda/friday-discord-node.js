@@ -2,6 +2,7 @@ const { random, embed } = require("../functions/");
 const { delMSGtimeout } = require("../config.json");
 
 // TODO: k should display the highest roll example !r 2d20k1 + 5 should show the highest roll for 2d20 and + 5 to it for advantage rolls, l for disadvantage
+// https://en.wikipedia.org/wiki/Dice_notation
 
 module.exports = {
   name: "roll",
@@ -14,16 +15,20 @@ module.exports = {
       return;
     }
 
-    if(args.join(" ").includes("k") || args.join(" ").includes("l") || args.join(" ").includes("x")) return msg.reply("K,L,X dice notation will be added in the future soon");
+    if (
+      args.join(" ").includes("k") ||
+      args.join(" ").includes("l")
+    ) 
+      return msg.reply("K,L dice notation will be added in the future soon");
 
-    if (args.length > 1)
-      return msg.reply(`\`${args.join(" ")}\`This command only works without spaces`);
+    // if (args.length > 1)
+    //   return msg.reply(`\`${args.join(" ")}\`This command only works without spaces`);
 
-    const diceRolls = args
-      .join(" ")
+    let resp = args.join(" ").split("x").join("*");
+
+    const diceRolls = resp
       .split("")
-      .filter((letter, index) => args.join(" ").charAt(index).toLowerCase() == "d");
-    let resp = args.join(" ");
+      .filter((letter, index) => resp.charAt(index).toLowerCase() == "d");
 
     diceRolls.map(() => {
       const roll = resp.match(/([0-9]+)*d[0-9]+/);

@@ -6,6 +6,5 @@ module.exports = {
     msg.reply("pong");
     // msg.channel.send('pong');
     console.info("pong");
-    console.info();
   },
 };
