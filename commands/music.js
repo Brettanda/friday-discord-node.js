@@ -3,7 +3,7 @@ const ytdl = require("ytdl-core-discord");
 const func = require("../functions");
 const { delMSGtimeout } = require("../config.json");
 const search = require("yt-search");
-const worker = require("worker_threads");
+// const worker = require("worker_threads");
 //const { stat } = require("fs");
 
 const queue = new Map();
@@ -14,7 +14,6 @@ exports.play = {
   usage: "[Audio URL]",
   description: "Plays the audio from a YouTube video",
   async execute(msg, args = "", bot) {
-    // const songInfo = await ytdl.getInfo(args[0], (err,info) => {if(err) {throw err; msg.reply(err[0])}});
     if (args == "")
       return msg.channel.send(
         func.embed(
@@ -94,65 +93,8 @@ exports.play = {
           )
           .then((item) => {
             // This seemed to be the only way to have the musicChoice show everytime. Sometimes they would only show the first one and stop
-            item
-              .react(musicChoice[0])
-              .then(() =>
-                item
-                  .react(musicChoice[1])
-                  .then(() =>
-                    item
-                      .react(musicChoice[2])
-                      .then(() =>
-                        item
-                          .react(musicChoice[3])
-                          .then(() =>
-                            item
-                              .react(musicChoice[4])
-                              .then(() =>
-                                item
-                                  .react(musicChoice[5])
-                                  .then(() =>
-                                    item
-                                      .react(musicChoice[6])
-                                      .then(() =>
-                                        item
-                                          .react(musicChoice[7])
-                                          .then(() =>
-                                            item.react(musicChoice[8]).catch((err) => {
-                                              return;
-                                            })
-                                          )
-                                          .catch((err) => {
-                                            return;
-                                          })
-                                      )
-                                      .catch((err) => {
-                                        return;
-                                      })
-                                  )
-                                  .catch((err) => {
-                                    return;
-                                  })
-                              )
-                              .catch((err) => {
-                                return;
-                              })
-                          )
-                          .catch((err) => {
-                            return;
-                          })
-                      )
-                      .catch((err) => {
-                        return;
-                      })
-                  )
-                  .catch((err) => {
-                    return;
-                  })
-              )
-              .catch((err) => {
-                return;
-              });
+            // prettier-ignore
+            item.react(musicChoice[0]).then(() => item.react(musicChoice[1]).then(() => item.react(musicChoice[2]).then(() => item.react(musicChoice[3]).then(() => item.react(musicChoice[4]).then(() => item.react(musicChoice[5]).then(() => item.react(musicChoice[6]).then(() => item.react(musicChoice[7]).then(() => item.react(musicChoice[8]).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; });
 
             const filter = (reaction, user) =>
               musicChoice.filter((item) => item === reaction.emoji.name) && user.bot == false;
@@ -177,7 +119,7 @@ exports.play = {
                   voiceChannel: msg.member.voice.channel,
                   connection: null,
                   songs: [],
-                  volume: 5,
+                  volume: 1,
                   playing: true,
                 };
 
@@ -225,15 +167,15 @@ exports.play = {
       });
 
     const serverQueue = queue.get(msg.guild.id);
-    // const songInfo =
+    // const songInfo = await ytdl.getInfo(args[0], (err,info) => {if(err) {throw err; msg.reply(err[0])}});
     ytdl
       .getInfo(args[0])
       .then((item) => {
-        if (typeof songInfo.video_url == "undefined") return;
+        if (typeof item.video_url == "undefined") return;
 
         const song = {
-          title: songInfo.title,
-          url: songInfo.video_url,
+          title: item.title,
+          url: item.video_url,
         };
 
         if (!serverQueue) {
@@ -242,7 +184,7 @@ exports.play = {
             voiceChannel: msg.member.voice.channel,
             connection: null,
             songs: [],
-            volume: 5,
+            volume: 1,
             playing: true,
           };
 
@@ -255,7 +197,7 @@ exports.play = {
             // const connection = await
             msg.member.voice.channel.join().then((con) => {
               queueContruct.connection = con;
-              item.delete();
+              // con.delete();
               play(msg, queueContruct.songs[0]);
             });
           } catch (err) {
@@ -490,7 +432,7 @@ async function play(msg, song) {
     .play(await ytdl(song.url), {
       type: "opus",
       liveBuffer: 20000,
-      highWaterMark: 50,
+      highWaterMark: 30,
       volume: false,
     })
     .on("finish", () => {
