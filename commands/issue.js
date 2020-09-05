@@ -3,14 +3,11 @@ const { embed, msgDev } = require("../functions");
 module.exports = {
   name: "issue",
   aliases: ["problem"],
-  description:
-    "If you have an issue or noticed a bug with Friday, this will send a message to the developer.",
+  description: "If you have an issue or noticed a bug with Friday, this will send a message to the developer.",
   usage: "[Description of issue and steps to recreate the issue]",
   async execute(msg, args = "", bot) {
     if (args == "") {
-      msg.channel.send(
-        "Don't forget to describe your issue. For example `!issue this is my issue`"
-      );
+      msg.channel.send("Don't forget to describe your issue. For example `!issue this is my issue`");
       return;
     }
 

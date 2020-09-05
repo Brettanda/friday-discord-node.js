@@ -80,8 +80,8 @@ module.exports = async (content, msg) => {
   // }
 
   if (content.match(/^r(e+)$/)) {
-    return await msg.react("🇷");
-    return await msg.react("🇪");
+    await msg.react("🇷");
+    await msg.react("🇪");
   }
 
   // if(content.includes("@someone")) {
@@ -94,23 +94,24 @@ module.exports = async (content, msg) => {
   //   });
   // }
 
+  if (content.includes("@here") || content.includes("@everyone")) {
+    const ping = ["🤔"];
+    msg.react(ping[func.random(0, ping.length)]);
+  }
+
   if (content.includes("bazinga")) {
-    return await msg.channel
-      .send(`Banning ${msg.author.username} from \`${msg.guild.name}\` in 10 seconds`)
-      .then((ban) => {
-        var timeLeft = 10;
-        var count = setInterval(() => {
-          timeLeft = timeLeft - 1;
-          if (timeLeft <= 0) {
-            ban.edit("Bazinga");
-            clearInterval(count);
-            return;
-          }
-          ban.edit(
-            `Banning ${msg.author.username} from \`${msg.guild.name}\` in ${timeLeft} seconds`
-          );
-        }, 1000);
-      });
+    return await msg.channel.send(`Banning ${msg.author.username} from \`${msg.guild.name}\` in 10 seconds`).then((ban) => {
+      var timeLeft = 10;
+      var count = setInterval(() => {
+        timeLeft = timeLeft - 1;
+        if (timeLeft <= 0) {
+          ban.edit("Bazinga");
+          clearInterval(count);
+          return;
+        }
+        ban.edit(`Banning ${msg.author.username} from \`${msg.guild.name}\` in ${timeLeft} seconds`);
+      }, 1000);
+    });
   }
 
   if (content == "f" || content.includes("can i get an f")) {
@@ -122,22 +123,11 @@ module.exports = async (content, msg) => {
     return await msg.react("😲");
   }
 
-  if (
-    content.includes("shit") ||
-    content.includes("shît") ||
-    content.includes("crap") ||
-    content.includes("poop") ||
-    content.includes("poo")
-  ) {
+  if (content.includes("shit") || content.includes("shît") || content.includes("crap") || content.includes("poop") || content.includes("poo")) {
     return await msg.react("💩");
   }
 
-  if (
-    content.includes("monkey") ||
-    content.includes("munky") ||
-    content.includes("manky") ||
-    content.includes("menky")
-  ) {
+  if (content.includes("monkey") || content.includes("munky") || content.includes("manky") || content.includes("menky")) {
     if (func.random(0, 1) == 1) return await msg.react("🐒");
     else return await msg.react("🐵");
   }
@@ -147,8 +137,6 @@ module.exports = async (content, msg) => {
   if (content == "it was me") return await msg.channel.send("Dio");
 
   if (content.includes("nani")) return await msg.channel.send("Da fuck");
-
-  if (content.includes("neko")) return await msg.react("😻");
 
   /*if (content.match(/\@everyone/)) {
   msg.reply('please use @here instead');

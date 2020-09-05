@@ -17,16 +17,9 @@ module.exports = {
           sub = ["animemes"];
         } else if ((msg.channel.nsfw && chName.includes("hentai")) || type == "hentai") {
           sub = ["hentaimemes"];
-        } else if (
-          msg.channel.nsfw &&
-          (chName.includes("disturbing") || chName.includes("wtf") || type == "wtf")
-        ) {
+        } else if (msg.channel.nsfw && (chName.includes("disturbing") || chName.includes("wtf") || type == "wtf")) {
           sub = ["wtf", "creepy", "makemesuffer", "cursed_images"];
-        } else if (
-          chName.includes("farmbuild") ||
-          chName.includes("minecraft") ||
-          type == "minecraft"
-        ) {
+        } else if (chName.includes("farmbuild") || chName.includes("minecraft") || type == "minecraft") {
           sub = ["minecraftmemes"];
         } else if (chName.includes("politics") || type == "politics") {
           sub = ["historymemes"];
@@ -38,18 +31,13 @@ module.exports = {
     sub = sub[func.random(0, sub.length)];
     // console.log(sub)
     try {
-      const { body } = await snekfetch
-        .get(`https://www.reddit.com/r/${sub}.json?sort=top&t=week`)
-        .query({ limit: 800 });
+      const { body } = await snekfetch.get(`https://www.reddit.com/r/${sub}.json?sort=top&t=week`).query({ limit: 800 });
 
-      var allowed = msg.channel.nsfw
-        ? body.data.children
-        : body.data.children.filter((post) => !post.data.over_18);
+      var allowed = msg.channel.nsfw ? body.data.children : body.data.children.filter((post) => !post.data.over_18);
 
       allowed = allowed.filter((post) => post.data.url.includes("https://i.redd.it/"));
 
-      if (!allowed.length)
-        return await msg.channel.send(`It seems I am out of fresh ${sub}!, Try again later.`);
+      if (!allowed.length) return await msg.channel.send(`It seems I am out of fresh ${sub}!, Try again later.`);
 
       const randomnumber = func.random(0, allowed.length),
         data = allowed[randomnumber].data;

@@ -19,10 +19,7 @@ module.exports = async (msg, bot) => {
     .split(/[\'\"\`\,\.]/)
     .join("");
 
-  if (
-    Array.from(msg.attachments).length >= 1 &&
-    (msg.content == null || typeof msg.content == "undefined" || msg.content == "")
-  ) {
+  if (Array.from(msg.attachments).length >= 1 && (msg.content == null || typeof msg.content == "undefined" || msg.content == "")) {
     console.log("Image");
     return;
   }
@@ -43,6 +40,7 @@ module.exports = async (msg, bot) => {
     "Self Aware",
     "Soup Time",
     "No U",
+    "I'm dad",
   ];
 
   // msg.channel.startTyping();
@@ -70,61 +68,61 @@ module.exports = async (msg, bot) => {
   //   console.log(talkingAboutMe)
   // });
 
-  msg.channel.messages.fetch({ limit: 3 }).then((item) => {
-    // const interpretation = func.interpret(content.split("friday").join(""), classifier);
+  const item = await msg.channel.messages.fetch({ limit: 3 });
+  // await msgs.then(async (item) => {
+  // const interpretation = func.interpret(content.split("friday").join(""), classifier);
 
-    // console.info("guess guess:",interpretation.guess)
+  // console.info("guess guess:",interpretation.guess)
 
-    // console.log("no spaces", content.split(" ").join("").split("friday").join(""));
-    // if (content.split(" ").join("").split("friday").join("") == "  ") {
-    //   msg.reply("How can I help?");
-    //   return;
-    // }
+  // console.log("no spaces", content.split(" ").join("").split("friday").join(""));
+  // if (content.split(" ").join("").split("friday").join("") == "  ") {
+  //   msg.reply("How can I help?");
+  //   return;
+  // }
 
-    // msg.channel.startTyping();
-    func
-      .queryDialogFlow(content, msg)
-      .then((result) => {
-        if (result.intent.displayName == "Default Fallback Intent") {
-          // await msg.channel.stopTyping(true);
-          return;
-        }
+  // msg.channel.startTyping();
+  const result = await func.queryDialogFlow(content, msg);
+  // await query.then((result) => {
+  if ((await result.intent.displayName) == "Default Fallback Intent") {
+    // await msg.channel.stopTyping(true);
+    return;
+  }
 
-        // console.info("guess: ",interpretation.guess);
-        // var trainingData = func.parseMovie().answers;
-        // var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
-        // var data = trainingData[interpretation.guess]
+  // console.info("guess: ",interpretation.guess);
+  // var trainingData = func.parseMovie().answers;
+  // var data = (typeof trainingData[interpretation.guess].answer != "undefined" ? trainingData[interpretation.guess].answer : (typeof trainingData[interpretation.guess].answers != "undefined" ? trainingData[interpretation.guess].answers[func.random(0, trainingData[interpretation.guess].answers.length)] : (trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] ? trainingData[interpretation.guess][func.random(0, trainingData[interpretation.guess].length)] : "dynamic")))
+  // var data = trainingData[interpretation.guess]
 
-        if (
-          !noContext.includes(result.intent.displayName) &&
-          msg.mentions.has(bot.user) != true &&
-          content.includes("friday") != true &&
-          // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
-          content.includes("bot") != true &&
-          // TODO: add a check for another bot
-          Array.from(item.filter((i) => i.author.id == bot.user.id)).length == 0 &&
-          msg.channel.type != "dm"
-        )
-          return console.log("Not replying to this message");
+  if (
+    !noContext.includes(await result.intent.displayName) &&
+    msg.mentions.has(bot.user) != true &&
+    content.includes("friday") != true &&
+    // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
+    content.includes("bot") != true &&
+    // TODO: add a check for another bot
+    Array.from(await item.filter((i) => i.author.id == bot.user.id)).length == 0 &&
+    msg.channel.type != "dm"
+  )
+    return console.log("Not replying to this message");
 
-        if (result.fulfillmentText == "") {
-          // await msg.channel.stopTyping(true);
-          console.info("No response to send");
-          return;
-          // msg.reply('Sorry, I\'m not sure what you mean');
-        }
-        console.info("Found response");
+  if ((await result.fulfillmentText) == "") {
+    // await msg.channel.stopTyping(true);
+    console.info("No response to send");
+    return;
+    // msg.reply('Sorry, I\'m not sure what you mean');
+  }
+  console.info("Found response");
 
-        if (!result.fulfillmentText.includes("dynamic")) {
-          msg.channel.send(func.capitalize(result.fulfillmentText));
-          // await msg.channel.stopTyping(true);
-          return;
-        }
+  if (!(await result.fulfillmentText.includes("dynamic"))) {
+    msg.channel.send(func.capitalize(await result.fulfillmentText));
+    // await msg.channel.stopTyping(true);
+    return;
+  }
 
-        require("./dynamicChat")(result.intent.displayName, msg, bot, result.fulfillmentText.replace("dynamic",""));
+  require("./dynamicChat")(await result.intent.displayName, msg, bot, await result.fulfillmentText.replace("dynamic", ""));
 
-        // await msg.channel.stopTyping(true);
-      })
-      .catch((err) => console.error(err));
-  });
+  // await msg.channel.stopTyping(true);
+  // })
+  // .catch((err) => console.error(err));
+  // });
 };

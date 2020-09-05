@@ -15,20 +15,14 @@ module.exports = {
       return;
     }
 
-    if (
-      args.join(" ").includes("k") ||
-      args.join(" ").includes("l")
-    ) 
-      return msg.reply("K,L dice notation will be added in the future soon");
+    if (args.join(" ").includes("k") || args.join(" ").includes("l")) return msg.reply("K,L dice notation will be added in the future soon");
 
     // if (args.length > 1)
     //   return msg.reply(`\`${args.join(" ")}\`This command only works without spaces`);
 
     let resp = args.join(" ").split("x").join("*");
 
-    const diceRolls = resp
-      .split("")
-      .filter((letter, index) => resp.charAt(index).toLowerCase() == "d");
+    const diceRolls = resp.split("").filter((letter, index) => resp.charAt(index).toLowerCase() == "d");
 
     diceRolls.map(() => {
       const roll = resp.match(/([0-9]+)*d[0-9]+/);

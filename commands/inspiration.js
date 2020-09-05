@@ -30,17 +30,17 @@ module.exports = {
       "https://cdn.discordapp.com/attachments/243945221086248961/750434222405058580/racim-amr-8KKGTKmULU8-unsplash.jpg",
       "https://cdn.discordapp.com/attachments/243945221086248961/750434504962867240/george-howden-CxvpmTTlj2M-unsplash.jpg",
       "https://cdn.discordapp.com/attachments/243945221086248961/750435116202983484/solen-feyissa-g5CAJdzndhI-unsplash.jpg",
-      "https://cdn.discordapp.com/attachments/243945221086248961/750435323812773998/waldemar-brandt-WX65IQ6BX18-unsplash.jpg"
+      "https://cdn.discordapp.com/attachments/243945221086248961/750435323812773998/waldemar-brandt-WX65IQ6BX18-unsplash.jpg",
     ];
     const sources = [
-        "Photo by Nur Bayraktepe on Unsplash",
-        "Photo by Lynda B on Unsplash",
-        "Photo by Veronica Reverse on Unsplash",
-        "Photo by Racim Amr on Unsplash",
-        "Photo by George Howden on Unsplash",
-        "Photo by Solen Feyissa on Unsplash",
-        "Photo by Waldemar Brandt on Unsplash"
-    ]
+      "Photo by Nur Bayraktepe on Unsplash",
+      "Photo by Lynda B on Unsplash",
+      "Photo by Veronica Reverse on Unsplash",
+      "Photo by Racim Amr on Unsplash",
+      "Photo by George Howden on Unsplash",
+      "Photo by Solen Feyissa on Unsplash",
+      "Photo by Waldemar Brandt on Unsplash",
+    ];
 
     const inspQuotes = [
       "Lechuga",
@@ -65,11 +65,12 @@ module.exports = {
       "Alt + F4\nis the solution to\nall of life's\nproblems",
       "E",
       "Empty the grease tray",
-      "You are not insane"
+      "You are not insane",
+      "Bruh",
     ];
 
     const text = inspQuotes[func.random(0, inspQuotes.length)];
-    const imageNum = func.random(0, inspImages.length)
+    const imageNum = func.random(0, inspImages.length);
     const background = await Canvas.loadImage(inspImages[imageNum]);
     const canvas = Canvas.createCanvas(background.width / 2, background.height / 2);
     const ctx = canvas.getContext("2d");
@@ -79,13 +80,13 @@ module.exports = {
     ctx.font = applyText(canvas, text);
     ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
-    ctx.shadowColor = "rgba(0,0,0,0.8)";
+    ctx.shadowColor = "rgba(0,0,0,1)";
     ctx.shadowBlur = 4;
     // console.log((canvas.height / 1.8) - ((ctx.measureText(text).emHeightAscent+ctx.measureText(text).emHeightDescent) / 2));
     // console.log(canvas.height,"/ 1.8 - ", (ctx.measureText(text).emHeightAscent+ctx.measureText(text).emHeightDescent), " / 2")
-    ctx.fillText(text, canvas.width / 2, (canvas.height / 1.8) - ((ctx.measureText(text).emHeightAscent+ctx.measureText(text).emHeightDescent) / 2));
+    ctx.fillText(text, canvas.width / 2, canvas.height / 1.8 - (ctx.measureText(text).emHeightAscent + ctx.measureText(text).emHeightDescent) / 2);
     ctx.font = `10% sans-serif`;
-    ctx.fillText(sources[imageNum],canvas.width / 2, canvas.height - 50)
+    ctx.fillText(sources[imageNum], canvas.width / 2, canvas.height - 50);
 
     const attachment = new MessageAttachment(canvas.toBuffer(), "inspiration.png");
 
