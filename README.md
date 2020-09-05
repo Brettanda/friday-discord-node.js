@@ -26,6 +26,10 @@ Make sure to add your bot token to the `.env` file or this won't be able to conn
 
 Another way to see the full list of commands is by typing `!help` in a Discord server that I have been invited to. You can also direct message me any commands as well (if you want to keep our conversation more private).
 
+## Music
+
+Friday can play music in a voice channel with the command `!play` followed by a search query or a YouTube video URL. Here are examples of those two uses `!play uptown funk` or `!play https://youtu.be/dQw4w9WgXcQ`.
+
 ## Chat
 
 Friday can respond to normal chat without the message being directed towards Friday
