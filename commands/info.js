@@ -13,25 +13,23 @@ module.exports = {
     console.log(bot.user.presence.activities);
 
     await msg.channel.send(
-      func.embed(
-        `${bot.user.username} - Info`,
-        "#fdfdfd",
-        "Some information about me, Friday ;)",
-        msg.author,
-        "",
-        "",
-        "",
-        ["Username", "Uptime", "Guilds joined", "Status", "Loving Life"],
-        [
+      func.embed({
+        title: `${bot.user.username} - Info`,
+        color: "#fdfdfd",
+        description: "Some information about me, Friday ;)",
+        author: msg.author,
+        msg: ["Username", "Uptime", "Guilds joined", "Status", "Loving Life"],
+        val: [
           bot.user.username,
           uptime + " hours",
           // bot.guilds.cache.map((item) => item.name).length,
           guilds,
+          // TODO: run this command and an error shows
           bot.user.presence.activities[0].name,
           "true",
         ],
-        bot.user.displayAvatarURL()
-      )
+        thumbNail: bot.user.displayAvatarURL(),
+      })
     );
   },
 };

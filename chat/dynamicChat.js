@@ -31,22 +31,20 @@ module.exports = async (content, msg, bot, extra) => {
       console.info(`Soup: ${image}`);
 
       await msg.channel.send(
-        func.embed(
-          "It's time for soup, just for you " + msg.author.username,
-          "#FFD700",
-          "I hope you enjoy, I made it myself :)",
-          msg.author,
-          image
-        )
+        func.embed({
+          title: "It's time for soup, just for you " + msg.author.username,
+          color: "#FFD700",
+          description: "I hope you enjoy, I made it myself :)",
+          author: msg.author,
+          image: image,
+        })
       );
       break;
     case "Stop":
       await msg.react("😅");
       break;
     case "No U":
-      await msg.channel.send(
-        func.embed("No u!", "#FFD700", "", msg.author, unoCards[func.random(0, unoCards.length)])
-      );
+      await msg.channel.send(func.embed({ title: "No u!", color: "#FFD700", author: msg.author, image: unoCards[func.random(0, unoCards.length)] }));
       break;
     case "Memes":
     case "Memes - Another":

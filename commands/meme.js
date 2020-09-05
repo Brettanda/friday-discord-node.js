@@ -59,13 +59,13 @@ module.exports = {
       postedMemes.push(data.url);
 
       await msg.channel.send(
-        func.embed(
-          /* data.title, `Here is a meme`*/ "",
-          0x00a2e8,
-          `**${data.title}** Memes provided by **r/${sub}** posted by: **${data.author}**`,
-          msg.author,
-          data.url
-        )
+        func.embed({
+          // data.title, `Here is a meme` "",
+          color: 0x00a2e8,
+          description: `**${data.title}** Memes provided by **r/${sub}** posted by: **${data.author}**`,
+          author: msg.author,
+          image: data.url,
+        })
       );
     } catch (err) {
       return console.log(err);

@@ -50,17 +50,13 @@ module.exports = {
 
     msg.channel
       .send(
-        embed(
-          `Your Total: ${resp}`,
-          "#fdfdfd",
-          "",
-          msg.author,
-          "",
-          "",
-          "",
-          `**Query:** ${args.join(" ")}`,
-          `\n**Result:** '${math}'`
-        )
+        embed({
+          title: `Your Total: ${resp}`,
+          color: "#fdfdfd",
+          author: msg.author,
+          msg: `**Query:** ${args.join(" ")}`,
+          val: `\n**Result:** '${math}'`,
+        })
       )
       .then((status) => status.delete({ timeout: delMSGtimeout * 20 }));
   },

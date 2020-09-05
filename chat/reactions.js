@@ -38,8 +38,12 @@ module.exports = async (content, msg) => {
 
   // the game
   if (content.includes("the game") || content.includes("thegame")) {
-    return await msg.channel.send(
-      func.embed("", "#FF8C00", "", msg.author, theGame[func.random(0, theGame.length)])
+    return msg.channel.send(
+      func.embed({
+        color: "#FF8C00",
+        author: msg.author,
+        image: theGame[func.random(0, theGame.length)],
+      })
     );
   }
 
