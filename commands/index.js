@@ -19,5 +19,5 @@ module.exports = {
   Servers: require("./admin").servers,
   Dice: require("./diceRoll"),
   Inspiration: require("./inspiration"),
-  // Music:  require('./music'),
+  RockPaperScissors: require("./rockpaperscissors"),
 };
