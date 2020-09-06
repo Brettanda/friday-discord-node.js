@@ -112,6 +112,8 @@ bot.on("message", async (msg) => {
       return await func.msgDev("Check Glitch, a message didn't have a guild and wasn't a DM.", bot, "log-errors");
     }
 
+    if(require("./autoSettings.json").dontMessageServers.includes(msg.guild.id)) return console.log("Message from an ignored server");
+    
     // Im not going to bother important channels
     if (msg.channel.type == "store" || msg.channel.type == "voice" || msg.channel.type == "category" || msg.channel.type == "news") return;
 
@@ -123,7 +125,6 @@ bot.on("message", async (msg) => {
     if (!msg.content.startsWith(prefix)) return await botChat(msg, bot);
 
 
-    if(require("./autoSettings.json").dontMessageServers.includes(msg.guild.id)) return console.log("Message from an ignored server");
 
     const args = msg.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
