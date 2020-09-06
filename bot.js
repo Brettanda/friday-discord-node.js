@@ -122,6 +122,9 @@ bot.on("message", async (msg) => {
 
     if (!msg.content.startsWith(prefix)) return await botChat(msg, bot);
 
+
+    if(require("./autoSettings.json").dontMessageServers.includes(msg.guild.id)) return console.log("Message from an ignored server");
+
     const args = msg.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
     console.info(`Called command: ${command}`);
