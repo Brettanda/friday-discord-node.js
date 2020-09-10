@@ -9,7 +9,7 @@ module.exports = {
   aliases: ["d", "dice", "r"],
   description: "D&D dice rolling, (Advantage and disadvantage will be added soon)",
   usage: "1d20+60/3 or !r 100d2+120d21*6+2",
-  execute(msg, args, bot) {
+  execute(msg, args) {
     if (!args.length) {
       msg.reply("Don't forget the dice face count");
       return;
@@ -31,7 +31,7 @@ module.exports = {
       const max = roll[0].match(/(?:d)([0-9]+)/)[1];
       let rolls = "";
       [...Array(rollTimes)].map((item, index) => {
-        let newRoll = random(1, max);
+        const newRoll = random(1, max);
 
         rolls += newRoll;
         if (index + 1 < rollTimes) rolls += "+";
@@ -50,8 +50,8 @@ module.exports = {
           author: msg.author,
           msg: `**Query:** ${args.join(" ")}`,
           val: `\n**Result:** '${math}'`,
-        })
+        }),
       )
-      .then((status) => status.delete({ timeout: delMSGtimeout * 20 }));
+      .then(status => status.delete({ timeout: delMSGtimeout * 20 }));
   },
 };

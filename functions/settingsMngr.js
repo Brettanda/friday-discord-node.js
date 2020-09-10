@@ -1,10 +1,9 @@
 const fs = require("fs");
 
-exports.save = async (msg) => {
-  const def = { dontMessageServers: ["264445053596991498"], messagesToDelete: {} };
+exports.save = async msg => {
+  const def = { dontMessageServers: ["264445053596991498", "110373943822540800"], messagesToDelete: {} };
 
-  if (!fs.existsSync("./autoSettings.json"))
-    fs.writeFileSync("./autoSettings.json", JSON.stringify(def, null, 4), { flag: "w" });
+  if (!fs.existsSync("./autoSettings.json")) fs.writeFileSync("./autoSettings.json", JSON.stringify(def, null, 4), { flag: "w" });
 
   const set = require("../autoSettings.json");
 
@@ -12,8 +11,7 @@ exports.save = async (msg) => {
     set.messagesToDelete = { [msg.guild.id]: { [msg.channel.id]: [] } };
   }
 
-  if (!set.messagesToDelete[msg.guild.id][msg.channel.id])
-    set.messagesToDelete[msg.guild.id][msg.channel.id] = [];
+  if (!set.messagesToDelete[msg.guild.id][msg.channel.id]) set.messagesToDelete[msg.guild.id][msg.channel.id] = [];
 
   set.messagesToDelete[msg.guild.id][msg.channel.id].push(msg.id);
 

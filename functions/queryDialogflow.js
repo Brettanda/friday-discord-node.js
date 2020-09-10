@@ -3,7 +3,7 @@ const dialogflow = require("dialogflow");
 module.exports = async (content, msg) => {
   // const hrstart = process.hrtime();
   try {
-    const sessionID = msg.channel.id ? msg.channel.id.toString() : msg.author.id.toString(); //Math.random().toString();
+    const sessionID = msg.channel.id ? msg.channel.id.toString() : msg.author.id.toString(); // Math.random().toString();
 
     const config = {
       credentials: {
@@ -30,11 +30,9 @@ module.exports = async (content, msg) => {
     // .then((res) => {
     const result = res[0].queryResult;
     console.log(
-      `Detected intent\n\t${result.intentDetectionConfidence}\n\tQuery: ${
-        result.queryText
-      }\n\tResponse: ${result.fulfillmentText}\n\t${
+      `Detected intent:\t${result.intentDetectionConfidence}\n\tQuery: ${result.queryText}\n\tResponse: ${result.fulfillmentText}\n\t${
         result.intent ? "Intent: " + result.intent.displayName : "No intent matched"
-      }`
+      }`,
     );
     // console.log(process.hrtime(hrstart)[1]/1000000000);
     if (result.intent) {

@@ -1,4 +1,4 @@
-const {registerFont,createCanvas,loadImage} = require("canvas");
+const { registerFont, createCanvas, loadImage } = require("canvas");
 const func = require("../functions");
 
 module.exports = {
@@ -67,6 +67,9 @@ module.exports = {
       "Empty the grease tray",
       "You are not insane",
       "Bruh",
+      "Lemons",
+      "Pineapple",
+      "Eat your vegetables",
     ];
 
     const text = inspQuotes[func.random(0, inspQuotes.length)];
@@ -77,7 +80,7 @@ module.exports = {
 
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-    registerFont("./assets/font/Ubuntu-Regular.ttf",{family:"Ubuntu"})
+    registerFont("./assets/font/Ubuntu-Regular.ttf", { family: "Ubuntu" });
 
     ctx.font = await applyText(canvas, text);
     ctx.textAlign = "center";
@@ -87,11 +90,11 @@ module.exports = {
     // console.log((canvas.height / 1.8) - ((ctx.measureText(text).emHeightAscent+ctx.measureText(text).emHeightDescent) / 2));
     // console.log(canvas.height,"/ 1.8 - ", (ctx.measureText(text).emHeightAscent+ctx.measureText(text).emHeightDescent), " / 2")
     ctx.fillText(text, canvas.width / 2, canvas.height / 1.8 - (ctx.measureText(text).emHeightAscent + ctx.measureText(text).emHeightDescent) / 2);
-    ctx.font = `10% Ubuntu`;
+    ctx.font = "10% Ubuntu";
     ctx.fillText(sources[imageNum], canvas.width / 2, canvas.height - 50);
 
     const attachment = new MessageAttachment(canvas.toBuffer(), "inspiration.png");
 
-    msg.channel.send(``, attachment);
+    msg.channel.send("", attachment);
   },
 };

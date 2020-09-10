@@ -15,14 +15,16 @@ module.exports = {
 
     msgDev(args.join(" "), bot, "log-issues", msg, "Issue");
 
-    await msg.channel.send(
-      embed({
-        title: "Your message has been sent to the developer",
-        color: "#fdfdfd",
-        author: msg.author,
-        msg: "Your message:",
-        val: args.join(" "),
-      })
-    );
+    await msg.channel
+      .send(
+        embed({
+          title: "Your message has been sent to the developer",
+          color: "#fdfdfd",
+          author: msg.author,
+          msg: "Your message:",
+          val: args.join(" "),
+        }),
+      )
+      .catch(err => console.error(err));
   },
 };

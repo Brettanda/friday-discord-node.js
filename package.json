@@ -1,12 +1,12 @@
 {
   "name": "friday-discord",
   "description": "I am Friday, and I want to bring life to your Discord server",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "main": "index.js",
   "license": "GPL-3.0",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js --dev",
+    "dev": "node index.js --dev --trace-warnings",
     "pretty-quick": "pretty-quick",
     "grunt": "grunt"
   },
@@ -14,11 +14,6 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged && grunt bump:patch"
     }
-  },
-  "prettier": {
-    "jsxBracketSameLine": true,
-    "printWidth": 200,
-    "bracketSpacing": true
   },
   "devDependencies": {
     "grunt-bump": "^0.8.0",

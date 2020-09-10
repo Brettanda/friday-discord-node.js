@@ -37,15 +37,15 @@ module.exports = async (content, msg) => {
   // }
 
   // the game
-  if (content.includes("the game") || content.includes("thegame")) {
-    return msg.channel.send(
-      func.embed({
-        color: "#FF8C00",
-        author: msg.author,
-        image: theGame[func.random(0, theGame.length)],
-      })
-    );
-  }
+  // if (content.includes('the game') || content.includes('thegame')) {
+  //   return msg.channel.send(
+  //     func.embed({
+  //       color: '#FF8C00',
+  //       author: msg.author,
+  //       image: theGame[func.random(0, theGame.length)],
+  //     })
+  //   );
+  // }
 
   // no u
   // if (
@@ -100,9 +100,9 @@ module.exports = async (content, msg) => {
   }
 
   if (content.includes("bazinga")) {
-    return await msg.channel.send(`Banning ${msg.author.username} from \`${msg.guild.name}\` in 10 seconds`).then((ban) => {
-      var timeLeft = 10;
-      var count = setInterval(() => {
+    return await msg.channel.send(`Banning ${msg.author.username} from \`${msg.guild.name}\` in 10 seconds`).then(ban => {
+      let timeLeft = 10;
+      const count = setInterval(() => {
         timeLeft = timeLeft - 1;
         if (timeLeft <= 0) {
           ban.edit("Bazinga");
@@ -119,13 +119,11 @@ module.exports = async (content, msg) => {
     return await msg.react("🇫");
   }
 
-  if (content.match(/^o+f$/)) {
-    return await msg.react("😲");
-  }
+  if (content.includes("money")) return await msg.react("💰");
 
-  if (content.includes("shit") || content.includes("shît") || content.includes("crap") || content.includes("poop") || content.includes("poo")) {
-    return await msg.react("💩");
-  }
+  if (content.match(/^o+f$/)) return await msg.react("😲");
+
+  if (content.includes("shit") || content.includes("shît") || content.includes("crap") || content.includes("poop") || content.includes("poo")) return await msg.react("💩");
 
   if (content.includes("monkey") || content.includes("munky") || content.includes("manky") || content.includes("menky")) {
     if (func.random(0, 1) == 1) return await msg.react("🐒");

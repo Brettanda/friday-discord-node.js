@@ -4,10 +4,9 @@ module.exports = {
   name: "server",
   aliases: ["guild", "serverinfo", "guildinfo"],
   description: "Gives you info about the current server",
-  execute(msg, args = "") {
-    if (msg.channel.type == "dm") {
-      return msg.channel.send("This command only works in a server");
-    }
+  execute(msg) {
+    if (msg.channel.type == "dm") return msg.channel.send("This command only works in a server");
+
     const reply = embed({
       title: msg.guild.name + " - info",
       color: "#fdfdfd",

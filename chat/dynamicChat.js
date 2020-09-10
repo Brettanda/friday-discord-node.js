@@ -22,11 +22,11 @@ module.exports = async (content, msg, bot, extra) => {
       await msg.react("👀");
       break;
     case "Creator":
-      await bot.users.fetch(process.env.DEVID).then((member) => {
+      await bot.users.fetch(process.env.DEVID).then(member => {
         msg.channel.send(`${member.tag} is my creator :)`);
       });
       break;
-    case "Soup Time":
+    case "Soup Time": {
       const image = soups[func.random(0, soups.length)];
       console.info(`Soup: ${image}`);
 
@@ -37,9 +37,10 @@ module.exports = async (content, msg, bot, extra) => {
           description: "I hope you enjoy, I made it myself :)",
           author: msg.author,
           image: image,
-        })
+        }),
       );
       break;
+    }
     case "Stop":
       await msg.react("😅");
       break;
@@ -63,14 +64,16 @@ module.exports = async (content, msg, bot, extra) => {
     case "Compliments":
     case "Thanks":
     case "are you a bot?":
-    case "I love you":
+    case "I love you": {
       const hearts = ["❤️", "💯", "💕"];
       await msg.react(hearts[func.random(0, hearts.length)]);
       break;
-    case "give me 5 minutes":
+    }
+    case "give me 5 minutes": {
       const clocks = ["⏰", "⌚", "🕰", "⏱"];
       await msg.react(clocks[func.random(0, clocks.length)]);
       break;
+    }
     case "inspiration":
       await require("../commands/inspiration").execute(msg);
       break;

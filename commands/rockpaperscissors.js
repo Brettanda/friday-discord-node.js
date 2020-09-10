@@ -6,11 +6,11 @@ module.exports = {
   description: "Play Rock Paper Scissors with Friday",
   usage: "[rock, paper or scissors]",
   execute(msg, args = "", bot) {
-    if (args == "") return msg.channel.send(func.embed({ title: "Don't forget your choice of Rock, Paper, or Scissors!", color: "#BAFAE5", author: msg.author }));
+    if (args == "") return msg.channel.send(func.embed({ title: "Don't forget your choice of Rock, Paper, or Scissors!", description: "eg: `!rps rock`", color: "#BAFAE5", author: msg.author }));
 
     const choices = ["rock", "paper", "scissors"];
 
-    const legalChoice = choices.filter((item) => item == args.join(" ").toLowerCase());
+    const legalChoice = choices.filter(item => item == args.join(" ").toLowerCase());
 
     if (legalChoice.length != 1)
       return msg.channel.send(func.embed({ title: `\`${args.join(" ")}\` is not rock, paper, or scissors. Please choose one of those.`, color: "#BAFAE5", author: msg.author }));
@@ -37,7 +37,7 @@ module.exports = {
     if (player == "scissors" && choice == "paper") winner = user;
 
     return msg.channel.send(
-      func.embed({ title: `Your move: ${args.join(" ").toLowerCase()} VS My move: ${choice}`, color: "#BAFAE5", description: `The winner of this round is: **${winner}**`, author: msg.author })
+      func.embed({ title: `Your move: ${args.join(" ").toLowerCase()} VS My move: ${choice}`, color: "#BAFAE5", description: `The winner of this round is: **${winner}**`, author: msg.author }),
     );
   },
 };
