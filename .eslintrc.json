@@ -8,9 +8,9 @@
     "ecmaVersion": 2019
   },
   "rules": {
-    "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "comma-dangle": ["error", "always-multiline"],
-    "comma-spacing": "error",
+    "comma-spacing": "warn",
     "comma-style": "error",
     "curly": ["error", "multi-or-nest", "consistent"],
     "dot-location": ["error", "property"],
@@ -28,7 +28,7 @@
     "no-shadow": ["error", { "allow": ["err", "resolve", "reject"] }],
     "no-trailing-spaces": ["error"],
     "no-var": "error",
-    "object-curly-spacing": ["error", "always"],
+    "object-curly-spacing": ["warn", "always"],
     "prefer-const": "error",
     "quotes": ["error", "double"],
     "semi": ["error", "always"],

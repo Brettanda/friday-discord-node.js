@@ -84,5 +84,52 @@
     "https://i.imgur.com/yXEiYQ4.png",
     "https://i.redd.it/wiga0fsqors11.png"
   ],
-  "theGame": ["https://tenor.com/view/the-game-you-lost-simon-pegg-shaun-of-the-dead-gif-15513407", "https://media1.tenor.com/images/4ee6e56242913c21e7581a1d38748b15/tenor.gif"]
+  "theGame": ["https://tenor.com/view/the-game-you-lost-simon-pegg-shaun-of-the-dead-gif-15513407", "https://media1.tenor.com/images/4ee6e56242913c21e7581a1d38748b15/tenor.gif"],
+  "inspImages": [
+    "https://cdn.discordapp.com/attachments/243945221086248961/750276288169771108/nur-bayraktepe-TBWYkMaDElk-unsplash_1.jpg",
+    "https://cdn.discordapp.com/attachments/243945221086248961/750276629263286292/lynda-b-qCejnWFEs54-unsplash_2.jpg",
+    "https://cdn.discordapp.com/attachments/243945221086248961/750434086908067880/veronica-reverse-diAIZW5IWBY-unsplash.jpg",
+    "https://cdn.discordapp.com/attachments/243945221086248961/750434222405058580/racim-amr-8KKGTKmULU8-unsplash.jpg",
+    "https://cdn.discordapp.com/attachments/243945221086248961/750434504962867240/george-howden-CxvpmTTlj2M-unsplash.jpg",
+    "https://cdn.discordapp.com/attachments/243945221086248961/750435116202983484/solen-feyissa-g5CAJdzndhI-unsplash.jpg",
+    "https://cdn.discordapp.com/attachments/243945221086248961/750435323812773998/waldemar-brandt-WX65IQ6BX18-unsplash.jpg"
+  ],
+  "inspImageSources": [
+    "Photo by Nur Bayraktepe on Unsplash",
+    "Photo by Lynda B on Unsplash",
+    "Photo by Veronica Reverse on Unsplash",
+    "Photo by Racim Amr on Unsplash",
+    "Photo by George Howden on Unsplash",
+    "Photo by Solen Feyissa on Unsplash",
+    "Photo by Waldemar Brandt on Unsplash"
+  ],
+  "inspImageQuotes": [
+    "Lechuga",
+    "Manzana",
+    "Peace",
+    ":)",
+    "Love, Laugh, Live",
+    "GTFO",
+    "If you are not first, you are last",
+    "Have you eaten?",
+    "@everyone",
+    "@here",
+    "Drink some water!",
+    "Have you eaten yet today?",
+    "If at first you don't succeed,\n then skydiving definitely\n isn't for you.",
+    "People who wonder\nwhether the glass is\nhalf empty or half full\nare missing the point.\n\nThe glass is REFFILABLE!",
+    "The elevator to success\nis out of order.\nYou'll need to use the stairs...\none step at a time.",
+    "When nothing\ngoes right...\n\ngo left.",
+    "When life gives\nyou lemons,\ngo outside and\ntake a walk",
+    "When life gives\nyou lemons",
+    "When life has you down\nput on some lip chap",
+    "Alt + F4\nis the solution to\nall of life's\nproblems",
+    "E",
+    "Empty the grease tray",
+    "You are not insane",
+    "Bruh",
+    "Lemons",
+    "Pineapple",
+    "Eat your vegetables"
+  ]
 }

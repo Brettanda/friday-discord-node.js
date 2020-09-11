@@ -1,5 +1,5 @@
 const func = require("../functions");
-const { delMSGtimeout } = require("../config.json");
+// const { delMSGtimeout } = require("../config.json");
 
 module.exports = {
   name: "info",
@@ -29,7 +29,7 @@ module.exports = {
           "true",
         ],
         thumbNail: bot.user.displayAvatarURL(),
-      })
+      }),
     );
   },
 };

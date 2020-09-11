@@ -1,12 +1,12 @@
 {
   "name": "friday-discord",
   "description": "I am Friday, and I want to bring life to your Discord server",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "main": "index.js",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node index.js --dev --trace-warnings",
+    "start": "NODE_ENV=production node index.js --trace-warnings",
+    "dev": "NODE_ENV=development node index.js --trace-warnings",
     "pretty-quick": "pretty-quick",
     "grunt": "grunt"
   },

@@ -14,10 +14,12 @@ const func = require("../functions");
 // console.log(classifier)
 
 module.exports = async (msg, bot) => {
-  const content = msg.cleanContent
+  let content = msg.cleanContent
     .toLowerCase()
-    .split(/[\'\"\`\,\.]/)
+    .split(/['"`,.]/)
     .join("");
+
+  if (msg.channel.type == "dm" && !content.includes("friday")) content = `@friday, ${content}`;
 
   if (Array.from(msg.attachments).length >= 1 && (msg.content == null || typeof msg.content == "undefined" || msg.content == "")) {
     console.log("Image");
@@ -33,7 +35,6 @@ module.exports = async (msg, bot) => {
     "Default Welcome Intent (Greetings)",
     "Title of your sex tape",
     "I dont want to talk to a chat bot",
-    "Farewells",
     "The meaning of life?",
     "Birthday",
     "Memes",
@@ -100,7 +101,7 @@ module.exports = async (msg, bot) => {
     // Array.from(item.filter(i => i.author.bot == true)).length < 1 &&
     content.includes("bot") != true &&
     // TODO: add a check for another bot
-    Array.from(await item.filter((i) => i.author.id == bot.user.id)).length == 0 &&
+    Array.from(await item.filter(i => i.author.id == bot.user.id)).length == 0 &&
     msg.channel.type != "dm"
   )
     return console.log("Not replying to this message");

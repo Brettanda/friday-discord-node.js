@@ -1,7 +1,7 @@
 const { delMSGtimeout } = require("../../config.json");
 const func = require("../../functions");
 
-const queue = require("./index").queue;
+const audioQueue = require("./index").audioQueue;
 
 module.exports = {
   name: "toggle",
@@ -9,7 +9,7 @@ module.exports = {
   description: "Toggle the pause state",
   async execute(msg, args = "", bot, command) {
     if (msg.channel.type == "dm") return await msg.channel.send("You can only use this command in server text channel");
-    const serverQueue = queue.get(msg.guild.id);
+    const serverQueue = audioQueue.get(msg.guild.id);
     // if (msg.member.voice.channel) {
     //   await msg.member.voice.channel.leave();
     // }
@@ -24,12 +24,12 @@ module.exports = {
       return await msg.channel
         .send(
           func.embed({
-            title: `The stream is already playing`,
+            title: "The stream is already playing",
             color: "#7BDCFC",
             author: msg.author,
-          })
+          }),
         )
-        .then((status) => {
+        .then(status => {
           status.delete({ timeout: delMSGtimeout });
         });
     if (command == "pause" && !serverQueue.connection.dispatcher.paused) return await serverQueue.connection.dispatcher.pause(true);
@@ -37,12 +37,12 @@ module.exports = {
       return await msg.channel
         .send(
           func.embed({
-            title: `The stream has already been paused`,
+            title: "The stream has already been paused",
             color: "#7BDCFC",
             author: msg.author,
-          })
+          }),
         )
-        .then((status) => {
+        .then(status => {
           status.delete({ timeout: delMSGtimeout });
         });
     if (command == "toggle" && !serverQueue.connection.dispatcher.paused) return await serverQueue.connection.dispatcher.pause(true);

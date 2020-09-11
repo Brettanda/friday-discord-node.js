@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 
 /*
  * Makes a message embed
+ * =====================
  * @param {Object} [options] Options
  */
 module.exports = (options = {}) => {
@@ -15,6 +16,7 @@ module.exports = (options = {}) => {
   if (description != "") embed.setDescription(description);
 
   if (color != "") embed.setColor(color);
+  else embed.setColor("#fdfdfd");
 
   if (image) embed.setImage(image);
 
@@ -26,5 +28,6 @@ module.exports = (options = {}) => {
 
   if (thumbNail != "") embed.setThumbnail(thumbNail);
 
-  return embed.setFooter(`Called by: ${author.username} ${message ? `\`${message}\`` : ""}`, author.displayAvatarURL()).setTimestamp();
+  if (author) return embed.setFooter(`Called by: ${author.username} ${message ? `\`${message}\`` : ""}`, author.displayAvatarURL()).setTimestamp();
+  else return embed.setFooter().setTimestamp();
 };
