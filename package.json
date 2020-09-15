@@ -1,7 +1,7 @@
 {
   "name": "friday-discord",
   "description": "I am Friday, and I want to bring life to your Discord server",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "main": "index.js",
   "license": "GPL-3.0",
   "scripts": {
@@ -31,7 +31,7 @@
     "dotenv": "^8.2.0",
     "eslint": "^7.8.1",
     "fs": "^0.0.2",
-    "snekfetch": "^4.0.4",
+    "node-fetch": "^2.6.1",
     "yt-search": "^2.2.4",
     "ytdl-core-discord": "^1.2.0"
   },
