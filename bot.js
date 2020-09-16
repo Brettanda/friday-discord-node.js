@@ -19,7 +19,7 @@ bot.on("ready", () => {
   if (bot.shard.ids.includes(0)) func.chooseGame(bot);
 });
 
-if (!process.env.NODE_ENV == "development") require("./dbl")(bot);
+if (process.env.NODE_ENV != "development") require("./dbl")(bot);
 
 bot.on("reconnecting", () => console.info("Reconnecting!"));
 
@@ -171,5 +171,5 @@ bot.on("message", async msg => {
   }
 });
 
-if (!process.env.NODE_ENV == "development") bot.login(process.env.TOKEN);
+if (process.env.NODE_ENV != "development") bot.login(process.env.TOKEN);
 else bot.login(process.env.TOKENTEST);
