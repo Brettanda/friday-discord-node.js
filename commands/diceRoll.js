@@ -15,7 +15,7 @@ module.exports = {
       return;
     }
 
-    if (args.join(" ").includes("k") || args.join(" ").includes("l")) return msg.reply("K,L dice notation will be added in the future soon");
+    if (args.join(" ").includes("k") || args.join(" ").includes("l")) return msg.reply("K,L dice notation will be added in the near future");
 
     // if (args.length > 1)
     //   return msg.reply(`\`${args.join(" ")}\`This command only works without spaces`);

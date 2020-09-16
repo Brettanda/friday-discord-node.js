@@ -1,5 +1,5 @@
 const dialogflow = require("dialogflow");
-// /home/brett/personal/friday-discord-node.js/node_modules/dialogflow/src/index
+
 module.exports = async (content, msg) => {
   // const hrstart = process.hrtime();
   try {

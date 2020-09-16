@@ -49,3 +49,14 @@ p!
 p@
 t!
 rpg
+-
+jd
+$menu
+$
+m!
+<
+tsaldo
+tajuda
+trank
+;;
+::

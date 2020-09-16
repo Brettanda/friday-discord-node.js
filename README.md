@@ -1,12 +1,13 @@
-# Friday Discord Bot
-
-[![NPM Version](https://img.shields.io/npm/v/npm.svg?style=flat)]()
-[![GitHub license](https://img.shields.io/github/license/Brettanda/friday-discord-node.js)](https://github.com/Brettanda/friday-discord-node.js/blob/master/LICENSE.md)
-[![GitHub issues](https://img.shields.io/github/issues/Brettanda/friday-discord-node.js)](https://github.com/Brettanda/friday-discord-node.js/issues)
-[![Discord Chat](https://img.shields.io/discord/707441352367013899?color=7289da&logo=discord&logoColor=white)](https://discord.gg/NTRuFjU)
-[![Vote](https://img.shields.io/badge/Vote-Friday-blue)](https://top.gg/bot/476303446547365891/vote)
-[![Add Friday to your server](https://img.shields.io/badge/Add%20Friday-to%20your%20server-orange)](https://discord.com/api/oauth2/authorize?client_id=476303446547365891&permissions=36792384&scope=bot)
-[![Become a Patron!](<https://img.shields.io/badge/-Become%20a%20Patron!-rgb(232%2C%2091%2C%2070)>)](https://www.patreon.com/bePatron?u=34255235)
+<div align="center">
+<h1>Friday Discord Bot</h1>
+<a href=""><img src="https://img.shields.io/npm/v/npm.svg?style=flat" alt="NPM Version"/></a>
+<a href="https://github.com/Brettanda/friday-discord-node.js/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/Brettanda/friday-discord-node.js" alt="GitHub license"/></a>
+<a href="https://github.com/Brettanda/friday-discord-node.js/issues"><img src="https://img.shields.io/github/issues/Brettanda/friday-discord-node.js" alt="GitHub issues"/></a>
+<a href="https://discord.gg/NTRuFjU"><img src="https://img.shields.io/discord/707441352367013899?color=7289da&logo=discord&logoColor=white" alt="Discord Chat"/></a>
+<a href="https://top.gg/bot/476303446547365891/vote"><img src="https://img.shields.io/badge/Vote-Friday-blue" alt="Vote"/></a>
+<a href="https://discord.com/api/oauth2/authorize?client_id=476303446547365891&permissions=36792384&scope=bot"><img src="https://img.shields.io/badge/Add%20Friday-to%20your%20server-orange" alt="Add Friday to your server"/></a>
+<a href="https://www.patreon.com/bePatron?u=34255235"><img src="https://img.shields.io/badge/-Become%20a%20Patron!-rgb(232%2C%2091%2C%2070)" alt="Become a Patron!"/></a>
+</div>
 
 ## Privacy Disclaimer
 
@@ -63,3 +64,10 @@ Dialogflow does not take any information about the Discord guild except for any 
 - [ ] When music is playing and someone sends a message there is a little bit of a lag spike that occurs in the audio. This needs to be fixed.
 - [ ] Add some kind of server-specific settings
 - [x] Add a search function to the `!play` command
+- [ ] Friday will sometimes stop playing a video at some point and thinks that it still is playing
+- [ ] Add the ability to play playlists from youtube as well as adding several
+
+## To add to the dashboard
+
+- [ ] Custom commands for sound clips to play in a voice channel
+- [ ] Custom prefix setting for paying

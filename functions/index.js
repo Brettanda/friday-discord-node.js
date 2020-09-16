@@ -7,4 +7,6 @@ module.exports = {
   msgDev: require("./msgdev"),
   chooseGame: require("./chooseGame"),
   isURL: require("./isURL"),
+  formatSec: require("./formatSec"),
+  promiseTimeout: require("./promiseTimeout"),
 };

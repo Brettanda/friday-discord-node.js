@@ -1,7 +1,7 @@
 const { soups, unoCards } = require("../config.json");
 const func = require("../functions");
 
-module.exports = async (content, msg, bot, extra) => {
+module.exports = async (content, msg, bot, extra, result) => {
   switch (content) {
     case "Insults":
       await msg.react("😭");
@@ -76,6 +76,9 @@ module.exports = async (content, msg, bot, extra) => {
     }
     case "inspiration":
       await require("../commands/inspiration").execute(msg);
+      break;
+    case "Math":
+      await require("../commands/diceRoll").execute(msg, [result.parameters.fields.Equations.stringValue]);
       break;
   }
 };

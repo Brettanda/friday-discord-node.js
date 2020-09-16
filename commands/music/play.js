@@ -1,7 +1,11 @@
+/* eslint-disable max-statements-per-line */
+/* eslint-disable max-nested-callbacks */
 const ytdl = require("ytdl-core-discord");
+// const scdl = require("soundcloud-downloader"); https://github.com/chrlew082/musicbot/blob/master/commands/play.js
+const search = require("yt-search");
+
 const { delMSGtimeout } = require("../../config.json");
 const func = require("../../functions");
-const search = require("yt-search");
 
 const audioQueue = require("./index").audioQueue;
 
@@ -10,13 +14,16 @@ module.exports = {
   aliases: ["add"],
   usage: "[Audio URL] or [Video title]",
   description: "Plays the audio from a YouTube video",
+  category: "music",
   async execute(msg, args = "", bot) {
     // console.log(bot.voice.connections)
     if (args == "") {
       return msg.channel.send(
         func.embed({
-          title: `Command: \`${msg.cleanContent}\`\nDon't forget to add the YouTube url after the command. For example: \`!play https://youtu.be/dQw4w9WgXcQ\`. You can also input the title of a video and I will search for that video. \`!play uptown funk\``,
+          title:
+            "Don't forget to add the YouTube url after the command. For example: `!play https://youtu.be/dQw4w9WgXcQ`. You can also input the title of a video and I will search for that video. `!play uptown funk`",
           color: "#7BDCFC",
+          message: msg.cleanContent,
           author: msg.author,
         }),
       );
@@ -27,24 +34,32 @@ module.exports = {
     if (!msg.member.voice.channel) {
       return msg.channel.send(
         func.embed({
-          title: `Command: \`${msg.cleanContent}\`\nYou need to be in a voice channel to play music!`,
+          title: "You need to be in a voice channel to play music!",
           color: "#7BDCFC",
+          message: msg.cleanContent,
           author: msg.author,
         }),
       );
     }
+
+    if (msg.guild.afkChannel == msg.member.voice.channel) return msg.channel.send(func.embed({ title: "Move out of the AFK channel to play audio.", color: "#7BDCFC", author: msg.author }));
 
     const permissions = msg.member.voice.channel.permissionsFor(msg.client.user);
 
     if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
       return msg.channel.send(
         func.embed({
-          title: `Command: \`${msg.cleanContent}\`\nI need the permissions to join and speak in your voice channel!`,
+          title: "I need the permissions to join and speak in your voice channel!",
           color: "#7BDCFC",
+          message: msg.cleanContent,
           author: msg.author,
         }),
       );
     }
+
+    // const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
+    // const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
+    // const scRegex = /^https?:\/\/(soundcloud\.com)\/(.*)$/;
 
     if (func.isURL(args.join(" ")) == false) {
       return search(args.join(" "), async (err, res) => {
@@ -78,7 +93,7 @@ module.exports = {
           .then(item => {
             // This seemed to be the only way to have the musicChoice show everytime. Sometimes they would only show the first one and stop
             // prettier-ignore
-            item.react(musicChoice[0]).then(() => item.react(musicChoice[1]).then(() => item.react(musicChoice[2]).then(() => item.react(musicChoice[3]).then(() => item.react(musicChoice[4]).then(() => item.react(musicChoice[5]).then(() => item.react(musicChoice[6]).then(() => item.react(musicChoice[7]).then(() => item.react(musicChoice[8]).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; }) ).catch((err) => { return; });
+            item.react(musicChoice[0]).then(() => item.react(musicChoice[1]).then(() => item.react(musicChoice[2]).then(() => item.react(musicChoice[3]).then(() => item.react(musicChoice[4]).then(() => item.react(musicChoice[5]).then(() => item.react(musicChoice[6]).then(() => item.react(musicChoice[7]).then(() => item.react(musicChoice[8]).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; });
 
             const filter = (reaction, user) => musicChoice.filter(item => item === reaction.emoji.name) && user.bot == false;
 
@@ -94,6 +109,7 @@ module.exports = {
                 title: this.videos[parseInt(num) - 1].title,
                 url: this.videos[parseInt(num) - 1].url,
                 duration: this.videos[parseInt(num) - 1].duration.timestamp,
+                // seek: 0,
               };
 
               if (!serverQueue) {
@@ -116,7 +132,7 @@ module.exports = {
 
                   queueContruct.connection = await msg.member.voice.channel.join();
                   item.delete();
-                  await play(msg, queueContruct.songs[0]);
+                  await play(msg, queueContruct.songs[0], bot);
                 } catch (err) {
                   console.log(err);
                   audioQueue.delete(msg.guild.id);
@@ -152,42 +168,67 @@ module.exports = {
     const serverQueue = audioQueue.get(msg.guild.id);
     // const songInfo = await ytdl.getInfo(args[0], (err,info) => {if(err) {throw err; msg.reply(err[0])}});
 
+    // TODO: make sure that videos with errors are skipped and don't break friday
+    process.once("unhandledRejection", async error => {
+      if (error.toString().includes("Error: FFmpeg/avconv not found!")) {
+        console.error("Run `sudo apt install ffmpeg`");
+        func.msgDev("Run `sudo apt install ffmpeg`", bot, "log-errors");
+        msg.channel.send(func.embed({ title: "An error has occured! I have notified my developer and this will be solved ASAP" }));
+        // console.log(serverQueue);
+        console.log(serverQueue.songs.length == 0);
+        if (serverQueue.songs.length == 0) {
+          serverQueue.songs = [];
+          serverQueue.connection.disconnect();
+          // return require("./stop").execute(msg,args)
+          // await serverQueue.voiceChannel.leave();
+          return audioQueue.delete(msg.guild.id);
+        } else {
+          serverQueue.songs.shift();
+          console.log(serverQueue.songs[0]);
+          return await play(msg, serverQueue.songs[0], bot);
+        }
+      }
+    });
+
+    function log(options = {}) {
+      if (typeof options !== "object") throw new TypeError("INVALID_TYPE", "options", "object", true);
+      const { error, userMSG = "", devMSG = "", userDesc = "", chat = "log-issues" } = options;
+      console.error(error);
+      if (devMSG) func.msgDev(devMSG, bot, chat, msg, "Music");
+      return msg.channel.send(
+        func.embed({
+          title: userMSG,
+          description: userDesc,
+          color: "#7BDCFC",
+          author: msg.author,
+        }),
+      );
+    }
+
     const item = await ytdl.getInfo(args[0]).catch(err => {
       if (err.toString().includes("Not a YouTube domain") || err.toString().includes("No video id found:")) {
-        console.error("Url not a YouTube domain");
-        func.msgDev(`Someone wants this url to work for music: \`${args.join(" ")}\``, bot, "log-issues", msg, "Music");
-        return msg.channel.send(
-          func.embed({
-            title: `\`${args.join(" ")}\` is not a valid YouTube URL`,
-            color: "#7BDCFC",
-            author: msg.author,
-          }),
-        );
+        return log({ error: "Url not a YouTube domain", userMSG: `\`${args.join(" ")}\` is not a valid YouTube URL`, devMSG: `Someone wants this url to work for music: \`${args.join(" ")}\`` });
+      } else if (err.toString().includes("Video unavailable")) {
+        return log({ error: "Video unavailable", userMSG: `\`${args.join(" ")}\` is showing as unavailable. Please try another video.` });
       } else {
-        console.error(err);
-        func.msgDev(err, bot, "log-errors", msg, "Music Error");
-        return msg.reply(
-          func.embed({
-            title: "Something has gone wrong. Please try again later.",
-            description: "There is a good chance that this video is age restricted, and I am having trouble playing it because of that.",
-            color: "#7BDCFC",
-            author: msg.author,
-          }),
-        );
+        return log({
+          error: err,
+          userMSG: "Something has gone wrong. Please try again later.",
+          chat: "log-errors",
+          userDesc: "There is a good chance that this video is age restricted, and I am having trouble playing it because of that.",
+          devMSG: err,
+        });
       }
     });
     if (typeof item.video_url == "undefined") return;
 
-    let totalSeconds = item.length_seconds;
-    const h = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    const min = Math.floor(totalSeconds / 60);
-    const sec = totalSeconds % 60;
+    console.log(args[0].match(/[?&]t=([0-9]+)/) ? args[0].match(/[?&]t=([0-9]+)/)[1] : 0);
 
     const song = {
       title: item.title,
       url: item.video_url,
-      duration: `${h ? `${h}:` : ""}${min ? `${min}:` : ""}${sec}`,
+      duration: func.formatSec(item.length_seconds),
+      // seek: args[0].match(/[?&]t=([0-9]+)/) ? args[0].match(/[?&]t=([0-9]+)/)[1] : 0,
     };
 
     if (!serverQueue) {
@@ -210,10 +251,10 @@ module.exports = {
         msg.member.voice.channel.join().then(async con => {
           queueContruct.connection = con;
           // con.delete();
-          await play(msg, queueContruct.songs[0]);
+          await play(msg, queueContruct.songs[0], bot);
         });
       } catch (err) {
-        queueContruct.connection = await msg.member.voice.channel.join().on("debug", console.log);
+        queueContruct.connection = await msg.member.voice.channel.join();
 
         console.log(err);
         audioQueue.delete(msg.guild.id);
@@ -226,7 +267,7 @@ module.exports = {
       return msg.channel
         .send(
           func.embed({
-            title: `${song.title} has been added to the queue!`,
+            title: `\`${song.title}\` has been added to the queue!`,
             color: "#7BDCFC",
             author: msg.author,
           }),
@@ -238,13 +279,16 @@ module.exports = {
   },
 };
 
-async function play(msg, song) {
+async function play(msg, song, bot) {
   const serverQueue = audioQueue.get(msg.guild.id);
 
   if (!song) {
+    console.log("no song");
     serverQueue.voiceChannel.leave();
     return audioQueue.delete(msg.guild.id);
   }
+
+  await serverQueue.connection.voice.setSelfDeaf(true);
 
   const dispatcher = serverQueue.connection
     .play(
@@ -254,23 +298,22 @@ async function play(msg, song) {
         quality: "highestaudio",
         format: "mp3",
         type: "opus",
-        liveBuffer: 20000,
-        highWaterMark: 50,
-        volume: false,
+        // highWaterMark: 50,
+        volume: 0.2,
       },
-      { seek: 0, volume: 0.1, highWaterMark: 50 },
+      // { seek: song.seek }, //, volume: 0.1, highWaterMark: 50 },
     )
     .on("finish", () => {
       console.log("finish");
       serverQueue.songs.shift();
 
       if (serverQueue.songs.length == 0) {
-        msg.channel.send(func.embed({ title: "Finished the queue", color: "#7BDCFC", author: msg.author })).then(status => {
+        msg.channel.send(func.embed({ title: "Finished the queue", color: "#7BDCFC" })).then(status => {
           status.delete({ timeout: delMSGtimeout });
         });
         return require("./index").leave(msg, msg.client);
       }
-      return play(msg, serverQueue.songs[0]);
+      return play(msg, serverQueue.songs[0], bot);
     })
     .on("error", error => {
       console.error("Player: ", error);
@@ -283,7 +326,9 @@ async function play(msg, song) {
   dispatcher.setVolume(0.1);
   // dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
-  serverQueue.textChannel.send(func.embed({ title: `Now Playing: **${song.title}**`, description: `Duration: ${song.duration}`, color: "#7BDCFC", author: msg.author })).then(status => {
-    status.delete({ timeout: delMSGtimeout * 2 });
-  });
+  serverQueue.textChannel
+    .send(func.embed({ title: `Now Playing: **${song.title}**`, color: "#7BDCFC", author: msg.author, msg: ["Duration", "Songs in queue"], val: [song.duration, serverQueue.songs.length - 1] }))
+    .then(status => {
+      status.delete({ timeout: delMSGtimeout * 2 });
+    });
 }

@@ -7,7 +7,7 @@ const Discord = require("discord.js");
  */
 module.exports = (options = {}) => {
   if (typeof options !== "object") throw new TypeError("INVALID_TYPE", "options", "object", true);
-  const { title = "", color = "", description = "", author = Object, image, usage, aliases, msg = [""] || "", val = [""] || "", extraM = "", extraV = "", inline = true, thumbNail, message } = options;
+  const { title = "", color = "", description = "", author, image, usage, aliases, msg = [""] || "", val = [""] || "", extraM = "", extraV = "", inline = true, thumbNail, message } = options;
 
   const embed = new Discord.MessageEmbed();
 
@@ -28,6 +28,6 @@ module.exports = (options = {}) => {
 
   if (thumbNail != "") embed.setThumbnail(thumbNail);
 
-  if (author) return embed.setFooter(`Called by: ${author.username} ${message ? `\`${message}\`` : ""}`, author.displayAvatarURL()).setTimestamp();
-  else return embed.setFooter().setTimestamp();
+  if (author) return embed.setFooter(`Called by: ${author.username} ${message ? `\`${message}\`` : ""}`, author.displayAvatarURL());
+  else return embed;
 };

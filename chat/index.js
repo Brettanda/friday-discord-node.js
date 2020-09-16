@@ -84,7 +84,11 @@ module.exports = async (msg, bot) => {
   // msg.channel.startTyping();
   const result = await func.queryDialogFlow(content, msg);
   // await query.then((result) => {
-  if ((await result.intent.displayName) == "Default Fallback Intent") {
+  if (!result.intent) {
+    console.error(result);
+    return func.msgDev(result.toString(), bot, "log-errors");
+  }
+  if (result.intent.displayName == "Default Fallback Intent") {
     // await msg.channel.stopTyping(true);
     return;
   }
@@ -120,7 +124,7 @@ module.exports = async (msg, bot) => {
     return;
   }
 
-  require("./dynamicChat")(await result.intent.displayName, msg, bot, await result.fulfillmentText.replace("dynamic", ""));
+  require("./dynamicChat")(result.intent.displayName, msg, bot, result.fulfillmentText.replace("dynamic", ""), result);
 
   // await msg.channel.stopTyping(true);
   // })

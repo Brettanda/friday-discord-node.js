@@ -1,12 +1,16 @@
 const { delMSGtimeout } = require("../../config.json");
+const embed = require("../../functions/embed");
 
-const queue = new Map();
+const audioQueue = new Map();
 
-(exports.queue = queue), (exports.play = require("./play")), (exports.stop = require("./stop")), (exports.toggle = require("./toggle")), (exports.skip = require("./skip"));
+(exports.audioQueue = audioQueue),
+  (exports.play = require("./play")),
+  (exports.stop = require("./stop")),
+  (exports.toggle = require("./toggle")),
+  ((exports.skip = require("./skip")), (exports.queue = require("./queue")));
 
 // exports.serverQueue =
 // TODO: Add a restriction so that only the person that started the music and admins can skip/stop songs
-
 
 // exports.volume = {
 //   name: "volume",
@@ -48,20 +52,25 @@ const queue = new Map();
 async function leave(msg, bot) {
   if (msg.channel.type == "dm") return msg.channel.send("You can only use this command in server text channel");
 
-  const serverQueue = queue.get(msg.guild.id);
+  const serverQueue = audioQueue.get(msg.guild.id);
 
   if (typeof serverQueue == "undefined" || serverQueue.connection == null || serverQueue.connection.dispatcher == null) {
     // console.log(Array.from(bot.voice.connections).length);
     // console.log(bot.voice);
 
     if (Array.from(bot.voice.connections).length > 0) {
-      return await bot.voice.connections.map((item) => item.channel.leave());
+      return await bot.voice.connections.map(item => item.channel.leave());
       // await msg.reply("I will leave. For now").then(status => {
       //   status.delete({ timeout: delMSGtimeout });
       // });
     } else if (Array.from(bot.voice.connections).length == 0) {
-      const status = await msg.reply(
-        "I am either not connected to any voice channel or something has gone wrong to prevent me from leave. If I am in a voice channel just wait a minute or two for me to leave automatically"
+      const status = await msg.channel.send(
+        embed({
+          title: "I am either not connected to any voice channel or something has gone wrong to prevent me from leaving",
+          description: "If I am in a voice channel just wait a minute or two for me to leave automatically",
+          color: "#7BDCFC",
+          author: msg.author,
+        }),
       );
       return status.delete({ timeout: delMSGtimeout });
     }

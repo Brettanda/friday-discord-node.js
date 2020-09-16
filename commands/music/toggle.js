@@ -7,6 +7,7 @@ module.exports = {
   name: "toggle",
   aliases: ["resume", "pause"],
   description: "Toggle the pause state",
+  category: "music",
   async execute(msg, args = "", bot, command) {
     if (msg.channel.type == "dm") return await msg.channel.send("You can only use this command in server text channel");
     const serverQueue = audioQueue.get(msg.guild.id);

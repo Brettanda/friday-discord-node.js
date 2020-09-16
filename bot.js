@@ -152,11 +152,11 @@ bot.on("message", async msg => {
 
     try {
       bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command))
-        ? await bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command)).execute(msg, args, bot, command)
-        : await bot.commands.get(command).execute(msg, args, bot, command);
+        ? bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command)).execute(msg, args, bot, command)
+        : bot.commands.get(command).execute(msg, args, bot, command);
     } catch (error) {
       console.error(error);
-      if (!process.env.NODE_ENV == "development") func.msgDev(error, bot, (chat = "log-errors"));
+      func.msgDev(error, bot, (chat = "log-errors"));
       msg.channel.send(
         func.embed({
           title: `There was an error trying to execute \`${msg.cleanContent}\``,
