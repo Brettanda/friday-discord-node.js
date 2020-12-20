@@ -7,6 +7,8 @@ const audioQueue = new Map();
   (exports.play = require("./play")),
   (exports.stop = require("./stop")),
   (exports.toggle = require("./toggle")),
+  (exports.join = require("./join")),
+  (exports.state = require("./stat")),
   ((exports.skip = require("./skip")), (exports.queue = require("./queue")));
 
 // exports.serverQueue =

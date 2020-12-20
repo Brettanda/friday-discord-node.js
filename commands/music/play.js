@@ -1,6 +1,6 @@
 /* eslint-disable max-statements-per-line */
 /* eslint-disable max-nested-callbacks */
-const ytdl = require("ytdl-core-discord");
+const ytdl = require("ytdl-core");
 // const scdl = require("soundcloud-downloader"); https://github.com/chrlew082/musicbot/blob/master/commands/play.js
 const search = require("yt-search");
 
@@ -8,20 +8,22 @@ const { delMSGtimeout } = require("../../config.json");
 const func = require("../../functions");
 
 const audioQueue = require("./index").audioQueue;
+// const worker = require("../../index").worker;
+
+// worker.postMessage({type:"play",msg})
 
 module.exports = {
   name: "play",
-  aliases: ["add"],
+  aliases: ["add", "p"],
   usage: "[Audio URL] or [Video title]",
   description: "Plays the audio from a YouTube video",
   category: "music",
-  async execute(msg, args = "", bot) {
+  async execute(msg, args = "", bot, c, prefix) {
     // console.log(bot.voice.connections)
     if (args == "") {
       return msg.channel.send(
         func.embed({
-          title:
-            "Don't forget to add the YouTube url after the command. For example: `!play https://youtu.be/dQw4w9WgXcQ`. You can also input the title of a video and I will search for that video. `!play uptown funk`",
+          title: `Don't forget to add the YouTube url after the command. For example: \`${prefix}play https://youtu.be/dQw4w9WgXcQ\`. You can also input the title of a video and I will search for that video. \`${prefix}play uptown funk\``,
           color: "#7BDCFC",
           message: msg.cleanContent,
           author: msg.author,
@@ -69,99 +71,105 @@ module.exports = {
           return msg.channel.send("Something went wrong");
         }
 
-        const videos = res.videos.slice(0, 9);
+        // const videos = res.videos.slice(0, 9);
 
-        let resp = "";
+        // let resp = "";
 
-        videos.map((ite, i) => (resp += `**[${parseInt(i) + 1}]:** ${videos[i].title}\n`));
+        // videos.map((ite, i) => (resp += `**[${parseInt(i) + 1}]:** ${videos[i].title}\n`));
 
-        resp += `\n**Choose a reaction number between 1 and ${videos.length}**`;
+        // resp += `\n**Choose a reaction number between 1 and ${videos.length}**`;
 
-        const musicChoice = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"];
+        // const musicChoice = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"];
 
-        msg.channel
-          .send(
-            func.embed({
-              title: `**Search for:** ${args.join(" ")}`,
-              color: "#7BDCFC",
-              author: msg.author,
-              msg: "Results",
-              val: resp,
-              inline: false,
-            }),
-          )
-          .then(item => {
-            // This seemed to be the only way to have the musicChoice show everytime. Sometimes they would only show the first one and stop
-            // prettier-ignore
-            item.react(musicChoice[0]).then(() => item.react(musicChoice[1]).then(() => item.react(musicChoice[2]).then(() => item.react(musicChoice[3]).then(() => item.react(musicChoice[4]).then(() => item.react(musicChoice[5]).then(() => item.react(musicChoice[6]).then(() => item.react(musicChoice[7]).then(() => item.react(musicChoice[8]).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; });
+        // msg.channel
+        //   .send(
+        //     func.embed({
+        //       title: `**Search for:** ${args.join(" ")}`,
+        //       color: "#7BDCFC",
+        //       author: msg.author,
+        //       msg: "Results",
+        //       val: resp,
+        //       inline: false,
+        //     }),
+        //   )
+        //   .then(item => {
+        // This seemed to be the only way to have the musicChoice show everytime. Sometimes they would only show the first one and stop
+        // prettier-ignore
+        // item.react(musicChoice[0]).then(() => item.react(musicChoice[1]).then(() => item.react(musicChoice[2]).then(() => item.react(musicChoice[3]).then(() => item.react(musicChoice[4]).then(() => item.react(musicChoice[5]).then(() => item.react(musicChoice[6]).then(() => item.react(musicChoice[7]).then(() => item.react(musicChoice[8]).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; })).catch(() => { return; });
 
-            const filter = (reaction, user) => musicChoice.filter(item => item === reaction.emoji.name) && user.bot == false;
+        // const filter = (reaction, user) => musicChoice.filter(item => item === reaction.emoji.name) && user.bot == false;
 
-            const collector = item.createReactionCollector(filter);
+        // const collector = item.createReactionCollector(filter);
 
-            collector.videos = videos;
+        // collector.videos = videos;
 
-            collector.once("collect", async function (r) {
-              const num = musicChoice.indexOf(musicChoice.filter(item => item === r.emoji.name)[0]) + 1;
-              const serverQueue = audioQueue.get(msg.guild.id);
+        // collector.once("collect", async function (r) {
+        //   const num = musicChoice.indexOf(musicChoice.filter(item => item === r.emoji.name)[0]) + 1;
+        const serverQueue = audioQueue.get(msg.guild.id);
 
-              const song = {
-                title: this.videos[parseInt(num) - 1].title,
-                url: this.videos[parseInt(num) - 1].url,
-                duration: this.videos[parseInt(num) - 1].duration.timestamp,
-                // seek: 0,
-              };
+        // const song = {
+        //   title: this.videos[parseInt(num) - 1].title,
+        //   url: this.videos[parseInt(num) - 1].url,
+        //   duration: this.videos[parseInt(num) - 1].duration.timestamp,
+        //   // seek: 0,
+        // };
+        const song = {
+          title: res.videos[0].title,
+          url: res.videos[0].url,
+          duration: res.videos[0].duration.timestamp,
+          // seek: 0,
+        };
 
-              if (!serverQueue) {
-                const queueContruct = {
-                  textChannel: msg.channel,
-                  voiceChannel: msg.member.voice.channel,
-                  connection: null,
-                  songs: [],
-                  volume: 0.1,
-                  playing: true,
-                };
+        if (!serverQueue) {
+          const queueContruct = {
+            textChannel: msg.channel,
+            voiceChannel: msg.member.voice.channel,
+            connection: null,
+            songs: [],
+            volume: 0.1,
+            playing: true,
+          };
 
-                audioQueue.set(msg.guild.id, queueContruct);
+          audioQueue.set(msg.guild.id, queueContruct);
 
-                queueContruct.songs.push(song);
+          queueContruct.songs.push(song);
 
-                try {
-                  // if(bot.voice.connections.map(item => item).length == 0)
-                  // const connection = await
+          try {
+            // if(bot.voice.connections.map(item => item).length == 0)
+            // const connection = await
 
-                  queueContruct.connection = await msg.member.voice.channel.join();
-                  item.delete();
-                  await play(msg, queueContruct.songs[0], bot);
-                } catch (err) {
-                  console.log(err);
-                  audioQueue.delete(msg.guild.id);
-                  item.delete();
-                  return msg.channel.send(err).then(status => {
-                    status.delete({ timeout: delMSGtimeout });
-                  });
-                }
-              } else {
-                // console.log(bot.voice.connections.map(item => item).length)
-                await msg.member.voice.channel.join();
-                serverQueue.songs.push(song);
-                item.delete();
-                return msg.channel
-                  .send(
-                    func.embed({
-                      title: `${song.title} has been added to the queue!`,
-                      color: "#7BDCFC",
-                      author: msg.author,
-                    }),
-                  )
-                  .then(status => {
-                    status.delete({ timeout: delMSGtimeout * 5 });
-                  });
-              }
+            queueContruct.connection = await msg.member.voice.channel.join();
+            // item.delete();
+            await play(msg, queueContruct.songs[0], bot);
+          } catch (err) {
+            console.log(err);
+            audioQueue.delete(msg.guild.id);
+            // item.delete();
+            return msg.channel.send(err).then(status => {
+              status.delete({ timeout: delMSGtimeout });
             });
+          }
+        } else {
+          // console.log(bot.voice.connections.map(item => item).length)
+          await msg.member.voice.channel.join();
+          serverQueue.songs.push(song);
+          // item.delete();
+          return msg.channel
+            .send(
+              func.embed({
+                title: `${song.title} has been added to the queue!`,
+                color: "#7BDCFC",
+                author: msg.author,
+              }),
+            )
+            .then(status => {
+              status.delete({ timeout: delMSGtimeout * 5 });
+            });
+        }
+        // });
 
-            item.delete({ timeout: delMSGtimeout }).catch(() => {});
-          });
+        // item.delete({ timeout: delMSGtimeout }).catch(() => {});
+        // });
       });
     }
 
@@ -220,16 +228,21 @@ module.exports = {
         });
       }
     });
-    if (typeof item.video_url == "undefined") return;
+
+    console.log("test",item.videoDetails)
+
+    if (typeof item.videoDetails.video_url == "undefined") return;
 
     console.log(args[0].match(/[?&]t=([0-9]+)/) ? args[0].match(/[?&]t=([0-9]+)/)[1] : 0);
 
     const song = {
-      title: item.title,
-      url: item.video_url,
-      duration: func.formatSec(item.length_seconds),
+      title: item.videoDetails.title,
+      url: item.videoDetails.video_url,
+      duration: func.formatSec(item.videoDetails.lengthSeconds),
       // seek: args[0].match(/[?&]t=([0-9]+)/) ? args[0].match(/[?&]t=([0-9]+)/)[1] : 0,
     };
+
+    console.log("test2")
 
     if (!serverQueue) {
       const queueContruct = {
@@ -292,12 +305,13 @@ async function play(msg, song, bot) {
 
   const dispatcher = serverQueue.connection
     .play(
-      await ytdl(song.url),
+      ytdl(song.url),
+      
       {
         filter: "audioonly",
         quality: "highestaudio",
         format: "mp3",
-        type: "opus",
+        // type: "opus",
         // highWaterMark: 50,
         volume: 0.2,
       },

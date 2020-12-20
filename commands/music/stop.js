@@ -5,7 +5,7 @@ const audioQueue = require("./index").audioQueue;
 
 module.exports = {
   name: "stop",
-  aliases: ["leave", "end", "clear"],
+  aliases: ["leave", "end", "clear", "disconnect"],
   description: "Leaves the voice channel that i am apart of",
   category: "music",
   execute(msg, args = "", bot) {

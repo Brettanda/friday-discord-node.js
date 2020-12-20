@@ -1,13 +1,13 @@
 const { soups } = require("../config.json");
 const { embed } = require("../functions");
-const Discord = require("discord.js");
 
 module.exports = {
   name: "souptime",
+  aliases: ["soup"],
   description: "Soup Time",
-  execute(msg, args) {
-    var num = Math.floor(Math.random() * (+soups.length - +0) + +0);
-    var image = soups[num];
+  execute(msg) {
+    const num = Math.floor(Math.random() * (+soups.length - +0) + +0);
+    const image = soups[num];
 
     msg.channel.send(
       embed({
@@ -16,7 +16,7 @@ module.exports = {
         description: "I hope you enjoy!",
         author: msg.author,
         image: image,
-      })
+      }),
     );
   },
 };
