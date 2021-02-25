@@ -1,4 +1,6 @@
-<div align="center">
+## This repo has been moved to [github.com/Brettanda/friday-discord-python](https://github.com/Brettanda/friday-discord-python)
+
+<!--<div align="center">
 <h1>Friday Discord Bot</h1>
 <a href=""><img src="https://img.shields.io/npm/v/npm.svg?style=flat" alt="NPM Version"/></a>
 <a href="https://github.com/Brettanda/friday-discord-node.js/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/Brettanda/friday-discord-node.js" alt="GitHub license"/></a>
@@ -47,11 +49,11 @@ Friday can respond to normal chat without the message being directed towards Fri
 
 Friday checks if a message is being directed towards Friday if the message contains a mention (`@Friday`), the word 'Friday' in capital letters or lowercase if the most recent message is from Friday, and Friday will (try) to respond to any message send through a direct message to Friday. If a phrase is said that Friday should respond to for a joke or something it will respond if it matches one of the 'no context' phrases. For example, if someone says 'Goodbye' with no context it will respond because goodbyes are apart of 'no context' and therefore can respond anyway.
 
-<!-- ## Privacy
+## Privacy
 
 Friday uses Googles Dialogflow which records all messages sent visible by Friday. As far as I can tell there is no easy way to remove message records from Dialogflow, but any messages will only be used to train the Friday Dialogflow Agent. If there is a conversation that you would like removed just message me with one of the messages from the conversation and I will remove it from Dialogflow.
 
-Dialogflow does not take any information about the Discord guild except for any persons mentioned in a message and contents of a message. The channel id is used for the Dialogflow session-id for context and so Friday can respond to questions appropriately. -->
+Dialogflow does not take any information about the Discord guild except for any persons mentioned in a message and contents of a message. The channel id is used for the Dialogflow session-id for context and so Friday can respond to questions appropriately.
 
 ## Todo
 
@@ -71,3 +73,4 @@ Dialogflow does not take any information about the Discord guild except for any 
 
 - [ ] Custom commands for sound clips to play in a voice channel
 - [ ] Custom prefix setting for paying
+-->
